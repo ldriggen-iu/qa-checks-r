@@ -1,6 +1,6 @@
 # IeDEA-DES QA Checks
 
-Please see the `Downloads` section (top right) for current documentation that are currently implemented.
+Please see the `Downloads` section (top right) for current documentation of the exceptions that are currently implemented.
 
 The major directions for running these scripts:
 
