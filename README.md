@@ -1,6 +1,6 @@
 # IeDEA-DES QA Checks
 
-Please see the `Downloads` section (top right) for documentation of the exceptions that are currently implemented. You can clone this repository if you are familiar with Git and GitHub. Alternatively, click on the cloud button with the word `zip` to download a zip archive of the most current version of the scripts.
+Please see the [downloads](https://github.com/IeDEA/qa-checks-r/downloads) section for documentation of the exceptions that are currently implemented. You can clone this repository if you are familiar with Git and GitHub. Alternatively, click on the cloud button with the word `zip` to download a zip archive of the most current version of the scripts.
 
 The major directions for running these scripts:
 
