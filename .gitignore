@@ -1,4 +1,5 @@
-*.csv
+input/*.csv
+output/*.csv
 *.docx
 *.pdf
 *.doc
