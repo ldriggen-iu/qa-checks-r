@@ -167,7 +167,7 @@ queryduplicates <- function(uniqueid,table,date=date,subsettext=""){
   assign("allcheck",check,envir=globalenv())
 }
 ## WRITE FUNCTION FOR OUT OF ORDER DATES, DATE2 IS SUPPOSED TO OCCUR ON OR AFTER DATE1
-outoforderdate <- function(date1,date2,table,table2=table2){
+outoforder <- function(date1,date2,table,table2=table2){
 	if(!missing(table2)){tablename <- paste(tablename,"&",table2)}
   datatable <- get(table)
   if(exists(date1,datatable) & exists(date2,datatable)){

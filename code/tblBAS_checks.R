@@ -24,11 +24,11 @@
 ## NAME OF TABLE FOR WRITING QUERIES
 tablename <- "tblBAS"
 ## READ TABLE
-basic <- read.csv(paste(tablename,".csv",sep=""),header=TRUE,stringsAsFactors = FALSE)
+basic <- read.csv(paste("input/",tablename,".csv",sep=""),header=TRUE,stringsAsFactors = FALSE)
 names(basic) <- tolower(names(basic))
 ## NAMES EXPECTED FROM HICDEP+/IeDEAS DES
 expectednames <- c("patient","center","country","birth_d","enrol_d","gender",
-                   "height_bas","weight_bas","mode","recart_y","who_stage","haart_d")
+                   "height_bas","weight_bas","mode","recart_y","who_stage","cdc_stage","haart_d")
 acceptablenames <- c(expectednames,"birth_d_a","enrol_d_a","haart_d_a")
 
 ################### QUERY CHECKING BEGINS HERE ###################
@@ -48,8 +48,8 @@ if(exists("enrol_d",basic)){basic$enrol_d <- convertdate("enrol_d","basic")}
 if(exists("haart_d",basic)){basic$haart_d <- convertdate("haart_d","basic")}
 
 ## CHECK FOR DATES OCCURRING IN THE WRONG ORDER
-outoforderdate("birth_d","enrol_d","basic")
-outoforderdate("birth_d","haart_d","basic")
+outoforder("birth_d","enrol_d","basic")
+outoforder("birth_d","haart_d","basic")
 
 ## CHECK FOR DATES OCCURRING TOO FAR IN THE FUTURE
 futuredate("birth_d","basic")
@@ -76,12 +76,14 @@ missingvalue("weight_bas","basic")
 missingvalue("mode","basic")
 missingvalue("recart_y","basic")
 missingvalue("who_stage","basic")
+missingvalue("cdc_stage","basic")
 
 ## CHECK FOR UNEXPECTED CODING
 badcodes("gender",c(1,2,9),"basic")
 badcodes("mode",c(1:8,90,99),"basic")
 badcodes("recart_y",c(0,1,9),"basic")
 badcodes("who_stage",c(1:4,9),"basic")
+badcodes("cdc_stage",c("A","A1","A2","A3","B","B1","B2","B3","C","C1","C2","C3"),"basic")
 badcodes("birth_d_a",c("<",">","D","M","Y","U"),"basic")
 badcodes("enrol_d_a",c("<",">","D","M","Y","U"),"basic")
 badcodes("haart_d_a",c("<",">","D","M","Y","U"),"basic")
