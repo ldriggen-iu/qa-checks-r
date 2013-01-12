@@ -1,7 +1,7 @@
 #############################################################
 #
 #   Program: tbl_checks.R
-#   Project: IeDEAS -- CCASANET
+#   Project: IeDEA
 # 
 #   Biostatistician/Programmer: Meridith Blevins, MS
 #   Purpose: Read in IeDEAS standard and write  
@@ -24,7 +24,7 @@ rm(list=ls()) # clear namespace
 
 
 ## USER -- PLEASE REVISE or CHANGE THE APPROPRIATE WORKING DIRECTORY AND SET THE APPROPRIATE DATABASE CLOSE DATE
-setwd("/home/blevinml/Projects/IeDEAS/qa-checks-r")
+#setwd("/home/blevinml/Projects/IeDEAS/qa-checks-r")
 #setwd("C:/Documents and Settings/blevinml/My Documents/Projects/IeDEAS/qa-checks-r")
 
 ## IN ORDER TO ASSESS DATES OCCURRING IN THE FUTURE, WE NEED A DATABASE CLOSE DATE (YYYY-MM-DD)
@@ -47,6 +47,7 @@ source("code/tblCENTER_checks.R")
 source("code/tblBAS_checks.R")
 source("code/tblLAB_CD4_checks.R")
 source("code/tblLAB_RNA_checks.R")
+source("code/tblART_checks.R")
 
 ################### QUERY CHECK PROGRAMS END HERE ###################
 

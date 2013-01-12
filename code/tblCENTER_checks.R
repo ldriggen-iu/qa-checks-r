@@ -1,7 +1,7 @@
 #############################################################
 #
 #   Program: tblCENTER_checks.R
-#   Project: IeDEAS -- CCASANET
+#   Project: IeDEA
 # 
 #   PI: Firas Wehbe, PhD
 #   Biostatistician/Programmer: Meridith Blevins, MS
@@ -24,7 +24,7 @@
 ## NAME OF TABLE FOR WRITING QUERIES
 tablename <- "tblCENTER"
 ## READ TABLE
-center <- read.csv(paste("input/",tablename,".csv",sep=""),header=TRUE,stringsAsFactors = FALSE)
+center <- read.csv(paste("input/",tablename,".csv",sep=""),header=TRUE,stringsAsFactors = FALSE,na.strings=c("NA",""))
 names(center) <- tolower(names(center))
 ## NAMES EXPECTED FROM HICDEP+/IeDEAS DES
 expectednames <- c("center","country","geocode_lat","geocode_lon","rural",

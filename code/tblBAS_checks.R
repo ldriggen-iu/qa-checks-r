@@ -1,7 +1,7 @@
 #############################################################
 #
 #   Program: tblBAS_checks.R
-#   Project: IeDEAS -- CCASANET
+#   Project: IeDEA
 # 
 #   PI: Firas Wehbe, PhD
 #   Biostatistician/Programmer: Meridith Blevins, MS
@@ -24,7 +24,7 @@
 ## NAME OF TABLE FOR WRITING QUERIES
 tablename <- "tblBAS"
 ## READ TABLE
-basic <- read.csv(paste("input/",tablename,".csv",sep=""),header=TRUE,stringsAsFactors = FALSE)
+basic <- read.csv(paste("input/",tablename,".csv",sep=""),header=TRUE,stringsAsFactors = FALSE,na.strings=c("NA",""))
 names(basic) <- tolower(names(basic))
 ## NAMES EXPECTED FROM HICDEP+/IeDEAS DES
 expectednames <- c("patient","center","country","birth_d","enrol_d","gender",
@@ -87,5 +87,8 @@ badcodes("cdc_stage",c("A","A1","A2","A3","B","B1","B2","B3","C","C1","C2","C3")
 badcodes("birth_d_a",c("<",">","D","M","Y","U"),"basic")
 badcodes("enrol_d_a",c("<",">","D","M","Y","U"),"basic")
 badcodes("haart_d_a",c("<",">","D","M","Y","U"),"basic")
+
+## QUERY PATIENTS WITH NO RECORD IN tblCENTER
+if(exists("center")){badrecord("center","basic","center")}
 
 ################### QUERY CHECKING ENDS HERE ###################

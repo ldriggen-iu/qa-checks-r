@@ -1,7 +1,7 @@
 #############################################################
 #
 #   Program: query_functions.R
-#   Project: IeDEAS -- CCASANET
+#   Project: IeDEA
 # 
 #   PI: Firas Wehbe, MD, PhD
 #   Biostatistician/Programmer: Meridith Blevins, MS
@@ -247,26 +247,6 @@ lowerrangecheck <- function(var,value,table,subsettext=""){
   check <- c(get("allcheck"),paste("Logic","Out of Range",tablename,thevars,sep=" and "))
   assign("allcheck",check,envir=globalenv())
 }
-## WRITE FUNCTION TO CHECK FOR DUPLICATES OF UNIQUEID
-queryextraid <- function(uniqueid,table,roottable="basic"){
-  datatable <- get(table)
-  if(exists(uniqueid,datatable)){
-    if(any(!(get(uniqueid,datatable) %in% get(uniqueid,get(roottable))))){
-        exterr <- !(get(uniqueid,datatable) %in% get(uniqueid,get(roottable)))
-      	query <- data.frame(datatable$patient[exterr],
-      										tablename,
-      										"patient",
-      										"Logic",
-      										"Unexpected Record",
-      										paste("patient=",datatable$patient[exterr],sep=""),
-      										stringsAsFactors=FALSE)     	 
-      names(query) <- names(emptyquery)
-      assign(paste("query",index,sep=""),query,envir=globalenv()); index <<- index + 1
-    }
-  }
-  check <- c(get("allcheck"),paste("Logic","Unexpected Record",tablename,"patient",sep=" and "))
-  assign("allcheck",check,envir=globalenv())
-}
 ## WRITE FUNCTION TO CHECK FOR UNEXPECTED VARIABLE TYPE
 notnumeric <- function(var,table){
   datatable <- get(table)
@@ -315,3 +295,26 @@ notdate <- function(var,table){
   assign("allcheck",check,envir=globalenv())
 }
 
+## WRITE FUNCTION TO CHECK FOR RECORDS THAT EXIST WHEN NOT PROPERLY INDICATED (eg, tblBAS)
+badrecord <- function(uniqueid,subset,superset,table,subsettext=""){
+  subset <- get(subset)
+  superset <- get(superset)
+  subvar <- unlist(strsplit(subsettext,"="))[1]
+  if(exists(uniqueid,subset) & exists(uniqueid,superset)){
+    if(any(!(get(uniqueid,subset) %in% get(uniqueid,superset)))){
+      recerr <- !(get(uniqueid,subset) %in% get(uniqueid,superset))
+      	query <- data.frame(get("patient",subset)[recerr],
+      										tablename,
+      										uniqueid,
+      										"Logic",
+      										"Unexpected Record",
+      										paste(uniqueid,"=",get(uniqueid,subset)[recerr]),
+      										stringsAsFactors=FALSE)
+      names(query) <- names(emptyquery)
+      assign(paste("query",index,sep=""),query,envir=globalenv()); index <<- index + 1
+    }
+  }
+  thevars <- ifelse(!is.na(subvar),paste(uniqueid,subvar),uniqueid)
+  check <- c(get("allcheck"),paste("Logic","Duplicate Record",tablename,thevars,sep=" and "))
+  assign("allcheck",check,envir=globalenv())
+}

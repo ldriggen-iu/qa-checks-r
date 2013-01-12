@@ -1,7 +1,7 @@
 #############################################################
 #
 #   Program: tblCD4_checks.R
-#   Project: IeDEAS -- CCASANET
+#   Project: IeDEA
 # 
 #   PI: Firas Wehbe, PhD
 #   Biostatistician/Programmer: Meridith Blevins, MS
@@ -24,7 +24,7 @@
 ## NAME OF TABLE FOR WRITING QUERIES
 tablename <- "tblLAB_CD4"
 ## READ TABLE
-cd4 <- read.csv(paste("input/",tablename,".csv",sep=""),header=TRUE,stringsAsFactors = FALSE)
+cd4 <- read.csv(paste("input/",tablename,".csv",sep=""),header=TRUE,stringsAsFactors = FALSE,na.strings=c("NA",""))
 names(cd4) <- tolower(names(cd4))
 ## NAMES EXPECTED FROM HICDEP+/IeDEAS DES
 expectednames <- c("patient","cd4_d","cd4_v","cd4_u")
@@ -43,13 +43,13 @@ notdate("cd4_d","cd4")
 if(exists("cd4_d",cd4)){cd4$cd4_d <- convertdate("cd4_d","cd4")}
 
 ## CHECK FOR DATES OCCURRING IN THE WRONG ORDER
-if("tblBAS.csv" %in% list.files()){
+if("tblBAS.csv" %in% list.files(path="input")){
 	basic <- read.csv("input/tblBAS.csv",header=TRUE,stringsAsFactors = FALSE)
 	cd4 <- merge(cd4,with(basic,data.frame(patient,birth_d)),all.x=TRUE)
 	cd4$birth_d <- convertdate("birth_d","cd4")
 	outoforder("birth_d","cd4_d","cd4",table2="tblBAS")
 }
-if("tblLTFU.csv" %in% list.files()){
+if("tblLTFU.csv" %in% list.files(path="input")){
 	ltfu <- read.csv("input/tblLTFU.csv",header=TRUE,stringsAsFactors = FALSE)
   cd4 <- merge(cd4,with(ltfu,data.frame(patient,drop_d,death_d)),all.x=TRUE)
 	cd4$drop_d <- convertdate("drop_d","cd4")
@@ -87,6 +87,7 @@ badcodes("cd4_u",c(1,2),"cd4")
 badcodes("cd4_d_a",c("<",">","D","M","Y","U"),"cd4")
 
 ## QUERY PATIENTS WITH NO RECORD IN tblBAS
-queryextraid("patient","cd4")
+badrecord("patient","cd4","basic")
+
 
 ################### QUERY CHECKING ENDS HERE ###################
