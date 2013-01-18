@@ -51,6 +51,7 @@ if("tblBAS.csv" %in% list.files(path="input")){
 	art <- merge(art,with(basic,data.frame(patient,birth_d,recart_y)),all.x=TRUE)
 	art$birth_d <- convertdate("birth_d","art")
 	outoforder("birth_d","art_sd","art",table2="tblBAS")
+	outoforder("birth_d","art_ed","art",table2="tblBAS")
 }
 if("tblLTFU.csv" %in% list.files(path="input")){
 	ltfu <- read.csv("input/tblLTFU.csv",header=TRUE,stringsAsFactors = FALSE)
@@ -59,6 +60,8 @@ if("tblLTFU.csv" %in% list.files(path="input")){
 	art$death_d <- convertdate("death_d","art")
 	outoforder("art_sd","drop_d","art",table2="tblLTFU")
 	outoforder("art_sd","death_d","art",table2="tblLTFU")
+	outoforder("art_ed","drop_d","art",table2="tblLTFU")
+	outoforder("art_ed","death_d","art",table2="tblLTFU")
 }
 
 ## CHECK FOR DATES OCCURRING IN THE WRONG ORDER

@@ -43,14 +43,14 @@ notdate("rna_d","rna")
 if(exists("rna_d",rna)){rna$rna_d <- convertdate("rna_d","rna")}
 
 ## CHECK FOR DATES OCCURRING IN THE WRONG ORDER
-if("input/tblBAS.csv" %in% list.files(path="input")){
-	basic <- read.csv("tblBAS.csv",header=TRUE,stringsAsFactors = FALSE)
+if("tblBAS.csv" %in% list.files(path="input")){
+	basic <- read.csv("input/tblBAS.csv",header=TRUE,stringsAsFactors = FALSE)
 	rna <- merge(rna,with(basic,data.frame(patient,birth_d)),all.x=TRUE)
 	rna$birth_d <- convertdate("birth_d","rna")
 	outoforder("birth_d","rna_d","rna",table2="tblBAS")
 }
-if("input/tblLTFU.csv" %in% list.files(path="input")){
-	ltfu <- read.csv("tblLTFU.csv",header=TRUE,stringsAsFactors = FALSE)
+if("tblLTFU.csv" %in% list.files(path="input")){
+	ltfu <- read.csv("input/tblLTFU.csv",header=TRUE,stringsAsFactors = FALSE)
   rna <- merge(rna,with(ltfu,data.frame(patient,drop_d,death_d)),all.x=TRUE)
 	rna$drop_d <- convertdate("drop_d","rna")
 	rna$death_d <- convertdate("death_d","rna")

@@ -48,6 +48,8 @@ source("code/tblBAS_checks.R")
 source("code/tblLAB_CD4_checks.R")
 source("code/tblLAB_RNA_checks.R")
 source("code/tblART_checks.R")
+source("code/tblDIS_checks.R")
+source("code/tblVIS_checks.R")
 
 ################### QUERY CHECK PROGRAMS END HERE ###################
 

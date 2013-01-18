@@ -300,21 +300,22 @@ badrecord <- function(uniqueid,subset,superset,table,subsettext=""){
   subset <- get(subset)
   superset <- get(superset)
   subvar <- unlist(strsplit(subsettext,"="))[1]
+  subvar <- gsub("!","",subvar)
   if(exists(uniqueid,subset) & exists(uniqueid,superset)){
     if(any(!(get(uniqueid,subset) %in% get(uniqueid,superset)))){
       recerr <- !(get(uniqueid,subset) %in% get(uniqueid,superset))
       	query <- data.frame(get("patient",subset)[recerr],
       										tablename,
-      										uniqueid,
+      										ifelse(!is.na(subvar),paste(uniqueid,subvar,sep=""),uniqueid),
       										"Logic",
       										"Unexpected Record",
-      										paste(uniqueid,"=",get(uniqueid,subset)[recerr]),
+      										paste(paste(uniqueid,"=",get(uniqueid,subset)[recerr]),subsettext,sep=""),
       										stringsAsFactors=FALSE)
       names(query) <- names(emptyquery)
       assign(paste("query",index,sep=""),query,envir=globalenv()); index <<- index + 1
     }
   }
   thevars <- ifelse(!is.na(subvar),paste(uniqueid,subvar),uniqueid)
-  check <- c(get("allcheck"),paste("Logic","Duplicate Record",tablename,thevars,sep=" and "))
+  check <- c(get("allcheck"),paste("Logic","Unexpected Record",tablename,thevars,sep=" and "))
   assign("allcheck",check,envir=globalenv())
 }

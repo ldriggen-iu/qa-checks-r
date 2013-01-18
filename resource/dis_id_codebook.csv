@@ -1,0 +1,48 @@
+code,label
+PGL,Persistent Generalized Lymphadenopathy
+ANGC,Angular cheilitis
+FNIF,Fungal nail infections of fingers
+HZS,Herpes zoster (single dermatome) 
+WTLM,Moderate unexplained weight loss (<10% of body weight)
+PPE,Papular pruritic eruptions
+RTIR,"Recurrent or chronic respiratory tract infection (RTIs, sinusitis, bronchitis, otitis media, otorrhea, pharyngitis)"
+ORUL,Recurrent oral ulcerations
+SEBD,Seborrheic dermatitis
+NUS,"Acute necrotising ulcerative stomatitis, gingivitis or periodontitis"
+CANM,Candidiasis (oral) (outside neonatal period) 
+MCP,Mycobacterium tuberculosis pulmonary
+OHLP,Oral hairy leukoplakia
+WTLS,Severe unexplained weight loss (>10% of body weight)
+BLD,"Unexplained anaemia (<8g/dl), and or neutropaenia (<500/mm3 – 2; <1000/mm3 - children), and or thrombocytopaenia (<50000/mm3) > 1 month"
+DIAC,Unexplained chronic diarrhoea (> 1month for adults; >14 days for children)
+FEVC,Unexplained persistent fever (> 1 month)
+DEM,AIDS dementia complex
+MYCD,Any disseminated mycosis
+BCNE,"Bacterial pneumonia, recurrent (>2 episodes within 1 year)"
+BCGD,BCG disease – disseminated
+CANT,"Candidiasis (trachea, bronchi or lungs)"
+CANO,Candidiasis oesophogeal
+CRVC,Cervical cancer (invasive)
+CRCO,Cryptococcosis extrapulmonary
+CRSP,Cryptosporidiosis (duration > 1 month)
+CMVR,Cytomegalovirus (CMV) chorioretinitis (onset at age>1month)
+CMVO,"Cytomegalovirus other location (site other than liver, spleen or lymph nodes) (onset at age>1month)"
+HERP,Herpes simplex virus ulcers (duration > 1 month) 
+HIST,Histoplasmosis extrapulm.
+ENC,HIV encephalopathy
+WAST,HIV Wasting Syndrome
+ISDI,Isosporiasis diarrhoea (duration > 1 month)
+KS,Kaposi Sarcoma
+LEIS,Leishmaniasis visceral
+MCDI,Microsporidosis diarrhoea (duration > 1 month)
+MC,Mycobacterium avium complex (MAC) or Kanasii extrapulm.
+MCXO,Mycobacterium extrapulm. other (excluding BCG in children)
+MCX,Mycobacterium tuberculosis extrapulmonary
+NHGP,Non-Hodgkin Lymphoma primary brain lymphoma
+NHGI,"Non-Hodgkin Lymphoma, diffuse large B-cell lymphoma (immunoblasti or centroblastic)"
+PCP,Pneumocystis carinii pneumonia 
+LEU,Progressive multifocal leucoencephalopathy
+BCIR,Recurrent severe presumed bacterial infection (excluding pneumonia) 
+SAM,Salmonella bacteraemia (non-typhoid) recurrent
+TOX,Toxoplasmosis brain (outside neonatal period)
+HERPV,Visceral herpes simplex infection
