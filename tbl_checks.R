@@ -43,13 +43,14 @@ databaseclose <- ifelse(is.na(databaseclose),Sys.Date(),databaseclose)
 
 ################### QUERY CHECK PROGRAMS BEGIN HERE #################
 
-source("code/tblCENTER_checks.R")
+# source("code/tblCENTER_checks.R")
 source("code/tblBAS_checks.R")
 source("code/tblLAB_CD4_checks.R")
 source("code/tblLAB_RNA_checks.R")
 source("code/tblART_checks.R")
-source("code/tblDIS_checks.R")
+# source("code/tblDIS_checks.R")
 source("code/tblVIS_checks.R")
+source("code/summarize_counts.R")
 
 ################### QUERY CHECK PROGRAMS END HERE ###################
 
@@ -59,7 +60,9 @@ allquery <- do.call(rbind,lapply(paste("query",1:(index-1),sep=""),get))
 ## WRITE QUERY FILES
 ## REORDER QUERY FILE ACCORDING TO SPECS 
 allquery <- allquery[,c(4:5,2:3,1,6)]
-## WRITE QUERY FILES
+## WRITE QUERY FILES -- CREATE OUTPUT DIRECTORY (IF NEEDED)
+wd <- getwd(); if(!file.exists("output")){dir.create(file.path(wd,"output"))}
 write.csv(allquery,paste("output/tbl_query_",format(Sys.Date(),"%Y%m%d"),".csv",sep=""),row.names=FALSE)
+write.csv(recordcounts,paste("output/counts_",format(Sys.Date(),"%Y%m%d"),".csv",sep=""),row.names=FALSE)
 #allcheck <- as.data.frame(allcheck); names(allcheck) <- "CHECKS PERFORMED"
 #write.csv(allcheck,paste("output/tbl_checks_",format(Sys.Date(),"%Y%m%d"),".csv",sep=""),row.names=FALSE)
