@@ -48,6 +48,7 @@ if(exists("art_ed",art)){art$art_ed <- convertdate("art_ed","art")}
 ## CHECK FOR DATES OCCURRING IN THE WRONG ORDER
 if("tblBAS.csv" %in% list.files(path="input")){
 	basic <- read.csv("input/tblBAS.csv",header=TRUE,stringsAsFactors = FALSE)
+	names(basic) <- tolower(names(basic))
 	art <- merge(art,with(basic,data.frame(patient,birth_d,recart_y)),all.x=TRUE)
 	art$birth_d <- convertdate("birth_d","art")
 	outoforder("birth_d","art_sd","art",table2="tblBAS")
@@ -55,12 +56,10 @@ if("tblBAS.csv" %in% list.files(path="input")){
 }
 if("tblLTFU.csv" %in% list.files(path="input")){
 	ltfu <- read.csv("input/tblLTFU.csv",header=TRUE,stringsAsFactors = FALSE)
-  art <- merge(art,with(ltfu,data.frame(patient,drop_d,death_d)),all.x=TRUE)
-	art$drop_d <- convertdate("drop_d","art")
+	names(ltfu) <- tolower(names(ltfu))
+  art <- merge(art,with(ltfu,data.frame(patient,death_d)),all.x=TRUE)
 	art$death_d <- convertdate("death_d","art")
-	outoforder("art_sd","drop_d","art",table2="tblLTFU")
 	outoforder("art_sd","death_d","art",table2="tblLTFU")
-	outoforder("art_ed","drop_d","art",table2="tblLTFU")
 	outoforder("art_ed","death_d","art",table2="tblLTFU")
 }
 
@@ -93,11 +92,12 @@ badcodes("art_sd_a",c("<",">","D","M","Y","U"),"art")
 badcodes("art_ed_a",c("<",">","D","M","Y","U"),"art")
 
 ## CHECK FOR UNEXPECTED RECORDS
-if(exists("basic")){
-  art_unique <- art[!duplicated(art$patient),]
-  basic_sub <- basic[basic$recart_y==1,]
-  badrecord("patient","art_unique","basic_sub",subsettext="&recart_y!=1")
-}
+# removed 1/30/2013 -- recart_y is meant to indicate ART-ever status at enrollment
+# if(exists("basic")){
+#   art_unique <- art[!duplicated(art$patient),]
+#   basic_sub <- basic[basic$recart_y==1,]
+#   badrecord("patient","art_unique","basic_sub",subsettext="&recart_y!=1")
+# }
 
 # ## NEED TO PROGRAM:
 # Overlapping periods of same drug

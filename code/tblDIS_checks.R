@@ -48,19 +48,18 @@ if(exists("dis_ed",dis)){dis$dis_ed <- convertdate("dis_ed","dis")}
 ## CHECK FOR DATES OCCURRING IN THE WRONG ORDER
 if("tblBAS.csv" %in% list.files(path="input")){
 	basic <- read.csv("input/tblBAS.csv",header=TRUE,stringsAsFactors = FALSE)
-	dis <- merge(dis,with(basic,data.frame(patient,birth_d,recdis_y)),all.x=TRUE)
+	names(basic) <- tolower(names(basic))
+	dis <- merge(dis,with(basic,data.frame(patient,birth_d)),all.x=TRUE)
 	dis$birth_d <- convertdate("birth_d","dis")
 	outoforder("birth_d","dis_d","dis",table2="tblBAS")
         outoforder("birth_d","dis_ed","dis",table2="tblBAS")
 }
 if("tblLTFU.csv" %in% list.files(path="input")){
 	ltfu <- read.csv("input/tblLTFU.csv",header=TRUE,stringsAsFactors = FALSE)
-  dis <- merge(dis,with(ltfu,data.frame(patient,drop_d,death_d)),all.x=TRUE)
-	dis$drop_d <- convertdate("drop_d","dis")
+	names(ltfu) <- tolower(names(ltfu))
+  dis <- merge(dis,with(ltfu,data.frame(patient,death_d)),all.x=TRUE)
 	dis$death_d <- convertdate("death_d","dis")
-	outoforder("dis_d","drop_d","dis",table2="tblLTFU")
 	outoforder("dis_d","death_d","dis",table2="tblLTFU")
-	outoforder("dis_ed","drop_d","dis",table2="tblLTFU")
 	outoforder("dis_ed","death_d","dis",table2="tblLTFU")
 }
 

@@ -45,16 +45,16 @@ if(exists("vis_d",visit)){visit$vis_d <- convertdate("vis_d","visit")}
 ## CHECK FOR DATES OCCURRING IN THE WRONG ORDER
 if("tblBAS.csv" %in% list.files(path="input")){
 	basic <- read.csv("input/tblBAS.csv",header=TRUE,stringsAsFactors = FALSE)
+	names(basic) <- tolower(names(basic))
 	visit <- merge(visit,with(basic,data.frame(patient,birth_d)),all.x=TRUE)
 	visit$birth_d <- convertdate("birth_d","visit")
 	outoforder("birth_d","vis_d","visit",table2="tblBAS")
 }
 if("tblLTFU.csv" %in% list.files(path="input")){
 	ltfu <- read.csv("input/tblLTFU.csv",header=TRUE,stringsAsFactors = FALSE)
-  visit <- merge(visit,with(ltfu,data.frame(patient,drop_d,death_d)),all.x=TRUE)
-	visit$drop_d <- convertdate("drop_d","visit")
+	names(ltfu) <- tolower(names(ltfu))
+  visit <- merge(visit,with(ltfu,data.frame(patient,death_d)),all.x=TRUE)
 	visit$death_d <- convertdate("death_d","visit")
-	outoforder("vis_d","drop_d","visit",table2="tblLTFU")
 	outoforder("vis_d","death_d","visit",table2="tblLTFU")
 }
 
@@ -74,6 +74,10 @@ if(exists("heigh",visit)){visit$heigh <- forcenumber(visit$heigh)}
 if(exists("weigh",visit)){visit$weigh <- forcenumber(visit$weigh)}
 if(exists("who_stage",visit)){visit$who_stage <- forcenumber(visit$who_stage)}
 
+## FORCE MISSING VALUES AS NA FOR RANGE CHECKS
+visit$weigh[visit$weigh==999] <- NA
+visit$heigh[visit$heigh==999] <- NA
+
 ## CHECK FOR DUPLICATE PATIENT IDs + RANGE CHECKS
 queryduplicates("patient","visit",date="vis_d")
 upperrangecheck("weigh",120,"visit")
@@ -82,8 +86,8 @@ upperrangecheck("heigh",220,"visit")
 lowerrangecheck("heigh",0,"visit") # consider specifying lower limit for adult population
 
 ## CHECK FOR UNEXPECTED CODING
-badcodes("who_stage",c(1:4),"visit")
-badcodes("cdc_stage",c("A","A1","A2","A3","B","B1","B2","B3","C","C1","C2","C3"),"visit")
+badcodes("who_stage",c(1:4,9),"visit")
+badcodes("cdc_stage",c("A","A1","A2","A3","B","B1","B2","B3","C","C1","C2","C3","N"),"visit")
 badcodes("vis_d_a",c("<",">","D","M","Y","U"),"visit")
 
 ## QUERY PATIENTS WITH NO RECORD IN tblBAS
