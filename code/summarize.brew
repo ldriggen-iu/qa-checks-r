@@ -1,0 +1,49 @@
+<html>
+<head>
+<title>Summary of query file: <%=useexceptions%></title>
+</head>
+<body>
+<%
+# Run or source some R code here
+overalltable <- geterrtable(unique(allquery$err),total=TRUE)
+
+writeHTMLtable <- function(table,header=FALSE){
+  start <- "<table border='1'><tr>"
+  end <- "</tr></table>"
+  if(header){
+    head <- paste(names(table),collapse="</th><th>")
+    table <- paste(start,"<th>",paste(c(head,apply(table,1,paste,collapse="</td><td>")),collapse="</tr><tr><td>"),end,sep="")
+  }
+  if(!header) table <- paste(start,"<td>",paste(apply(table,1,paste,collapse="</td><td>"),collapse="</tr><tr><td>"),end,sep="")
+  return(table)
+}
+
+png(filename='output/counts_by_enrol_d.png',width=640,height=480)
+plotcounts <- data.frame(table(allquery$PID))
+plotcounts <- merge(plotcounts,basic,by.x="Var1",by.y="patient",all.x=TRUE)
+plot(plotcounts$enrol_d[is.na(plotcounts$enrol_d_a)],plotcounts$Freq[is.na(plotcounts$enrol_d_a)],
+     type="p",pch=16,cex=0.2,xlab="Year of enrollment",ylab="Number of exceptions",main="Patient-level counts")
+abline(h=mean(plotcounts$Freq),lty=2,lwd=1.5,col=4)
+abline(h=median(plotcounts$Freq),lty=1,lwd=1.5,col=3)
+legend("topleft",c("Mean","Median"),col=4:3,lty=2:1,lwd=1.5,bty="n")
+dev.off()
+
+## THIS LOOPS OVER CENTER TO CREATE SUMMARY TABLES
+print_by_center <- NULL
+for(i in sort(unique(allquery$center))){
+  print_by_center <- c(print_by_center,paste("<hr />The following table summarizes exceptions encountered for center <strong>",i,"</strong>: ",writeHTMLtable(geterrtable(unique(allquery$err),total=TRUE,subset=(!is.na(allquery$center) & allquery$center==i)),header=TRUE),sep=""))
+}
+
+excsum <- nrow(allquery)
+patsum <- length(unique(allquery$PID))
+%>
+<h1>Query Summary</h1>
+<p>This report summarizes <%=excsum%> exceptions found among <%=patsum%> patients in a database formulated using the IeDEA data exchange standard. </p>
+<img src="counts_by_enrol_d.png" />
+<hr />
+The following table summarizes exceptions encountered for the <strong> entire database</strong>:
+<%=writeHTMLtable(overalltable,header=TRUE)%>
+<%=print_by_center%>
+
+</body>
+</html>

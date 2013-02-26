@@ -8,6 +8,7 @@
 #
 #   INPUT: "tbl_query_yyyymmdd.csv"
 #   OUTPUT: "summaryX_yyyymmdd.csv"
+#   PACKAGES: Brewer
 #
 #   Notes: As long as the working directory structure 
 #          matches README.md, such that the data tables,
@@ -16,7 +17,7 @@
 #          a listing of data queries in /output.
 #
 #   Created: 25 January 2013
-#   Revisions: 
+#   Revisions: 20 February 2013
 #     
 #############################################################
 rm(list=ls()) # clear namespace
@@ -77,6 +78,18 @@ geterrcounts <- function(vartype,subset=TRUE){
   return(line)
 }
 
+## CONVERT DATE VARIABLES AND PERFORM LOGIC CHECK AGAINST DATE OF BIRTH
+convertdate <- function(date,table){
+  datatable <- get(table)
+  if(exists(date,datatable)){
+    var <- as.Date(get(date,datatable),"%Y-%m-%d")
+  }
+  if(!exists(date,datatable)){
+    var <- NULL
+  }
+  return(var)
+}
+
 
 ## GET QUERY COUNTS FOR ALL ERROR TYPES, THEN COMBINE INTO A TABLE
 ## WHEN SUBSET=TRUE, THIS SELECTS EVERYTHING (NO SUBSETTING)
@@ -99,3 +112,19 @@ overalltable <- geterrtable(unique(allquery$err),total=TRUE)
 
 ## WRITE QUERY SUMMARY
 write.csv(overalltable,paste("output/query_summary_",format(Sys.Date(),"%Y%m%d"),".csv",sep=""),row.names=FALSE)
+
+
+############ EVERYTHING CODED ABOVE IS NOT DEPENDENT ON ANY R PACKAGE OR ORIGINAL DATASETS ############
+basic <- read.csv("input/tblBAS.csv",header=TRUE,stringsAsFactors = FALSE,na.strings=c("NA",""))
+names(basic) <- tolower(names(basic))
+## CONVERT DATES USING EXPECTED FORMAT (will force NA if format is incorrect)
+if(exists("enrol_d",basic)){basic$enrol_d <- convertdate("enrol_d","basic")}
+
+allquery <- merge(allquery,basic,by.x="PID",by.y="patient",all.x=TRUE)
+
+## SUMMARIZE QUERIES IN HTML
+library(brew)
+brew(file='code/summarize.brew',output='output/summary_report.html')
+
+
+

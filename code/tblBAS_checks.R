@@ -27,7 +27,7 @@ tablename <- "tblBAS"
 basic <- read.csv(paste("input/",tablename,".csv",sep=""),header=TRUE,stringsAsFactors = FALSE,na.strings=c("NA",""))
 names(basic) <- tolower(names(basic))
 ## NAMES EXPECTED FROM HICDEP+/IeDEAS DES
-expectednames <- c("patient","center","country","birth_d","enrol_d","gender",
+expectednames <- c("patient","center","birth_d","enrol_d","gender",
 #                    "height_bas","weight_bas","who_stage","cdc_stage",
 		   "mode","recart_y","haart_d")
 acceptablenames <- c(expectednames,"birth_d_a","enrol_d_a","haart_d_a")

@@ -18,29 +18,46 @@
 #     
 #############################################################
 
-
-setwd("/home/blevinml/Projects/IeDEAS/qa-checks-r/code")
-source("datafor_utility_functions.R")
-
-
-
+## CONVERT DATE VARIABLES AND PERFORM LOGIC CHECK AGAINST DATE OF BIRTH
+convertdate <- function(date,table){
+  datatable <- get(table)
+  if(exists(date,datatable)){
+    var <- as.Date(get(date,datatable),"%Y-%m-%d")
+  }
+  if(!exists(date,datatable)){
+    var <- NULL
+  }
+  return(var)
+}
 
 # baseline - window defined, closest/latest/earliest
-getbaseline <- function(baselinedate,visitdate,id,value=value,before=30,after=30,type="closest",data=parent.frame(),returndate=FALSE,dateformat=dateformat){
+getbaseline <- function(baselinedate,visitdate,ids,value=value,before=30,after=30,type="closest",data=parent.frame(),returndate=FALSE,dateformat=dateformat,subset=subset){
    ## get appropriate variables from data frame if provided
     if(!missing(data)){
         bdate <- get(deparse(substitute(baselinedate)),data)
         vdate <- get(deparse(substitute(visitdate)),data)
-        ids <- get(deparse(substitute(id)),data)
+        ids <- get(deparse(substitute(ids)),data)
         if(!missing(value)) values <- get(deparse(substitute(value)),data)
     }
     if(!missing(dateformat)){
         vdate <- as.Date(vdate,dateformat)
 	bdate <- as.Date(bdate,dateformat)
     }
+  ## check variable lengths
+   if(!missing(value) & length(values)!=length(ids))  stop("values is not the appropriate length")
+   if(length(vdate)!=length(ids))  stop("vdate is not the appropriate length")
+   if(length(bdate)!=length(ids))  stop("bdate is not the appropriate length")
+   if(!missing(subset)){
+       if(length(subset) != length(ids)) stop("subset is not the appropriate length")
+       if(!is.logical(subset)) stop("subset should be a logical argument")
+       vdate <- vdate[subset]
+       bdate <- bdate[subset]
+       ids <- ids[subset]
+       if(!missing(value)) values <- values[subset]
+   }
   ## check for duplicates by visitdate
     dups <- unsplit(lapply(split(vdate, ids), FUN=anyDuplicated), ids)
-    dupids <- unique(ids[dups>0])
+    dupids <- sort(unique(ids[dups>0]))
     if(length(dupids)>0){
          warning(paste("visitdate is duplicated for",length(dupids),"id's; returning list of duplicate id."))
          return(duplicateids = dupids)
