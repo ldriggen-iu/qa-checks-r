@@ -206,13 +206,13 @@ convertdate <- function(date,table){
   return(var)
 }
 ## WRITE FUNCTION TO CHECK FOR OUT OF RANGE DATA
-upperrangecheck <- function(var,value,table,subsettext=""){
+upperrangecheck <- function(var,value,table,subsettext="",ptlevel=TRUE){
   datatable <- get(table)
   subvar <- unlist(strsplit(subsettext,"="))[1]
   if(exists(var,datatable)){
     coderr <- !is.na(get(var,datatable)) & get(var,datatable) > value
     if(any(coderr)){
-      query<-data.frame(datatable$patient[coderr],
+      query<-data.frame(ifelse(ptlevel,datatable$patient[coderr],datatable$center[coderr]),
       									tablename,ifelse(!is.na(subvar),paste(var,subvar,sep=""),var),"Logic",
       									"Out of Range",
       									paste(var,"=",get(var,datatable)[coderr],subsettext,sep=""),
@@ -227,13 +227,13 @@ upperrangecheck <- function(var,value,table,subsettext=""){
   assign("allcheck",check,envir=globalenv())
 }
 ## WRITE FUNCTION TO CHECK FOR OUT OF RANGE DATA
-lowerrangecheck <- function(var,value,table,subsettext=""){
+lowerrangecheck <- function(var,value,table,subsettext="",ptlevel=TRUE){
   datatable <- get(table)
   subvar <- unlist(strsplit(subsettext,"="))[1]
   if(exists(var,datatable)){
     coderr <- !is.na(get(var,datatable)) & get(var,datatable) < value
     if(any(coderr)){
-      query<-data.frame(datatable$patient[coderr],
+      query<-data.frame(ifelse(ptlevel,datatable$patient[coderr],datatable$center[coderr]),
       									tablename,ifelse(!is.na(subvar),paste(var,subvar,sep=""),var),"Logic",
       									"Out of Range",
       									paste(var,"=",get(var,datatable)[coderr],subsettext,sep=""),

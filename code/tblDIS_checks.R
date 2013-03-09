@@ -23,10 +23,6 @@
 
 ## NAME OF TABLE FOR WRITING QUERIES
 tablename <- "tblDIS"
-## READ TABLE
-dis <- read.csv(paste("input/",tablename,".csv",sep=""),header=TRUE,stringsAsFactors = FALSE,na.strings=c("NA",""))
-dis <- dis[!is.na(dis$patient),]
-names(dis) <- tolower(names(dis))
 ## NAMES EXPECTED FROM HICDEP+/IeDEAS DES
 expectednames <- c("patient","dis_id","dis_d","dis_ed","dis_wd")
 acceptablenames <- c(expectednames,"dis_d_a","dis_ed_a")
@@ -46,21 +42,17 @@ if(exists("dis_d",dis)){dis$dis_d <- convertdate("dis_d","dis")}
 if(exists("dis_ed",dis)){dis$dis_ed <- convertdate("dis_ed","dis")}
 
 ## CHECK FOR DATES OCCURRING IN THE WRONG ORDER
-if("tblBAS.csv" %in% list.files(path="input")){
-	basic <- read.csv("input/tblBAS.csv",header=TRUE,stringsAsFactors = FALSE)
-	names(basic) <- tolower(names(basic))
-	dis <- merge(dis,with(basic,data.frame(patient,birth_d)),all.x=TRUE)
-	dis$birth_d <- convertdate("birth_d","dis")
-	outoforder("birth_d","dis_d","dis",table2="tblBAS")
-        outoforder("birth_d","dis_ed","dis",table2="tblBAS")
+if(exists("basic")){
+	basdis <- merge(dis,with(basic,data.frame(patient,birth_d)),all.x=TRUE)
+	basdis$birth_d <- convertdate("birth_d","basdis")
+	outoforder("birth_d","dis_d","basdis",table2="tblBAS")
+        outoforder("birth_d","dis_ed","basdis",table2="tblBAS")
 }
-if("tblLTFU.csv" %in% list.files(path="input")){
-	ltfu <- read.csv("input/tblLTFU.csv",header=TRUE,stringsAsFactors = FALSE)
-	names(ltfu) <- tolower(names(ltfu))
-  dis <- merge(dis,with(ltfu,data.frame(patient,death_d)),all.x=TRUE)
-	dis$death_d <- convertdate("death_d","dis")
-	outoforder("dis_d","death_d","dis",table2="tblLTFU")
-	outoforder("dis_ed","death_d","dis",table2="tblLTFU")
+if(exists("ltfu")){
+        ltfudis <- merge(dis,with(ltfu,data.frame(patient,death_d)),all.x=TRUE)
+	ltfudis$death_d <- convertdate("death_d","ltfudis")
+	outoforder("dis_d","death_d","ltfudis",table2="tblLTFU")
+	outoforder("dis_ed","death_d","ltfudis",table2="tblLTFU")
 }
 
 ## CHECK FOR DATES OCCURRING IN THE WRONG ORDER

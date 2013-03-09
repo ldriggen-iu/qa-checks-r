@@ -24,9 +24,6 @@
 ## NAME OF TABLE FOR WRITING QUERIES
 tablename <- "tblART"
 ## READ TABLE
-art <- read.csv(paste("input/",tablename,".csv",sep=""),header=TRUE,stringsAsFactors = FALSE,na.strings=c("NA",""))
-art <- art[!is.na(art$patient),]
-names(art) <- tolower(names(art))
 ## NAMES EXPECTED FROM HICDEP+/IeDEAS DES
 expectednames <- c("patient","art_id","art_sd","art_ed","art_rs")
 acceptablenames <- c(expectednames,"art_sd_a","art_ed_a")
@@ -46,21 +43,17 @@ if(exists("art_sd",art)){art$art_sd <- convertdate("art_sd","art")}
 if(exists("art_ed",art)){art$art_ed <- convertdate("art_ed","art")}
 
 ## CHECK FOR DATES OCCURRING IN THE WRONG ORDER
-if("tblBAS.csv" %in% list.files(path="input")){
-	basic <- read.csv("input/tblBAS.csv",header=TRUE,stringsAsFactors = FALSE)
-	names(basic) <- tolower(names(basic))
-	art <- merge(art,with(basic,data.frame(patient,birth_d,recart_y)),all.x=TRUE)
-	art$birth_d <- convertdate("birth_d","art")
-	outoforder("birth_d","art_sd","art",table2="tblBAS")
-	outoforder("birth_d","art_ed","art",table2="tblBAS")
+if(exists("basic")){
+	basart <- merge(art,with(basic,data.frame(patient,birth_d,recart_y)),all.x=TRUE)
+	basart$birth_d <- convertdate("birth_d","basart")
+	outoforder("birth_d","art_sd","basart",table2="tblBAS")
+	outoforder("birth_d","art_ed","basart",table2="tblBAS")
 }
-if("tblLTFU.csv" %in% list.files(path="input")){
-	ltfu <- read.csv("input/tblLTFU.csv",header=TRUE,stringsAsFactors = FALSE)
-	names(ltfu) <- tolower(names(ltfu))
-  art <- merge(art,with(ltfu,data.frame(patient,death_d)),all.x=TRUE)
-	art$death_d <- convertdate("death_d","art")
-	outoforder("art_sd","death_d","art",table2="tblLTFU")
-	outoforder("art_ed","death_d","art",table2="tblLTFU")
+if(exists("ltfu")){
+        ltfuart <- merge(art,with(ltfu,data.frame(patient,death_d)),all.x=TRUE)
+	ltfuart$death_d <- convertdate("death_d","ltfuart")
+	outoforder("art_sd","death_d","ltfuart",table2="tblLTFU")
+	outoforder("art_ed","death_d","ltfuart",table2="tblLTFU")
 }
 
 ## CHECK FOR DATES OCCURRING IN THE WRONG ORDER

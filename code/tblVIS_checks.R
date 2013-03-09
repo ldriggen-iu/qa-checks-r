@@ -23,9 +23,6 @@
 
 ## NAME OF TABLE FOR WRITING QUERIES
 tablename <- "tblVIS"
-## READ TABLE
-visit <- read.csv(paste("input/",tablename,".csv",sep=""),header=TRUE,stringsAsFactors = FALSE,na.strings=c("NA",""))
-names(visit) <- tolower(names(visit))
 ## NAMES EXPECTED FROM HICDEP+/IeDEAS DES
 expectednames <- c("patient","vis_d","weigh","heigh","cdc_stage","who_stage")
 acceptablenames <- c(expectednames,"vis_d_a")
@@ -43,19 +40,15 @@ notdate("vis_d","visit")
 if(exists("vis_d",visit)){visit$vis_d <- convertdate("vis_d","visit")}
 
 ## CHECK FOR DATES OCCURRING IN THE WRONG ORDER
-if("tblBAS.csv" %in% list.files(path="input")){
-	basic <- read.csv("input/tblBAS.csv",header=TRUE,stringsAsFactors = FALSE)
-	names(basic) <- tolower(names(basic))
-	visit <- merge(visit,with(basic,data.frame(patient,birth_d)),all.x=TRUE)
-	visit$birth_d <- convertdate("birth_d","visit")
-	outoforder("birth_d","vis_d","visit",table2="tblBAS")
+if(exists("basic")){
+	basvisit <- merge(visit,with(basic,data.frame(patient,birth_d)),all.x=TRUE)
+	basvisit$birth_d <- convertdate("birth_d","visit")
+	outoforder("birth_d","vis_d","basvisit",table2="tblBAS")
 }
-if("tblLTFU.csv" %in% list.files(path="input")){
-	ltfu <- read.csv("input/tblLTFU.csv",header=TRUE,stringsAsFactors = FALSE)
-	names(ltfu) <- tolower(names(ltfu))
-  visit <- merge(visit,with(ltfu,data.frame(patient,death_d)),all.x=TRUE)
-	visit$death_d <- convertdate("death_d","visit")
-	outoforder("vis_d","death_d","visit",table2="tblLTFU")
+if(exists("ltfu")){
+        ltfuvisit <- merge(visit,with(ltfu,data.frame(patient,death_d)),all.x=TRUE)
+	ltfuvisit$death_d <- convertdate("death_d","visit")
+	outoforder("vis_d","death_d","ltfuvisit",table2="tblLTFU")
 }
 
 ## CHECK FOR DATES OCCURRING TOO FAR IN THE FUTURE
@@ -75,8 +68,8 @@ if(exists("weigh",visit)){visit$weigh <- forcenumber(visit$weigh)}
 if(exists("who_stage",visit)){visit$who_stage <- forcenumber(visit$who_stage)}
 
 ## FORCE MISSING VALUES AS NA FOR RANGE CHECKS
-visit$weigh[visit$weigh==999] <- NA
-visit$heigh[visit$heigh==999] <- NA
+if(exists("weigh",visit)){visit$weigh[visit$weigh==999] <- NA}
+if(exists("heigh",visit)){visit$heigh[visit$heigh==999] <- NA}
 
 ## CHECK FOR DUPLICATE PATIENT IDs + RANGE CHECKS
 queryduplicates("patient","visit",date="vis_d")

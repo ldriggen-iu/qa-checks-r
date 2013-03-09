@@ -23,9 +23,6 @@
 
 ## NAME OF TABLE FOR WRITING QUERIES
 tablename <- "tblCENTER"
-## READ TABLE
-center <- read.csv(paste("input/",tablename,".csv",sep=""),header=TRUE,stringsAsFactors = FALSE,na.strings=c("NA",""))
-names(center) <- tolower(names(center))
 ## NAMES EXPECTED FROM HICDEP+/IeDEAS DES
 expectednames <- c("center","country","geocode_lat","geocode_lon","rural",
                    "level","close_d")
@@ -50,10 +47,10 @@ notnumeric("geocode_lat","center")
 notnumeric("geocode_lon","center")
 
 ## RANGE CHECKS
-upperrangecheck("geocode_lat",90,"center")
-lowerrangecheck("geocode_lat",-90,"center")
-upperrangecheck("geocode_lon",180,"center")
-lowerrangecheck("geocode_lon",-180,"center")
+upperrangecheck("geocode_lat",90,"center",ptlevel=FALSE)
+lowerrangecheck("geocode_lat",-90,"center",ptlevel=FALSE)
+upperrangecheck("geocode_lon",180,"center",ptlevel=FALSE)
+lowerrangecheck("geocode_lon",-180,"center",ptlevel=FALSE)
                 
 ## CHECK FOR MISSING DATA
 missingvalue("center","center")

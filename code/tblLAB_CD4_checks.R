@@ -43,19 +43,15 @@ notdate("cd4_d","cd4")
 if(exists("cd4_d",cd4)){cd4$cd4_d <- convertdate("cd4_d","cd4")}
 
 ## CHECK FOR DATES OCCURRING IN THE WRONG ORDER
-if("tblBAS.csv" %in% list.files(path="input")){
-	basic <- read.csv("input/tblBAS.csv",header=TRUE,stringsAsFactors = FALSE)
-	names(basic) <- tolower(names(basic))
-	cd4 <- merge(cd4,with(basic,data.frame(patient,birth_d)),all.x=TRUE)
-	cd4$birth_d <- convertdate("birth_d","cd4")
-	outoforder("birth_d","cd4_d","cd4",table2="tblBAS")
+if(exists("basic")){
+	bascd4 <- merge(cd4,with(basic,data.frame(patient,birth_d)),all.x=TRUE)
+	bascd4$birth_d <- convertdate("birth_d","bascd4")
+	outoforder("birth_d","cd4_d","bascd4",table2="tblBAS")
 }
-if("tblLTFU.csv" %in% list.files(path="input")){
-	ltfu <- read.csv("input/tblLTFU.csv",header=TRUE,stringsAsFactors = FALSE)
-	names(ltfu) <- tolower(names(ltfu))
-  cd4 <- merge(cd4,with(ltfu,data.frame(patient,death_d)),all.x=TRUE)
-	cd4$death_d <- convertdate("death_d","cd4")
-	outoforder("cd4_d","death_d","cd4",table2="tblLTFU")
+if(exists("ltfu")){
+       ltfucd4 <- merge(cd4,with(ltfu,data.frame(patient,death_d)),all.x=TRUE)
+	ltfucd4$death_d <- convertdate("death_d","ltfucd4")
+	outoforder("cd4_d","death_d","ltfucd4",table2="tblLTFU")
 }
 
 ## CHECK FOR DATES OCCURRING TOO FAR IN THE FUTURE

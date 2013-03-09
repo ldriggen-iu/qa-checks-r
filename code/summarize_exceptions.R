@@ -22,10 +22,12 @@
 #############################################################
 rm(list=ls()) # clear namespace
 
-
-## USER -- PLEASE REVISE or CHANGE THE APPROPRIATE WORKING DIRECTORY AND SET THE APPROPRIATE DATABASE CLOSE DATE
+## USER -- PLEASE REVISE or CHANGE THE APPROPRIATE WORKING DIRECTORY
 #setwd("/home/blevinml/Projects/IeDEAS/qa-checks-r")
 #setwd("C:/Documents and Settings/blevinml/My Documents/Projects/IeDEAS/qa-checks-r")
+
+## SUMMARIZE COUNT DATA
+source("code/summarize_counts.R")
 
 ## READ IN QUERY FILE -- CHOOSE MOST RECENT IF MULTIPLE
 wd <- getwd()
@@ -125,6 +127,3 @@ allquery <- merge(allquery,basic,by.x="PID",by.y="patient",all.x=TRUE)
 ## SUMMARIZE QUERIES IN HTML
 library(brew)
 brew(file='code/summarize.brew',output='output/summary_report.html')
-
-
-

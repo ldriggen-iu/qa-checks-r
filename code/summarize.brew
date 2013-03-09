@@ -1,24 +1,73 @@
 <html>
 <head>
-<title>Summary of query file: <%=useexceptions%></title>
+<title>Summary of data files (<%=paste(existingtables,collapse=", ")%>) and  query file (<%=useexceptions%>)</title>
 </head>
 <body>
 <%
 # Run or source some R code here
-overalltable <- geterrtable(unique(allquery$err),total=TRUE)
-
 writeHTMLtable <- function(table,header=FALSE){
   start <- "<table border='1'><tr>"
   end <- "</tr></table>"
   if(header){
     head <- paste(names(table),collapse="</th><th>")
-    table <- paste(start,"<th>",paste(c(head,apply(table,1,paste,collapse="</td><td>")),collapse="</tr><tr><td>"),end,sep="")
+    table <- paste(start,"<th>",paste(c(head,apply(table,1,paste,collapse="</td><td>&nbsp;")),collapse="</tr><tr><td>"),end,sep="")
   }
-  if(!header) table <- paste(start,"<td>",paste(apply(table,1,paste,collapse="</td><td>"),collapse="</tr><tr><td>"),end,sep="")
+  if(!header) table <- paste(start,"<td>",paste(apply(table,1,paste,collapse="</td><td>&nbsp;"),collapse="</tr><tr><td>"),end,sep="")
   return(table)
 }
 
-png(filename='output/counts_by_enrol_d.png',width=640,height=480)
+## CREATE A BARPLOT GRAPHIC
+library(latticeExtra)
+dob_year <- as.numeric(substr(basic$birth_d,1,4))
+plotdob <- data.frame(table(dob_year[is.na(basic$birth_d_a)],basic$gender[is.na(basic$birth_d_a)]))
+
+
+png("output/year_gender_barstack.png",res=100,width=640,height=480, bg="transparent") 
+stackbar <- barchart(Freq~Var1,plotdob,groups=Var2,xlab="Year of birth",ylab="Number of patients",horizontal=F,stack=T,scales=list(x=list(rot=45,at=c(1+seq(1900,2010,by=5)-min(dob_year[is.na(basic$birth_d_a)],na.rm=TRUE)),labels=seq(1900,2010,by=5))) ,
+             panel=function(x,y,...) {panel.fill(col="transparent")
+                 panel.grid(-1,0,lty=3,col="black")
+                 panel.barchart(x,y,col=c("blue","red"),...)},
+             )
+stackbar <- stackbar + layer(panel.key(c("Male", "Female"), corner = c(.02,0.98), padding = 2,rectangles = TRUE , space="right",size=2,height=c(1,1), points = FALSE, lines = FALSE, packets = 1,cex=0.8))
+print(update(stackbar, par.settings =  custom.theme(symbol = c("blue","red"), fill = c("blue","red"), lwd=1)))
+dev.off()
+
+
+png("output/year_gender_barchart.png",res=100,width=640,height=480, bg="transparent") 
+regbar <- barchart(Freq~Var1,plotdob,groups=Var2,xlab="Year of birth",ylab="Number of patients",horizontal=F,scales=list(x=list(rot=45,at=c(1+seq(1900,2010,by=5)-min(dob_year[is.na(basic$birth_d_a)],na.rm=TRUE)),labels=seq(1900,2010,by=5))), origin = 0,
+             panel=function(x,y,...) {
+		 panel.fill(col="transparent")
+                 panel.grid(-1,0,lty=3,col="black")
+                 panel.barchart(x,y,col=c("blue","red"),...)},
+             )
+regbar <- regbar + layer(panel.key(c("Male", "Female"), corner = c(.02,0.98), padding = 2,rectangles = TRUE, space="right",size=2, height=c(1,1), points = FALSE, lines = FALSE, packets = 1,cex=0.8))
+print(update(regbar, par.settings =  custom.theme(symbol = c("blue","red"), fill = c("blue","red"), lwd=1)))
+dev.off()
+
+
+## THIS LOOPS OVER CENTER TO CREATE SUMMARY TABLES
+print_records_by_center <- NULL
+for(i in sort(unique(allquery$center))){
+  crecordcounts <- t(sapply(readtables,getrecordcounts,subset=basic$patient[basic$center==i]))
+  crecordcounts <- data.frame(existingtables,crecordcounts[,2:3])
+  names(crecordcounts) <- c("tbl","records","patients")
+  print_records_by_center <- c(print_records_by_center,paste("<hr />The following table summarizes records and unique patients for center <strong>",i,"</strong>: ",writeHTMLtable(crecordcounts,header=TRUE),sep=""))
+}
+%>
+<h1>Data Summary</h1>
+<p>This report summarizes <%=sum(recordcounts$records)%> records found among <%=recordcounts$patients[recordcounts$tbl=="tblBAS"]%> patients in a database formulated using the IeDEA data exchange standard. </p>
+<img src="year_gender_barchart.png" />
+<hr />
+The following table summarizes the number of records and unique patients for the <strong> entire database</strong>:
+<%=writeHTMLtable(recordcounts,header=TRUE)%>
+<%=print_records_by_center%>
+
+
+<%
+# Run or source some R code here
+overalltable <- geterrtable(unique(allquery$err),total=TRUE)
+
+png(filename='output/counts_by_enrol_d.png',res=100,width=640,height=480)
 plotcounts <- data.frame(table(allquery$PID))
 plotcounts <- merge(plotcounts,basic,by.x="Var1",by.y="patient",all.x=TRUE)
 plot(plotcounts$enrol_d[is.na(plotcounts$enrol_d_a)],plotcounts$Freq[is.na(plotcounts$enrol_d_a)],

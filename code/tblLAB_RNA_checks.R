@@ -23,9 +23,6 @@
 
 ## NAME OF TABLE FOR WRITING QUERIES
 tablename <- "tblLAB_RNA"
-## READ TABLE
-rna <- read.csv(paste("input/",tablename,".csv",sep=""),header=TRUE,stringsAsFactors = FALSE,na.strings=c("NA",""))
-names(rna) <- tolower(names(rna))
 ## NAMES EXPECTED FROM HICDEP+/IeDEAS DES
 expectednames <- c("patient","rna_d","rna_v","rna_l","rna_t")
 acceptablenames <- c(expectednames,"rna_d_a")
@@ -43,19 +40,15 @@ notdate("rna_d","rna")
 if(exists("rna_d",rna)){rna$rna_d <- convertdate("rna_d","rna")}
 
 ## CHECK FOR DATES OCCURRING IN THE WRONG ORDER
-if("tblBAS.csv" %in% list.files(path="input")){
-	names(basic) <- tolower(names(basic))
-	basic <- read.csv("input/tblBAS.csv",header=TRUE,stringsAsFactors = FALSE)
-	rna <- merge(rna,with(basic,data.frame(patient,birth_d)),all.x=TRUE)
-	rna$birth_d <- convertdate("birth_d","rna")
-	outoforder("birth_d","rna_d","rna",table2="tblBAS")
+if(exists("basic")){
+	basrna <- merge(rna,with(basic,data.frame(patient,birth_d)),all.x=TRUE)
+	basrna$birth_d <- convertdate("birth_d","basrna")
+	outoforder("birth_d","rna_d","basrna",table2="tblBAS")
 }
-if("tblLTFU.csv" %in% list.files(path="input")){
-	ltfu <- read.csv("input/tblLTFU.csv",header=TRUE,stringsAsFactors = FALSE)
-	names(ltfu) <- tolower(names(ltfu))
-  rna <- merge(rna,with(ltfu,data.frame(patient,death_d)),all.x=TRUE)
-	rna$death_d <- convertdate("death_d","rna")
-	outoforder("rna_d","death_d","rna",table2="tblLTFU")
+if(exists("ltfu")){
+        ltfurna <- merge(rna,with(ltfu,data.frame(patient,death_d)),all.x=TRUE)
+	ltfurna$death_d <- convertdate("death_d","ltfurna")
+	outoforder("rna_d","death_d","ltfurna",table2="tblLTFU")
 }
 
 ## CHECK FOR DATES OCCURRING TOO FAR IN THE FUTURE
