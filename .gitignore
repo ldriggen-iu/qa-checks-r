@@ -4,3 +4,6 @@ output/*.csv
 *.pdf
 *.doc
 .DS_STORE
+.Rproj.user
+*.Rproj
+.Rhistory
