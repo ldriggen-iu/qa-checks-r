@@ -57,7 +57,7 @@ for(i in 1:length(readtables)){
 
 ################### QUERY CHECK PROGRAMS BEGIN HERE #################
 
-# if(exists("center")) source("code/tblCENTER_checks.R")
+if(exists("center")) source("code/tblCENTER_checks.R")
 if(exists("basic")) source("code/tblBAS_checks.R")
 if(exists("cd4")) source("code/tblLAB_CD4_checks.R")
 if(exists("rna")) source("code/tblLAB_RNA_checks.R")

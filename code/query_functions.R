@@ -49,12 +49,12 @@ missvar <- function(expectednames,table){
   assign("allcheck",check,envir=globalenv())
 }
 ## WRITE FUNCTION TO CHECK FOR MISSING PATIENT VALUES
-missingvalue <- function(var,table){
+missingvalue <- function(var,table,id="patient"){
 datatable <- get(table)
 if(exists(var,datatable)){
     if(!exists(paste(var,"_a",sep=""),datatable)){
 	if(any(is.na(get(var,datatable)))){
-	  query <- data.frame(datatable$patient[is.na(get(var,datatable))],
+	  query <- data.frame(get(id,datatable)[is.na(get(var,datatable))],
 											  tablename,
 											  var,
 											  "Missing Value",
@@ -68,7 +68,7 @@ if(exists(var,datatable)){
     if(exists(paste(var,"_a",sep=""),datatable)){
 	if(any(!(!is.na(get(paste(var,"_a",sep=""),datatable)) & get(paste(var,"_a",sep=""),datatable)=="U") & is.na(get(var,datatable)))){
 	  miserr <- !(!is.na(get(paste(var,"_a",sep=""),datatable)) & get(paste(var,"_a",sep=""),datatable)=="U") & is.na(get(var,datatable))
-	  query <- data.frame(datatable$patient[miserr],
+	  query <- data.frame(get(id,datatable)[miserr],
 											  tablename,
 											  var,
 											  "Missing Value",
@@ -83,7 +83,7 @@ if(exists(var,datatable)){
   assign("allcheck",check,envir=globalenv())
 }
 ## WRITE FUNCTION TO CHECK FOR DATES OCCURRING IN FUTURE
-futuredate <- function(var,table){
+futuredate <- function(var,table,id="patient"){
   datatable <- get(table)
   if(exists(var,datatable)){
     futerr <- !is.na(get(var,datatable)) & get(var,datatable)>databaseclose
@@ -97,7 +97,7 @@ futuredate <- function(var,table){
       futerr[!is.na(flag) & flag=="<"] <- FALSE
     }
     query <- emptyquery
-    if(any(futerr)){query<-data.frame(datatable$patient[futerr],
+    if(any(futerr)){query<-data.frame(get(id,datatable)[futerr],
     																	tablename,var,"Logic",
     																	"Date in the Future",
     																	paste("databaseclose=",format(as.Date(databaseclose,origin="1970-01-01"),format="%Y-%m-%d"),"&",var,"=",get(var,datatable)[futerr],sep=""),
@@ -110,12 +110,12 @@ futuredate <- function(var,table){
   assign("allcheck",check,envir=globalenv())
 }
 ## WRITE FUNCTION TO CHECK FOR UNEXPECTED CODES
-badcodes <- function(var,codelist,table){
+badcodes <- function(var,codelist,table,id="patient"){
   datatable <- get(table)
   if(exists(var,datatable)){
     coderr <- !is.na(get(var,datatable)) & !(get(var,datatable) %in% codelist)
     if(any(coderr)){
-      query<-data.frame(datatable$patient[coderr],
+      query<-data.frame(get(id,datatable)[coderr],
       									tablename,var,"Value Error",
       									"Unexpected Code",
       									paste(var,"=",get(var,datatable)[coderr],sep=""),
@@ -129,31 +129,31 @@ badcodes <- function(var,codelist,table){
   assign("allcheck",check,envir=globalenv())
 }
 ## WRITE FUNCTION TO CHECK FOR DUPLICATES OF UNIQUEID
-queryduplicates <- function(uniqueid,table,date=date,subsettext=""){
+queryduplicates <- function(uniqueid,table,date=date,subsettext="",id="patient"){
   datatable <- get(table)
   subvar <- unlist(strsplit(subsettext,"="))[1]
   if(exists(uniqueid,datatable)){
-  	if(!missing(date)){id <- paste(get(uniqueid,datatable),"&",get(date,datatable))}
-  	if(missing(date)){id <- get(uniqueid,datatable)}
-    if(any(duplicated(id))){
-      duperr <- duplicated(id)
+  	if(!missing(date)){pid <- paste(get(uniqueid,datatable),"&",get(date,datatable))}
+  	if(missing(date)){pid <- get(uniqueid,datatable)}
+    if(any(duplicated(pid))){
+      duperr <- duplicated(pid)
       if(missing(date)){
-      	query <- data.frame(datatable$patient[duperr],
+      	query <- data.frame(get(id,datatable)[duperr],
       										tablename,
-      										"patient",
+      										id,
       										"Logic",
       										"Duplicate Record",
-      										paste("patient =",datatable$patient[duperr]),
+      										paste(id," =",get(id,datatable)[duperr]),
       										stringsAsFactors=FALSE)
       }
       	 if(!missing(date)){
-      	 	query <- data.frame(datatable$patient[duperr],
+      	 	query <- data.frame(get(id,datatable)[duperr],
       	 											tablename,
-      	 											ifelse(!is.na(subvar),paste("patient&",date,subvar,sep=""),
-      	 														 paste("patient&",date,sep="")),
+      	 											ifelse(!is.na(subvar),paste(id,"&",date,subvar,sep=""),
+      	 														 paste(id,"&",date,sep="")),
       	 											"Logic",
       	 											"Duplicate Record",
-      	 											paste("patient=",datatable$patient[duperr],"&",
+      	 											paste(id,"=",get(id,datatable)[duperr],"&",
       	 														date,"=",get(date,datatable)[duperr],subsettext,sep=""),
       	 											stringsAsFactors=FALSE)
       	 }      	 
@@ -161,13 +161,13 @@ queryduplicates <- function(uniqueid,table,date=date,subsettext=""){
       assign(paste("query",index,sep=""),query,envir=globalenv()); index <<- index + 1
     }
   }
-  thevars <- ifelse(!missing(date),paste("patient &", date),"patient")
+  thevars <- ifelse(!missing(date),paste(id,"&", date),id)
   thevars <- ifelse(!is.na(subvar),paste(thevars,subvar),thevars)
   check <- c(get("allcheck"),paste("Logic","Duplicate Record",tablename,thevars,sep=" and "))
   assign("allcheck",check,envir=globalenv())
 }
 ## WRITE FUNCTION FOR OUT OF ORDER DATES, DATE2 IS SUPPOSED TO OCCUR ON OR AFTER DATE1
-outoforder <- function(date1,date2,table,table2=table2){
+outoforder <- function(date1,date2,table,table2=table2,id="patient"){
 	if(!missing(table2)){tablename <- paste(tablename,"&",table2)}
   datatable <- get(table)
   if(exists(date1,datatable) & exists(date2,datatable)){
@@ -181,7 +181,7 @@ outoforder <- function(date1,date2,table,table2=table2){
 	logicerr[!is.na(flag2) & flag2 %in% c("U","<")] <- FALSE
      }
      if(any(logicerr)){
-      query <- data.frame(datatable$patient[logicerr],
+      query <- data.frame(get(id,datatable)[logicerr],
      										 tablename,paste(date1,"&",date2,sep=""),
      										 "Logic",
      										 "Out of Order",
@@ -206,13 +206,13 @@ convertdate <- function(date,table){
   return(var)
 }
 ## WRITE FUNCTION TO CHECK FOR OUT OF RANGE DATA
-upperrangecheck <- function(var,value,table,subsettext="",ptlevel=TRUE){
+upperrangecheck <- function(var,value,table,subsettext="",id="patient"){
   datatable <- get(table)
   subvar <- unlist(strsplit(subsettext,"="))[1]
   if(exists(var,datatable)){
     coderr <- !is.na(get(var,datatable)) & get(var,datatable) > value
     if(any(coderr)){
-      query<-data.frame(ifelse(ptlevel,datatable$patient[coderr],datatable$center[coderr]),
+      query<-data.frame(get(id,datatable)[coderr],
       									tablename,ifelse(!is.na(subvar),paste(var,subvar,sep=""),var),"Logic",
       									"Out of Range",
       									paste(var,"=",get(var,datatable)[coderr],subsettext,sep=""),
@@ -227,13 +227,13 @@ upperrangecheck <- function(var,value,table,subsettext="",ptlevel=TRUE){
   assign("allcheck",check,envir=globalenv())
 }
 ## WRITE FUNCTION TO CHECK FOR OUT OF RANGE DATA
-lowerrangecheck <- function(var,value,table,subsettext="",ptlevel=TRUE){
+lowerrangecheck <- function(var,value,table,subsettext="",id="patient"){
   datatable <- get(table)
   subvar <- unlist(strsplit(subsettext,"="))[1]
   if(exists(var,datatable)){
     coderr <- !is.na(get(var,datatable)) & get(var,datatable) < value
     if(any(coderr)){
-      query<-data.frame(ifelse(ptlevel,datatable$patient[coderr],datatable$center[coderr]),
+      query<-data.frame(get(id,datatable)[coderr],
       									tablename,ifelse(!is.na(subvar),paste(var,subvar,sep=""),var),"Logic",
       									"Out of Range",
       									paste(var,"=",get(var,datatable)[coderr],subsettext,sep=""),
@@ -248,12 +248,12 @@ lowerrangecheck <- function(var,value,table,subsettext="",ptlevel=TRUE){
   assign("allcheck",check,envir=globalenv())
 }
 ## WRITE FUNCTION TO CHECK FOR UNEXPECTED VARIABLE TYPE
-notnumeric <- function(var,table){
+notnumeric <- function(var,table,id="patient"){
   datatable <- get(table)
   if(exists(var,datatable)){
     numerr <- grepl("[:alpha:]",get(var,datatable))
     if(any(numerr)){
-      query<-data.frame(datatable$patient[numerr],
+      query<-data.frame(get(id,datatable)[numerr],
       									tablename,var,"Value Error",
       									"Unexpected Type",
       									paste(var,"=",get(var,datatable)[numerr],"&type=numeric",sep=""),
@@ -275,13 +275,13 @@ forcenumber <- function(var){
 }
 
 ## WRITE FUNCTION TO CHECK FOR UNEXPECTED VARIABLE TYPE
-notdate <- function(var,table){
+notdate <- function(var,table,id="patient"){
   datatable <- get(table)
   if(exists(var,datatable)){
     datavar <- get(var,datatable)
     numerr <- !is.na(datavar) & !(grepl("[0-9]",substr(datavar,1,4)) & grepl("-",substr(datavar,5,5)) & grepl("[0-9]",substr(datavar,6,7)) & grepl("-",substr(datavar,8,8)) & grepl("[0-9]",substr(datavar,9,10)))
     if(any(numerr)){
-      query<-data.frame(datatable$patient[numerr],
+      query<-data.frame(get(id,datatable)[numerr],
       									tablename,var,"Value Error",
       									"Unexpected Type",
       									paste(var,"=",datavar[numerr],"&type=date",sep=""),
@@ -296,7 +296,7 @@ notdate <- function(var,table){
 }
 
 ## WRITE FUNCTION TO CHECK FOR RECORDS THAT EXIST WHEN NOT PROPERLY INDICATED (eg, tblBAS)
-badrecord <- function(uniqueid,subset,superset,table,subsettext=""){
+badrecord <- function(uniqueid,subset,superset,table,subsettext="",id="patient"){
   subset <- get(subset)
   superset <- get(superset)
   subvar <- unlist(strsplit(subsettext,"="))[1]
@@ -304,7 +304,7 @@ badrecord <- function(uniqueid,subset,superset,table,subsettext=""){
   if(exists(uniqueid,subset) & exists(uniqueid,superset)){
     if(any(!(get(uniqueid,subset) %in% get(uniqueid,superset)))){
       recerr <- !(get(uniqueid,subset) %in% get(uniqueid,superset))
-      	query <- data.frame(get("patient",subset)[recerr],
+      	query <- data.frame(get(id,subset)[recerr],
       										tablename,
       										ifelse(!is.na(subvar),paste(uniqueid,subvar,sep=""),uniqueid),
       										"Logic",

@@ -26,8 +26,8 @@
 
 ## IDENTIFY WHICH TABLES TO EXPECT FROM DES
 ## STILL NEED TO INCORPORATE tblLTFU and tblCENTER
-expectedtables <- c("basic","cd4","rna","art","dis","visit")
-expecteddestables <- c("tblBAS","tblLAB_CD4","tblLAB_RNA","tblART","tblDIS","tblVIS") 
+expectedtables <- c("center","basic","cd4","rna","art","dis","visit")
+expecteddestables <- c("tblCENTER","tblBAS","tblLAB_CD4","tblLAB_RNA","tblART","tblDIS","tblVIS") 
 
 ## CHOOSE FIRST SELECTS THE TEXT STRING OCCURING BEFORE THE SPECIFIED SEPARATER
 choosefirst <- function(var,sep=".") unlist(lapply(strsplit(var,sep,fixed=TRUE),function(x) x[1]))
@@ -50,11 +50,14 @@ getrecordcounts <- function(table,unique_id="patient",subset=basic$patient){
   return(c(table,x1,x2))
   }
 
-recordcounts <- t(sapply(readtables,getrecordcounts))
+
+
+
+recordcounts <- rbind(getrecordcounts(table="center",unique_id="center",subset=center$center),t(sapply(readtables[-1],getrecordcounts)))
 recordcounts <- data.frame(existingtables,recordcounts[,2:3])
 names(recordcounts) <- c("tbl","records","patients")
 
-## WRITE QUERY FILES -- CREATE OUTPUT DIRECTORY (IF NEEDED)
+## WRITE COUNT FILE -- CREATE OUTPUT DIRECTORY (IF NEEDED)
 wd <- getwd(); if(!file.exists("output")){dir.create(file.path(wd,"output"))}
 write.csv(recordcounts,paste("output/counts_",format(Sys.Date(),"%Y%m%d"),".csv",sep=""),row.names=FALSE)
 

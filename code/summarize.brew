@@ -48,8 +48,8 @@ dev.off()
 ## THIS LOOPS OVER CENTER TO CREATE SUMMARY TABLES
 print_records_by_center <- NULL
 for(i in sort(unique(allquery$center))){
-  crecordcounts <- t(sapply(readtables,getrecordcounts,subset=basic$patient[basic$center==i]))
-  crecordcounts <- data.frame(existingtables,crecordcounts[,2:3])
+  crecordcounts <- t(sapply(readtables[-1],getrecordcounts,subset=basic$patient[basic$center==i]))
+  crecordcounts <- data.frame(existingtables[-1],crecordcounts[,2:3])
   names(crecordcounts) <- c("tbl","records","patients")
   print_records_by_center <- c(print_records_by_center,paste("<hr />The following table summarizes records and unique patients for center <strong>",i,"</strong>: ",writeHTMLtable(crecordcounts,header=TRUE),sep=""))
 }
@@ -80,7 +80,7 @@ dev.off()
 ## THIS LOOPS OVER CENTER TO CREATE SUMMARY TABLES
 print_by_center <- NULL
 for(i in sort(unique(allquery$center))){
-  print_by_center <- c(print_by_center,paste("<hr />The following table summarizes exceptions encountered for center <strong>",i,"</strong>: ",writeHTMLtable(geterrtable(unique(allquery$err),total=TRUE,subset=(!is.na(allquery$center) & allquery$center==i)),header=TRUE),sep=""))
+  print_by_center <- c(print_by_center,paste("<hr />The following table summarizes exceptions encountered for center <strong>",i,"</strong>: ",writeHTMLtable(geterrtable(unique(allquery$err[allquery$Error != "Table Structure"]),total=TRUE,subset=(!is.na(allquery$center) & allquery$center==i)),header=TRUE),sep=""))
 }
 
 excsum <- nrow(allquery)
