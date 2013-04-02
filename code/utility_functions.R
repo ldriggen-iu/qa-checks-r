@@ -19,12 +19,11 @@
 #############################################################
 
 ## CONVERT DATE VARIABLES AND PERFORM LOGIC CHECK AGAINST DATE OF BIRTH
-convertdate <- function(date,table){
-  datatable <- get(table)
-  if(exists(date,datatable)){
-    var <- as.Date(get(date,datatable),"%Y-%m-%d")
+convertdate <- function(date,table=parent.frame()){
+  if(exists(deparse(substitute(date)),table)){
+    var <- as.Date(get(deparse(substitute(date)),table),"%Y-%m-%d")
   }
-  if(!exists(date,datatable)){
+  if(!exists(deparse(substitute(date)),table)){
     var <- NULL
   }
   return(var)

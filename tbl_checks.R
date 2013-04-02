@@ -59,6 +59,7 @@ for(i in 1:length(readtables)){
 
 if(exists("center")) source("code/tblCENTER_checks.R")
 if(exists("basic")) source("code/tblBAS_checks.R")
+if(exists("ltfu")) source("code/tblLTFU_checks.R")
 if(exists("cd4")) source("code/tblLAB_CD4_checks.R")
 if(exists("rna")) source("code/tblLAB_RNA_checks.R")
 if(exists("art")) source("code/tblART_checks.R")
@@ -76,5 +77,3 @@ allquery <- allquery[,c(4:5,2:3,1,6)]
 ## WRITE QUERY FILES -- CREATE OUTPUT DIRECTORY (IF NEEDED)
 wd <- getwd(); if(!file.exists("output")){dir.create(file.path(wd,"output"))}
 write.csv(allquery,paste("output/tbl_query_",format(Sys.Date(),"%Y%m%d"),".csv",sep=""),row.names=FALSE)
-#allcheck <- as.data.frame(allcheck); names(allcheck) <- "CHECKS PERFORMED"
-#write.csv(allcheck,paste("output/tbl_checks_",format(Sys.Date(),"%Y%m%d"),".csv",sep=""),row.names=FALSE)

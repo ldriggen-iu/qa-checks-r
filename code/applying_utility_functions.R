@@ -59,5 +59,5 @@ firsthaart <- getselectdate(art_sd,patient,data=art,dateformat="%Y-%m-%d") # def
     cd4 <- cd4[dups == 0,]
 
 ## GET CD4 COUNT ONLY BEFORE ART using "subset" feature
-base_cd4_no_haart <- getbaseline(enrol_d,cd4_d,patient,value=cd4_v,data=cd4,returndate=TRUE,dateformat="%Y-%m-%d",subset=(cd4$cd4_u==1 & convertdate("cd4_d","cd4") <= convertdate("art_sd","cd4"))) # default is closest date with window -30,30
+base_cd4_no_haart <- getbaseline(enrol_d,cd4_d,patient,value=cd4_v,data=cd4,returndate=TRUE,dateformat="%Y-%m-%d",subset=(cd4$cd4_u==1 & convertdate(cd4_d,cd4) <= convertdate(art_sd,cd4))) # default is closest date with window -30,30
 
