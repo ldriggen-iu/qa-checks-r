@@ -67,11 +67,28 @@ The following table summarizes the number of records and unique patients for the
 # Run or source some R code here
 overalltable <- geterrtable(unique(allquery$err),total=TRUE)
 
-png(filename='output/counts_by_enrol_d.png',res=100,width=640,height=480)
+png("output/histbox.png",res=100,width=480,height=480, bg="transparent") 
+# Add boxplots to a scatterplot
+par(mar=c(3,3,1,1),mgp=c(2,1,0))
+par(fig=c(0,1,0,0.8))
+set.seed(1)
+plotcounts <- data.frame(table(allquery$PID))
+hist(plotcounts$Freq, nclass=20, xlab="Number of exceptions",main="")
+maxcount <- max(hist(plotcounts$Freq, nclass=20, plot=F)$counts)
+z <- density(plotcounts$Freq)
+#Scale density estimate to coincide with histogram
+lines(z$x, maxcount*z$y/max(z$y))
+par(fig=c(0,1,0.6,1), new=TRUE)
+boxplot(plotcounts$Freq,ylab="",horizontal=TRUE,axes=FALSE)
+stripchart(plotcounts$Freq,vertical=FALSE,method="jitter",add=TRUE,pch=19,cex=0.05,col=3,jitter=0.025)
+dev.off()
+
+png(filename='output/counts_by_enrol_d.png',res=100,width=480,height=480, bg="transparent")
+par(mgp=c(2,1,0),mar=c(3,3,1,1))
 plotcounts <- data.frame(table(allquery$PID))
 plotcounts <- merge(plotcounts,basic,by.x="Var1",by.y="patient",all.x=TRUE)
 plot(plotcounts$enrol_d[is.na(plotcounts$enrol_d_a)],plotcounts$Freq[is.na(plotcounts$enrol_d_a)],
-     type="p",pch=16,cex=0.2,xlab="Year of enrollment",ylab="Number of exceptions",main="Patient-level counts")
+     type="p",pch=16,cex=0.2,xlab="Year of enrollment",ylab="Number of exceptions",main="")
 abline(h=mean(plotcounts$Freq),lty=2,lwd=1.5,col=4)
 abline(h=median(plotcounts$Freq),lty=1,lwd=1.5,col=3)
 legend("topleft",c("Mean","Median"),col=4:3,lty=2:1,lwd=1.5,bty="n")
@@ -88,6 +105,8 @@ patsum <- length(unique(allquery$PID))
 %>
 <h1>Query Summary</h1>
 <p>This report summarizes <%=excsum%> exceptions found among <%=patsum%> patients in a database formulated using the IeDEA data exchange standard. </p>
+<h2>Patient-level Counts</h2>
+<img src="histbox.png" />
 <img src="counts_by_enrol_d.png" />
 <hr />
 The following table summarizes exceptions encountered for the <strong> entire database</strong>:

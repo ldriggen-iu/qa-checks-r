@@ -42,7 +42,7 @@ allquery <- read.csv(paste("output/",useexceptions,sep=""),header=TRUE,stringsAs
 allquery$tbl <- gsub(" ","",(sub(" &.*","",allquery$Table)))
 
 ## READ IN TABLE COUNTS (RECORDS AND PATIENTS)
-recordcounts <- read.csv(paste("output/",gsub("tbl_query_","counts_",useexceptions),sep=""),header=TRUE,stringsAsFactors = FALSE,na.strings=c("NA",""))
+recordcounts <- read.csv(paste("output/","counts_",format(Sys.Date(),"%Y%m%d"),".csv",sep=""),header=TRUE,stringsAsFactors = FALSE,na.strings=c("NA",""))
 allquery <- merge(allquery,recordcounts)
 
 ## DETERMINE UNIQUE QUERY LISTINGS
