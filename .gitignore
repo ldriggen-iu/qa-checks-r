@@ -1,5 +1,7 @@
 input/*.csv
 output/*.csv
+output/*.png
+output/*.html
 *.docx
 *.pdf
 *.doc
