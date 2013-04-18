@@ -50,9 +50,11 @@ existingtables <- choosefirst(list.files("input"))
 readtables <- expectedtables[match(existingtables,expecteddestables)]
 ## READ IN ALL EXISTING TABLES
 for(i in 1:length(readtables)){
-  readcsv <- read.csv(paste("input/",existingtables[i],".csv",sep=""),header=TRUE,stringsAsFactors = FALSE)
-  names(readcsv) <- tolower(names(readcsv))
-  assign(readtables[i],readcsv)
+  if(!is.na(readtables[i])){
+     readcsv <- read.csv(paste("input/",existingtables[i],".csv",sep=""),header=TRUE,stringsAsFactors = FALSE,na.strings=c(NA,""))
+     names(readcsv) <- tolower(names(readcsv))
+     assign(readtables[i],readcsv)
+   }
 }
 
 ################### QUERY CHECK PROGRAMS BEGIN HERE #################

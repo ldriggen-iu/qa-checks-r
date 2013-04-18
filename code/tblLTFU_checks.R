@@ -39,6 +39,12 @@ notdate(death_d,ltfu)
 notdate(lastinfo_d,ltfu)
 notdate(transfer_d,ltfu)
 
+## CHECK FOR MISSING DATA
+missingvalue(lastvis_d,ltfu)
+# missingvalue(death_d,ltfu)
+missingvalue(lastinfo_d,ltfu)
+# missingvalue(transfer_d,ltfu)
+
 ## CONVERT DATES USING EXPECTED FORMAT (will force NA if format is incorrect)
 if(exists("lastvis_d",ltfu)){ltfu$lastvis_d <- convertdate(lastvis_d,ltfu)}
 if(exists("death_d",ltfu)){ltfu$death_d <- convertdate(death_d,ltfu)}
@@ -73,16 +79,10 @@ futuredate(transfer_d,ltfu)
 ## CHECK FOR DUPLICATE PATIENT IDs
 queryduplicates(patient,ltfu)
 
-## CHECK FOR MISSING DATA
-missingvalue(lastvis_d,ltfu)
-# missingvalue(death_d,ltfu)
-missingvalue(lastinfo_d,ltfu)
-# missingvalue(transfer_d,ltfu)
-
 ## CHECK FOR UNEXPECTED CODING
-badcodes(lastvis_d,c("<",">","D","M","Y","U"),ltfu)
-badcodes(death_d,c("<",">","D","M","Y","U"),ltfu)
-badcodes(lastinfo_d,c("<",">","D","M","Y","U"),ltfu)
-badcodes(transfer_d,c("<",">","D","M","Y","U"),ltfu)
+badcodes(lastvis_d_a,c("<",">","D","M","Y","U"),ltfu)
+badcodes(death_d_a,c("<",">","D","M","Y","U"),ltfu)
+badcodes(lastinfo_d_a,c("<",">","D","M","Y","U"),ltfu)
+badcodes(transfer_d_a,c("<",">","D","M","Y","U"),ltfu)
 
 ################### QUERY CHECKING ENDS HERE ###################

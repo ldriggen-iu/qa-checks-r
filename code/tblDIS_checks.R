@@ -37,6 +37,10 @@ missvar(expectednames,dis)
 notdate(dis_d,dis)
 notdate(dis_ed,dis)
 
+## CHECK FOR MISSING DATA -- do this before date is converted to avoid duplicated queries
+missingvalue(dis_id,dis)
+missingvalue(dis_d,dis)
+
 ## CONVERT DATES USING EXPECTED FORMAT (will force NA if format is incorrect)
 if(exists("dis_d",dis)){dis$dis_d <- convertdate(dis_d,dis)}
 if(exists("dis_ed",dis)){dis$dis_ed <- convertdate(dis_ed,dis)}
@@ -70,10 +74,6 @@ for(i in unique(dis$dis_id)[!is.na(unique(dis$dis_id))]){
 
 ## CHECK FOR INCORRECT VARIABLE TYPE (prior to range checks, if applicable)
 notnumeric(dis_wd,dis)
-
-## CHECK FOR MISSING DATA
-missingvalue(dis_id,dis)
-missingvalue(dis_d,dis)
 
 ## CHECK FOR UNEXPECTED CODING
 dis_id_codebook <- read.csv("resource/dis_id_codebook.csv",header=TRUE,stringsAsFactors = FALSE,na.strings="")

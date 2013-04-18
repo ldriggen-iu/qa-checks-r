@@ -39,6 +39,11 @@ missvar(expectednames,cd4)
 ## PRIOR TO CONVERTING DATES, CHECK THAT THE TYPE IS APPROPRIATE 
 notdate(cd4_d,cd4)
 
+## CHECK FOR MISSING DATA
+missingvalue(cd4_d,cd4)
+missingvalue(cd4_v,cd4)
+missingvalue(cd4_u,cd4)
+
 ## CONVERT DATES USING EXPECTED FORMAT (will force NA if format is incorrect)
 if(exists("cd4_d",cd4)){cd4$cd4_d <- convertdate(cd4_d,cd4)}
 
@@ -59,11 +64,6 @@ futuredate(cd4_d,cd4)
 
 ## CHECK FOR INCORRECT VARIABLE TYPE (prior to range checks)
 notnumeric(cd4_v,cd4)
-
-## CHECK FOR MISSING DATA
-missingvalue(cd4_d,cd4)
-missingvalue(cd4_v,cd4)
-missingvalue(cd4_u,cd4)
 
 ## CONVERT TO NUMERIC OR FORCE MISSING FOR NON-NUMERIC
 cd4$cd4_v <- forcenumber(cd4$cd4_v)

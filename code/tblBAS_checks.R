@@ -39,6 +39,17 @@ notdate(birth_d,basic)
 notdate(enrol_d,basic)
 notdate(haart_d,basic)
 
+## CHECK FOR MISSING DATA
+missingvalue(birth_d,basic)
+missingvalue(enrol_d,basic)
+missingvalue(haart_d,basic)
+missingvalue(patient,basic)
+missingvalue(center,basic)
+missingvalue(country,basic)
+missingvalue(gender,basic)
+missingvalue(mode,basic)
+missingvalue(recart_y,basic)
+
 ## CONVERT DATES USING EXPECTED FORMAT (will force NA if format is incorrect)
 if(exists("birth_d",basic)){basic$birth_d <- convertdate(birth_d,basic)}
 if(exists("enrol_d",basic)){basic$enrol_d <- convertdate(enrol_d,basic)}
@@ -56,16 +67,6 @@ futuredate(haart_d,basic)
 ## CHECK FOR DUPLICATE PATIENT IDs
 queryduplicates(patient,basic)
 
-## CHECK FOR MISSING DATA
-missingvalue(birth_d,basic)
-missingvalue(enrol_d,basic)
-missingvalue(haart_d,basic)
-missingvalue(patient,basic)
-missingvalue(center,basic)
-missingvalue(country,basic)
-missingvalue(gender,basic)
-missingvalue(mode,basic)
-missingvalue(recart_y,basic)
 ## CHECK FOR UNEXPECTED CODING
 badcodes(gender,c(1,2,9),basic)
 badcodes(mode,c(1:8,90,99),basic)

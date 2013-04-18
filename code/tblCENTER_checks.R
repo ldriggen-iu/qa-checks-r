@@ -35,6 +35,15 @@ missvar(expectednames,center)
 
 ## PRIOR TO CONVERTING DATES, CHECK THAT THE TYPE IS APPROPRIATE 
 notdate(close_d,center,id=center)
+                
+## CHECK FOR MISSING DATA
+missingvalue(center,center,id=center)
+missingvalue(country,center,id=center)
+missingvalue(geocode_lat,center,id=center)
+missingvalue(geocode_lon,center,id=center)
+missingvalue(rural,center,id=center)
+missingvalue(level,center,id=center)
+missingvalue(close_d,center,id=center)
 
 ## CONVERT DATES USING EXPECTED FORMAT (will force NA if format is incorrect)
 if(exists("close_d",center)){center$close_d <- convertdate(close_d,center)}
@@ -51,15 +60,6 @@ upperrangecheck(geocode_lat,90,center,id=center)
 lowerrangecheck(geocode_lat,-90,center,id=center)
 upperrangecheck(geocode_lon,180,center,id=center)
 lowerrangecheck(geocode_lon,-180,center,id=center)
-                
-## CHECK FOR MISSING DATA
-missingvalue(center,center,id=center)
-missingvalue(country,center,id=center)
-missingvalue(geocode_lat,center,id=center)
-missingvalue(geocode_lon,center,id=center)
-missingvalue(rural,center,id=center)
-missingvalue(level,center,id=center)
-missingvalue(close_d,center,id=center)
 
 ## CHECK FOR UNEXPECTED CODING
 badcodes(rural,c(1,2,3,4,9),center,id=center)

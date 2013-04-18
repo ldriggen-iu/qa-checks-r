@@ -36,6 +36,10 @@ missvar(expectednames,visit)
 ## PRIOR TO CONVERTING DATES, CHECK THAT THE TYPE IS APPROPRIATE 
 notdate(vis_d,visit)
 
+## CHECK FOR MISSING DATA
+missingvalue(vis_d,visit)
+# it's okay for others to be missing 
+
 ## CONVERT DATES USING EXPECTED FORMAT (will force NA if format is incorrect)
 if(exists("vis_d",visit)){visit$vis_d <- convertdate(vis_d,visit)}
 
@@ -58,10 +62,6 @@ futuredate(vis_d,visit)
 notnumeric(heigh,visit)
 notnumeric(weigh,visit)
 
-## CHECK FOR MISSING DATA
-missingvalue(vis_d,visit)
-# it's okay for others to be missing 
-
 ## CONVERT TO NUMERIC OR FORCE MISSING FOR NON-NUMERIC
 if(exists("heigh",visit)){visit$heigh <- forcenumber(visit$heigh)}
 if(exists("weigh",visit)){visit$weigh <- forcenumber(visit$weigh)}
@@ -80,7 +80,7 @@ lowerrangecheck(heigh,0,visit) # consider specifying lower limit for adult popul
 
 ## CHECK FOR UNEXPECTED CODING
 badcodes(who_stage,c(1:4,9),visit)
-badcodes(cdc_stage,c("A","A1","A2","A3","B","B1","B2","B3","C","C1","C2","C3","N"),visit)
+badcodes(cdc_stage,c("A","A1","A2","A3","B","B1","B2","B3","C","C1","C2","C3","N","9"),visit)
 badcodes(vis_d_a,c("<",">","D","M","Y","U"),visit)
 
 ## QUERY PATIENTS WITH NO RECORD IN tblBAS

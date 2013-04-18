@@ -24,7 +24,6 @@ rm(list=ls()) # clear namespace
 
 ## USER -- PLEASE REVISE or CHANGE THE APPROPRIATE WORKING DIRECTORY
 #setwd("/home/blevinml/Projects/IeDEAS/qa-checks-r")
-#setwd("C:/Documents and Settings/blevinml/My Documents/Projects/IeDEAS/qa-checks-r")
 
 ## SUMMARIZE COUNT DATA
 source("code/summarize_counts.R")

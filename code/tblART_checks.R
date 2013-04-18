@@ -38,6 +38,10 @@ missvar(expectednames,art)
 notdate(art_sd,art)
 notdate(art_ed,art)
 
+## CHECK FOR MISSING DATA
+missingvalue(art_id,art)
+missingvalue(art_sd,art)
+
 ## CONVERT DATES USING EXPECTED FORMAT (will force NA if format is incorrect)
 if(exists("art_sd",art)){art$art_sd <- convertdate(art_sd,art)}
 if(exists("art_ed",art)){art$art_ed <- convertdate(art_ed,art)}
@@ -71,10 +75,6 @@ for(i in unique(art$art_id)[!is.na(unique(art$art_id))]){
 
 ## CHECK FOR INCORRECT VARIABLE TYPE (prior to range checks, if applicable)
 notnumeric(art_rs,art)
-
-## CHECK FOR MISSING DATA
-missingvalue(art_id,art)
-missingvalue(art_sd,art)
 
 ## CHECK FOR UNEXPECTED CODING
 art_id_codebook <- read.csv("resource/art_id_codebook.csv",header=TRUE,stringsAsFactors = FALSE,na.strings="")

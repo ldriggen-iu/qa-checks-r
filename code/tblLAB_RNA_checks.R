@@ -36,6 +36,11 @@ missvar(expectednames,rna)
 ## PRIOR TO CONVERTING DATES, CHECK THAT THE TYPE IS APPROPRIATE 
 notdate(rna_d,rna)
 
+## CHECK FOR MISSING DATA
+missingvalue(rna_d,rna)
+missingvalue(rna_v,rna)
+# it's okay for "rna_l" and "rna_t" to be missing 
+
 ## CONVERT DATES USING EXPECTED FORMAT (will force NA if format is incorrect)
 if(exists("rna_d",rna)){rna$rna_d <- convertdate(rna_d,rna)}
 
@@ -57,11 +62,6 @@ futuredate(rna_d,rna)
 ## CHECK FOR INCORRECT VARIABLE TYPE (prior to range checks)
 notnumeric(rna_v,rna)
 notnumeric(rna_l,rna)
-
-## CHECK FOR MISSING DATA
-missingvalue(rna_d,rna)
-missingvalue(rna_v,rna)
-# it's okay for "rna_l" and "rna_t" to be missing 
 
 ## CONVERT TO NUMERIC OR FORCE MISSING FOR NON-NUMERIC
 rna$rna_v <- forcenumber(rna$rna_v)
