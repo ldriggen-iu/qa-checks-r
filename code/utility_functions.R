@@ -19,6 +19,16 @@
 #############################################################
 
 ## CONVERT DATE VARIABLES AND PERFORM LOGIC CHECK AGAINST DATE OF BIRTH
+#' convertdate
+#'
+#' summary
+#'
+#' details
+#'
+#' @param date NEEDDOC
+#' @param table NEEDDOC
+#' @export
+
 convertdate <- function(date,table=parent.frame()){
   if(exists(deparse(substitute(date)),table)){
     var <- as.Date(get(deparse(substitute(date)),table),"%Y-%m-%d")
@@ -30,6 +40,25 @@ convertdate <- function(date,table=parent.frame()){
 }
 
 # baseline - window defined, closest/latest/earliest
+#' getbaseline
+#'
+#' summary
+#'
+#' details
+#'
+#' @param baselinedate NEEDDOC
+#' @param visitdate NEEDDOC
+#' @param ids NEEDDOC
+#' @param value NEEDDOC
+#' @param before NEEDDOC
+#' @param after NEEDDOC
+#' @param type NEEDDOC
+#' @param data NEEDDOC
+#' @param returndate NEEDDOC
+#' @param dateformat NEEDDOC
+#' @param subset NEEDDOC
+#' @export
+
 getbaseline <- function(baselinedate,visitdate,ids,value=value,before=30,after=30,type="closest",data=parent.frame(),returndate=FALSE,dateformat=dateformat,subset=subset){
    ## get appropriate variables from data frame if provided
     if(!missing(data)){
@@ -97,6 +126,18 @@ getbaseline <- function(baselinedate,visitdate,ids,value=value,before=30,after=3
 # first date
 # last date
 
+#' getselectdate
+#'
+#' summary
+#'
+#' details
+#'
+#' @param date NEEDDOC
+#' @param id NEEDDOC
+#' @param type NEEDDOC
+#' @param data NEEDDOC
+#' @param dateformat NEEDDOC
+#' @export
 
 getselectdate <- function(date,id,type="first",data=data,dateformat=dateformat){
     ## get appropriate variables from data frame if provided
@@ -114,7 +155,18 @@ getselectdate <- function(date,id,type="first",data=data,dateformat=dateformat){
     return(selectdate)
 }
 
-
+#' getnadirvalue
+#'
+#' summary
+#'
+#' details
+#'
+#' @param value NEEDDOC
+#' @param id NEEDDOC
+#' @param data NEEDDOC
+#' @param date NEEDDOC
+#' @param dateformat NEEDDOC
+#' @export
 
 getnadirvalue <- function(value,id,data=data,date=date,dateformat=dateformat){
     ## get appropriate variables from data frame if provided
