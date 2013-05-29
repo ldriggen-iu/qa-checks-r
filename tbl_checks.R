@@ -41,8 +41,8 @@ databaseclose <- as.Date(databaseclose,"%Y-%m-%d")
 databaseclose <- ifelse(is.na(databaseclose),Sys.Date(),databaseclose)
 
 ## IDENTIFY WHICH TABLES TO EXPECT FROM DES
-expectedtables <- c("center","basic","ltfu","cd4","rna","art","dis","visit")
-expecteddestables <- c("tblCENTER","tblBAS","tblLTFU","tblLAB_CD4","tblLAB_RNA","tblART","tblDIS","tblVIS")
+expectedtables <- c("center","program","basic","ltfu","cd4","rna","art","dis","visit")
+expecteddestables <- c("tblCENTER","tblPROGRAM","tblBAS","tblLTFU","tblLAB_CD4","tblLAB_RNA","tblART","tblDIS","tblVIS")
 ## CHOOSE FIRST SELECTS THE TEXT STRING OCCURING BEFORE THE SPECIFIED SEPARATER
 choosefirst <- function(var,sep=".") unlist(lapply(strsplit(var,sep,fixed=TRUE),function(x) x[1]))
 ## DETERMINE WHICH TABLES EXIST IN '/input'
@@ -60,6 +60,7 @@ for(i in 1:length(readtables)){
 ################### QUERY CHECK PROGRAMS BEGIN HERE #################
 
 if(exists("center")) source("code/tblCENTER_checks.R")
+if(exists("program")) source("code/tblPROGRAM_checks.R")
 if(exists("basic")) source("code/tblBAS_checks.R")
 if(exists("ltfu")) source("code/tblLTFU_checks.R")
 if(exists("cd4")) source("code/tblLAB_CD4_checks.R")

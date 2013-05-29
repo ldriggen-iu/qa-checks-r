@@ -25,9 +25,8 @@
 #setwd("C:/Documents and Settings/blevinml/My Documents/Projects/IeDEAS/qa-checks-r")
 
 ## IDENTIFY WHICH TABLES TO EXPECT FROM DES
-## STILL NEED TO INCORPORATE tblLTFU and tblCENTER
-expectedtables <- c("center","basic","cd4","rna","art","dis","visit")
-expecteddestables <- c("tblCENTER","tblBAS","tblLAB_CD4","tblLAB_RNA","tblART","tblDIS","tblVIS") 
+expectedtables <- c("center","program","basic","cd4","rna","art","dis","visit")
+expecteddestables <- c("tblCENTER","tblPROGRAM","tblBAS","tblLAB_CD4","tblLAB_RNA","tblART","tblDIS","tblVIS") 
 
 ## CHOOSE FIRST SELECTS THE TEXT STRING OCCURING BEFORE THE SPECIFIED SEPARATER
 choosefirst <- function(var,sep=".") unlist(lapply(strsplit(var,sep,fixed=TRUE),function(x) x[1]))
@@ -57,8 +56,10 @@ getrecordcounts <- function(table,unique_id="patient",subset=basic$patient){
 
 
 
-recordcounts <- rbind(getrecordcounts(table="center",unique_id="center",subset=center$center),t(sapply(readtables[-1],getrecordcounts)))
-recordcounts <- data.frame(existingtables,recordcounts[,2:3])
+recordcounts <- rbind(getrecordcounts(table="center",unique_id="center",subset=center$center),
+                      getrecordcounts(table="program",unique_id="program",subset=program$program),
+                      t(sapply(readtables[-c(1:2)],getrecordcounts)))
+recordcounts <- data.frame(existingtables,recordcounts[,2:3],row.names=NULL)
 names(recordcounts) <- c("tbl","records","patients")
 
 ## WRITE COUNT FILE -- CREATE OUTPUT DIRECTORY (IF NEEDED)

@@ -27,6 +27,7 @@ rm(list=ls()) # clear namespace
 
 ## SUMMARIZE COUNT DATA
 source("code/summarize_counts.R")
+source("code/utility_functions.R")
 
 ## READ IN QUERY FILE -- CHOOSE MOST RECENT IF MULTIPLE
 wd <- getwd()
@@ -80,12 +81,11 @@ geterrcounts <- function(vartype,subset=TRUE){
 }
 
 ## CONVERT DATE VARIABLES AND PERFORM LOGIC CHECK AGAINST DATE OF BIRTH
-convertdate <- function(date,table){
-  datatable <- get(table)
-  if(exists(date,datatable)){
-    var <- as.Date(get(date,datatable),"%Y-%m-%d")
+convertdate <- function(date,table=parent.frame()){
+  if(exists(deparse(substitute(date)),table)){
+    var <- as.Date(get(deparse(substitute(date)),table),"%Y-%m-%d")
   }
-  if(!exists(date,datatable)){
+  if(!exists(deparse(substitute(date)),table)){
     var <- NULL
   }
   return(var)
@@ -116,12 +116,23 @@ write.csv(overalltable,paste("output/query_summary_",format(Sys.Date(),"%Y%m%d")
 
 
 ############ EVERYTHING CODED ABOVE IS NOT DEPENDENT ON ANY R PACKAGE OR ORIGINAL DATASETS ############
+## READ IN TABLE BASIC TO UTILIZE ENROLLMENT DATE FOR FIGURES
 basic <- read.csv("input/tblBAS.csv",header=TRUE,stringsAsFactors = FALSE,na.strings=c("NA",""))
 names(basic) <- tolower(names(basic))
+## READ IN TABLE VISIT TO UTILIZE CENTER FOR SUBSETTING
+visit <- read.csv("input/tblVIS.csv",header=TRUE,stringsAsFactors = FALSE,na.strings=c("NA",""))
+names(visit) <- tolower(names(visit))
 ## CONVERT DATES USING EXPECTED FORMAT (will force NA if format is incorrect)
-if(exists("enrol_d",basic)){basic$enrol_d <- convertdate("enrol_d","basic")}
-
-allquery <- merge(allquery,basic,by.x="PID",by.y="patient",all.x=TRUE)
+if(exists("enrol_d",basic)){basic$enrol_d <- convertdate(enrol_d,basic)}
+if(exists("vis_d",visit)){visit$vis_d <- convertdate(vis_d,visit)}
+## MERGE FOR ENROLLMENT DATE
+visit <- merge(with(visit,data.frame(patient,center,vis_d,stringsAsFactors = FALSE)),with(basic,data.frame(patient,enrol_d,stringsAsFactors = FALSE)),by="patient",all.x=TRUE)
+# in case there are duplicates by visit date 
+dups <- unsplit(lapply(split(visit$vis_d, visit$patient), FUN=anyDuplicated), visit$patient)
+visit <- visit[dups == 0 & !is.na(visit$vis_d),]
+## IDENTIFY CENTER of ENROLLMENT BY DATE OF VISIT CLOSEST TO DATE OF ENROLLMENT
+enroll_center <- getbaseline(enrol_d,vis_d,patient,value=center,data=visit,returndate=FALSE,before=365*5,after=365*5) # default is closest date with window -30,30
+allquery <- merge(merge(allquery,basic,by.x="PID",by.y="patient",all.x=TRUE),enroll_center,by.x="PID",by.y="id",all.x=TRUE)
 
 ## SUMMARIZE QUERIES IN HTML
 library(brew)

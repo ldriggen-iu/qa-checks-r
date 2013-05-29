@@ -24,9 +24,9 @@
 ## NAME OF TABLE FOR WRITING QUERIES
 tablename <- "tblBAS"
 ## NAMES EXPECTED FROM HICDEP+/IeDEAS DES
-expectednames <- c("patient","center","birth_d","enrol_d","gender",
-		   "mode","recart_y","haart_d")
-acceptablenames <- c(expectednames,"birth_d_a","enrol_d_a","haart_d_a")
+expectednames <- c("patient","birth_d","enrol_d","gender",
+		   "mode","naive_y","haart_d")
+acceptablenames <- c(expectednames,"program","birth_d_a","enrol_d_a","haart_d_a")
 
 ################### QUERY CHECKING BEGINS HERE ###################
 
@@ -42,13 +42,14 @@ notdate(haart_d,basic)
 ## CHECK FOR MISSING DATA
 missingvalue(birth_d,basic)
 missingvalue(enrol_d,basic)
-missingvalue(haart_d,basic)
 missingvalue(patient,basic)
-missingvalue(center,basic)
 missingvalue(country,basic)
 missingvalue(gender,basic)
 missingvalue(mode,basic)
-missingvalue(recart_y,basic)
+missingvalue(naive_y,basic)
+# check missing haart_d only among those confirmed not naive 
+notnaive <- basic[basic$naive_y==0,]
+missingvalue(haart_d,notnaive)
 
 ## CONVERT DATES USING EXPECTED FORMAT (will force NA if format is incorrect)
 if(exists("birth_d",basic)){basic$birth_d <- convertdate(birth_d,basic)}
@@ -70,12 +71,12 @@ queryduplicates(patient,basic)
 ## CHECK FOR UNEXPECTED CODING
 badcodes(gender,c(1,2,9),basic)
 badcodes(mode,c(1:8,90,99),basic)
-badcodes(recart_y,c(0,1,9),basic)
+badcodes(naive_y,c(0,1,9),basic)
 badcodes(birth_d_a,c("<",">","D","M","Y","U"),basic)
 badcodes(enrol_d_a,c("<",">","D","M","Y","U"),basic)
 badcodes(haart_d_a,c("<",">","D","M","Y","U"),basic)
 
-## QUERY PATIENTS WITH NO RECORD IN tblCENTER
-if(exists("center")){badrecord(center,basic,center)}
+## QUERY PATIENTS WITH NO RECORD IN tblPROGRAM
+if(exists("program") & exists("program",basic)){badrecord(program,basic,program)}
 
 ################### QUERY CHECKING ENDS HERE ###################

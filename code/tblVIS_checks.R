@@ -24,7 +24,7 @@
 ## NAME OF TABLE FOR WRITING QUERIES
 tablename <- "tblVIS"
 ## NAMES EXPECTED FROM HICDEP+/IeDEAS DES
-expectednames <- c("patient","vis_d","weigh","heigh","cdc_stage","who_stage")
+expectednames <- c("patient","center","vis_d","weigh","heigh","cdc_stage","who_stage")
 acceptablenames <- c(expectednames,"vis_d_a")
 
 ################### QUERY CHECKING BEGINS HERE ###################
@@ -37,6 +37,7 @@ missvar(expectednames,visit)
 notdate(vis_d,visit)
 
 ## CHECK FOR MISSING DATA
+missingvalue(center,visit)
 missingvalue(vis_d,visit)
 # it's okay for others to be missing 
 
@@ -80,11 +81,14 @@ lowerrangecheck(heigh,0,visit) # consider specifying lower limit for adult popul
 
 ## CHECK FOR UNEXPECTED CODING
 badcodes(who_stage,c(1:4,9),visit)
-badcodes(cdc_stage,c("A","A1","A2","A3","B","B1","B2","B3","C","C1","C2","C3","N","9"),visit)
+badcodes(cdc_stage,c("A","A1","A2","A3","B","B1","B2","B3","C","C1","C2","C3","9"),visit)
 badcodes(vis_d_a,c("<",">","D","M","Y","U"),visit)
 
 ## QUERY PATIENTS WITH NO RECORD IN tblBAS
 badrecord(patient,visit,basic)
+
+## QUERY PATIENTS WITH NO RECORD IN tblCENTER
+if(exists("center")){badrecord(center,visit,center,id=patient)}
 
 ################### QUERY CHECKING ENDS HERE ###################
 
@@ -92,5 +96,5 @@ badrecord(patient,visit,basic)
 ## QUERY CHECKS TO CODE ##
 #tblVIS	WithinTable	VW002	Height decreasing over time 		YES
 #tblVIS	CrossTable	VC002	No weights within 3 mths of starting FPV/DRV
-
+# pediatric ranges
 

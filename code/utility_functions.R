@@ -102,16 +102,16 @@ getbaseline <- function(baselinedate,visitdate,ids,value=value,before=30,after=3
     if(type=="latest") keep1 <- unsplit(lapply(split(diff, ids), FUN=function(x) c(max(x))), ids)
     if(!missing(value)) {
         if(returndate){
-            baselinevalues <- data.frame(ids,vdate,values)[keep1==diff & !is.na(values),]
+            baselinevalues <- data.frame(ids,vdate,values,stringsAsFactors = FALSE)[keep1==diff & !is.na(values),]
             names(baselinevalues) <- c(deparse(substitute(id)),paste(deparse(substitute(value)),"_d",sep=""),deparse(substitute(value)))
         }
         if(!returndate){
-            baselinevalues <- data.frame(ids,values)[keep1==diff & !is.na(values),]
+            baselinevalues <- data.frame(ids,values,stringsAsFactors = FALSE)[keep1==diff & !is.na(values),]
             names(baselinevalues) <- c(deparse(substitute(id)),deparse(substitute(value)))
         }
     }
     if(missing(value)) {
-        baselinevalues <- data.frame(ids,vdate)[keep1==diff,]
+        baselinevalues <- data.frame(ids,vdate,stringsAsFactors = FALSE)[keep1==diff,]
         names(baselinevalues) <- c(deparse(substitute(id)),deparse(substitute(visitdate)))
     }
     return(baselinevalues)
@@ -150,7 +150,7 @@ getselectdate <- function(date,id,type="first",data=data,dateformat=dateformat){
     }
     if(type=="first") keep1 <- unsplit(lapply(split(dates, ids), FUN=function(x) min(x)), ids)
     if(type=="last") keep1 <- unsplit(lapply(split(dates, ids), FUN=function(x) max(x)), ids)
-    selectdate <- unique(data.frame(ids,keep1))
+    selectdate <- unique(data.frame(ids,keep1,stringsAsFactors = FALSE))
     names(selectdate) <- c(deparse(substitute(id)),deparse(substitute(date)))
     return(selectdate)
 }
@@ -180,11 +180,11 @@ getnadirvalue <- function(value,id,data=data,date=date,dateformat=dateformat){
     }
     keep1 <- unsplit(lapply(split(values, ids), FUN=function(x) min(x)), ids)
     if(missing(date)){
-        nadirvalue <- unique(data.frame(ids,keep1))
+        nadirvalue <- unique(data.frame(ids,keep1,stringsAsFactors = FALSE))
         names(nadirvalue) <- c(deparse(substitute(id)),deparse(substitute(value)))
     }
     if(!missing(date)){
-        nadirvalue <- data.frame(ids,keep1,dates)[keep1==values,]
+        nadirvalue <- data.frame(ids,keep1,dates,stringsAsFactors = FALSE)[keep1==values,]
 	nadirvalue <- nadirvalue[!duplicated(nadirvalue$ids),]
         names(nadirvalue) <- c(deparse(substitute(id)),deparse(substitute(value)),deparse(substitute(date)))
     }
