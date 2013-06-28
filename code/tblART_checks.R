@@ -48,7 +48,7 @@ if(exists("art_ed",art)){art$art_ed <- convertdate(art_ed,art)}
 
 ## CHECK FOR DATES OCCURRING IN THE WRONG ORDER
 if(exists("basic")){
-	basart <- merge(art,with(basic,data.frame(patient,birth_d,recart_y)),all.x=TRUE)
+	basart <- merge(art,with(basic,data.frame(patient,birth_d)),all.x=TRUE)
 	basart$birth_d <- convertdate(birth_d,basart)
 	outoforder(birth_d,art_sd,basart,table2="tblBAS")
 	outoforder(birth_d,art_ed,basart,table2="tblBAS")
@@ -83,14 +83,6 @@ badcodes(art_id,art_id_codebook$code,art)
 badcodes(art_rs,art_rs_codebook$code,art)
 badcodes(art_sd_a,c("<",">","D","M","Y","U"),art)
 badcodes(art_ed_a,c("<",">","D","M","Y","U"),art)
-
-## CHECK FOR UNEXPECTED RECORDS
-# removed 1/30/2013 -- recart_y is meant to indicate ART-ever status at enrollment
-# if(exists("basic")){
-#   art_unique <- art[!duplicated(art$patient),]
-#   basic_sub <- basic[basic$recart_y==1,]
-#   badrecord("patient","art_unique","basic_sub",subsettext="&recart_y!=1")
-# }
 
 # ## NEED TO PROGRAM:
 # Overlapping periods of same drug
