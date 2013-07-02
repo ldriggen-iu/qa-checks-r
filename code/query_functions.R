@@ -297,3 +297,24 @@ badrecord <- function(uniqueid,subset=parent.frame(),superset=parent.frame(),sub
     }
   }
 }
+
+## WRITE FUNCTION TO CHECK FOR RECORDS THAT SHOULD EXIST WHEN NOT PROPERLY INDICATED (eg, tblBAS)
+missrecord <- function(uniqueid,subset=parent.frame(),superset=parent.frame(),subsettext="",id=patient){
+  uniqueid <- deparse(substitute(uniqueid))
+  subvar <- unlist(strsplit(subsettext,"="))[1]
+  subvar <- gsub("!","",subvar)
+  if(exists(uniqueid,subset) & exists(uniqueid,superset)){
+    if(any(!(get(uniqueid,subset) %in% get(uniqueid,superset)))){
+      recerr <- !(get(uniqueid,subset) %in% get(uniqueid,superset))
+      	query <- data.frame(get(deparse(substitute(id)),subset)[recerr],
+      										tablename,
+      										ifelse(!is.na(subvar),paste(uniqueid,subvar,sep=""),uniqueid),
+      										"Logic",
+      										"Missing Record",
+      										paste(paste(uniqueid,"=",get(uniqueid,subset)[recerr]),subsettext,sep=""),
+      										stringsAsFactors=FALSE)
+      names(query) <- names(emptyquery)
+      assign(paste("query",index,sep=""),query,envir=globalenv()); index <<- index + 1
+    }
+  }
+}

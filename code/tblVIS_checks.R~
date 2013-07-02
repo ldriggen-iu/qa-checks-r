@@ -84,9 +84,9 @@ badcodes(who_stage,c(1:4,9),visit)
 badcodes(cdc_stage,c("A","A1","A2","A3","B","B1","B2","B3","C","C1","C2","C3","9"),visit)
 badcodes(vis_d_a,c("<",">","D","M","Y","U"),visit)
 
-## QUERY PATIENTS WITH NO RECORD IN tblBAS (bad ID)
+## QUERY PATIENTS WITH NO RECORD IN tblBAS
 badrecord(patient,visit,basic)
-## QUERY PATIENTS WITH MISSING RECORD IN tblVIS (has ID, but no VISIT data)
+## QUERY PATIENTS WITH MISSING RECORD IN tblVIS
 missrecord(patient,basic,visit)
 
 ## QUERY PATIENTS WITH NO RECORD IN tblCENTER

@@ -151,8 +151,37 @@ getselectdate <- function(date,id,type="first",data=data,dateformat=dateformat){
     if(type=="first") keep1 <- unsplit(lapply(split(dates, ids), FUN=function(x) min(x)), ids)
     if(type=="last") keep1 <- unsplit(lapply(split(dates, ids), FUN=function(x) max(x)), ids)
     selectdate <- unique(data.frame(ids,keep1,stringsAsFactors = FALSE))
-    names(selectdate) <- c(deparse(substitute(id)),deparse(substitute(date)))
+    names(selectdate) <- c(deparse(substitute(id)),paste(deparse(substitute(date)),type,"cmp",sep="_"))
     return(selectdate)
+}
+
+
+## THIS FUNCTION ALLOWS THE USER TO GET THE VALUE OF VAR WHICH APPEARS FIRST, LAST, or MOST OFTEN.
+most <- function(x){ux <- unique(x); ux[which.max(tabulate(match(x,ux)))]}
+getselectvar <- function(date,id,var,type="first",data=data,dateformat=dateformat){
+    ## get appropriate variables from data frame if provided
+    if(!missing(data)){
+        dates <- get(deparse(substitute(date)),data)
+        ids <- get(deparse(substitute(id)),data)
+        vars <- get(deparse(substitute(var)),data)
+    }
+    if(!missing(dateformat)){
+        dates <- as.Date(dates,dateformat)
+    }
+    if(type=="first"){
+        date1 <- unsplit(lapply(split(dates, ids), FUN=function(x) min(x)), ids)
+	keep1 <- data.frame(ids,vars,stringsAsFactors = FALSE)[date1==dates,]
+    }
+    if(type=="most"){
+        keep1 <- unsplit(lapply(split(vars, ids), FUN=function(x) most(x)), ids)
+        keep1 <- unique(data.frame(ids,keep1,stringsAsFactors = FALSE))
+    }
+    if(type=="last"){
+        date1 <- unsplit(lapply(split(dates, ids), FUN=function(x) max(x)), ids)
+        keep1 <- data.frame(ids,vars,stringsAsFactors = FALSE)[date1==dates,]
+    }
+    names(keep1) <- c(deparse(substitute(id)),paste(deparse(substitute(var)),type,"cmp",sep="_"))
+    return(keep1)
 }
 
 #' getnadirvalue
@@ -193,24 +222,8 @@ getnadirvalue <- function(value,id,data=data,date=date,dateformat=dateformat){
 
 
 
-
-
-
-
-
-# getfirstdate <- function(...,data=data){
-#     ## get appropriate variables from data frame if provided
-#     if(!missing(data)){
-#         bdate <- get(deparse(substitute(dates)),data)
-#         vdate <- get(deparse(substitute(visitdate)),data)
-#         ids <- get(deparse(substitute(id)),data)
-#         if(!missing(value)) values <- get(deparse(substitute(value)),data)
-#     }
-#     x  <- sapply(match.call()[-1],deparse)
-#     y <- do.call("cbind",lapply(x,function(x) assign(x,get(x,basic))))
-#     return(y)
-# }
-# y <- getfirstdate(enrol_d,birth_d)
+## CHOOSE FIRST SELECTS THE TEXT STRING OCCURING BEFORE THE SPECIFIED SEPARATER
+choosefirst <- function(var,sep=".") unlist(lapply(strsplit(var,sep,fixed=TRUE),function(x) x[1]))
 
 
 
