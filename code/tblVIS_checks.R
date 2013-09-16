@@ -92,11 +92,28 @@ missrecord(patient,basic,visit)
 ## QUERY PATIENTS WITH NO RECORD IN tblCENTER
 if(exists("center")){badrecord(center,visit,center,id=patient)}
 
+
+## QUERY ANY HEIGHT DECREASES FROM ONE VISIT TO THE NEXT
+if(exists("heigh",visit)){
+    qheigh <- visit[with(visit,order(patient,vis_d)),]
+    qheigh <- qheigh[!is.na(qheigh$heigh),]
+    qheigh$heightdelta <- with(qheigh,unsplit(lapply(split(heigh, patient), FUN=function(x) c(NA, diff(x))), patient))
+    recerr <- which(!is.na(qheigh$heightdelta) & qheigh$heightdelta < 0)
+    if(length(recerr)>0){
+	query <- data.frame(qheigh$patient[recerr],
+		tablename,
+		"heigh",
+		"Logic",
+		"Out of Range",
+		paste(paste0("vis_d=",qheigh$vis_d[recerr-1]),paste0("heigh=",qheigh$heigh[recerr-1]),
+		      paste0("vis_d=",qheigh$vis_d[recerr]),  paste0("heigh=",qheigh$heigh[recerr]),sep="&"),
+		stringsAsFactors=FALSE)
+	names(query) <- names(emptyquery)
+	assign(paste("query",index,sep=""),query,envir=globalenv()); index <<- index + 1
+    }
+}
 ################### QUERY CHECKING ENDS HERE ###################
 
 
 ## QUERY CHECKS TO CODE ##
-#tblVIS	WithinTable	VW002	Height decreasing over time 		YES
-#tblVIS	CrossTable	VC002	No weights within 3 mths of starting FPV/DRV
 # pediatric ranges
-

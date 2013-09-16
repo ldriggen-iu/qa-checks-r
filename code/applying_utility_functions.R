@@ -61,3 +61,7 @@ firsthaart <- getselectdate(art_sd,patient,data=art,dateformat="%Y-%m-%d") # def
 ## GET CD4 COUNT ONLY BEFORE ART using "subset" feature
 base_cd4_no_haart <- getbaseline(enrol_d,cd4_d,patient,value=cd4_v,data=cd4,returndate=TRUE,dateformat="%Y-%m-%d",subset=(cd4$cd4_u==1 & convertdate(cd4_d,cd4) <= convertdate(art_sd,cd4))) # default is closest date with window -30,30
 
+
+# tblDIS	CrossTable	DC002	AIDS-defining records, yet AIDS=0 in tblBAS		YES
+# tblDIS	CrossTable	DC003	First AIDS-defining DIS_D not equal to AIDS_D in tblBAS		Y
+

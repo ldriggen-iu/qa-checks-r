@@ -137,3 +137,5 @@ allquery <- merge(merge(allquery,basic,by.x="PID",by.y="patient",all.x=TRUE),enr
 ## SUMMARIZE QUERIES IN HTML
 library(brew)
 brew(file='code/summarize.brew',output='output/summary_report.html')
+brew(file='code/patient.brew',output='output/patient_report.html')
+

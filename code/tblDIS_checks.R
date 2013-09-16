@@ -86,10 +86,24 @@ badcodes(dis_ed_a,c("<",">","D","M","Y","U"),dis)
 ## QUERY PATIENTS WITH NO RECORD IN tblBAS
 badrecord(patient,dis,basic)
 
-# ## NEED TO PROGRAM ADDITIONAL CHECKS:
-# tblDIS	WithinTable	DW006	Same event recorded twice - 2 records, same DIS_ID, DIS_D within 6 months		YES
-# tblDIS	WithinTable	DW007	DIS_ED present but before DIS_D		YES
-# tblDIS	CrossTable	DC002	AIDS-defining records, yet AIDS=0 in tblBAS		YES
-# tblDIS	CrossTable	DC003	First AIDS-defining DIS_D not equal to AIDS_D in tblBAS		Y
-
+## QUERY ANY EVENT THAT IS RECORDED TWICE, same DIS_ID, and DIS_D withing 6 months 
+if(exists("dis_d",dis) & exists("dis_id",dis)){
+    qdis <- dis[with(dis,order(patient,dis_id,dis_d)),]
+    qdis <- qdis[!is.na(qdis$dis_d) & !is.na(qdis$dis_id),]
+    qdis$patient_dis_id <- paste(qdis$patient,qdis$dis_id,sep="-")
+	qdis$disdelta <- with(qdis,unsplit(lapply(split(dis_d, patient_dis_id), FUN=function(x) c(NA, diff(x))), patient_dis_id))
+	recerr <- which(!is.na(qdis$disdelta) & qdis$disdelta/365.25 < 0.5) ## LESS THAN 6 MONTHS APART
+    if(length(recerr)>0){
+	query <- data.frame(qdis$patient[recerr],
+		tablename,
+		"dis_id",
+		"Logic",
+		"Out of Range",
+		paste(paste0("dis_d=",qdis$dis_d[recerr-1]),paste0("dis_id=",qdis$dis_id[recerr-1]),
+		      paste0("dis_d=",qdis$dis_d[recerr]),  paste0("dis_id=",qdis$dis_id[recerr]),sep="&"),
+		stringsAsFactors=FALSE)
+	names(query) <- names(emptyquery)
+	assign(paste("query",index,sep=""),query,envir=globalenv()); index <<- index + 1
+    }
+}
 ################### QUERY CHECKING ENDS HERE ###################

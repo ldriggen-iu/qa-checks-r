@@ -1,0 +1,37 @@
+<html>
+<head>
+<title>Patient-level summary of query file (<%=useexceptions%>)</title>
+</head>
+<body>
+<%
+# Run or source some R code here
+getptlevcounts <- function(subset=TRUE){
+  ptlev1 <- as.data.frame.matrix(table(allquery$PID[subset],allquery$tbl[subset]))
+  ptlev1$Total <- apply(ptlev1,1,sum)
+  ptlev1 <- data.frame(PID=row.names(ptlev1),ptlev1)
+  ptlev1 <- ptlev1[order(ptlev1$Total,decreasing=TRUE),]
+  return(ptlev1)
+}
+
+## THIS LOOPS OVER CENTER TO CREATE SUMMARY TABLES
+print_by_center <- printtext_by_center <- NULL
+for(i in sort(unique(allquery$center))){
+  print_by_center <- c(print_by_center,paste("<hr />The following table summarizes patient-level counts for exceptions among patients from center (at date of enrollment) <strong>",i,"</strong>: ",
+                     writeHTMLtable(getptlevcounts(subset=(!is.na(allquery$center) & allquery$center==i)),header=TRUE),sep=""))
+  printtext_by_center <- c(printtext_by_center,paste0("<p>There were ",sum(allquery$center==i,na.rm=TRUE)," exceptions found among ",length(unique(allquery$PID[allquery$center==i]))," patients enrolled at ",i,". </p>"))
+}
+
+excsum <- nrow(allquery)
+patsum <- length(unique(allquery$PID))
+%>
+<h1>Query Summary</h1>
+<p>This report summarizes <%=excsum%> exceptions found among <%=patsum%> patients in a database formulated using the IeDEA data exchange standard. </p>
+<%=printtext_by_center%>
+<h2>Patient-level Counts</h2>
+<img src="histbox.png" />
+<img src="counts_by_enrol_d.png" />
+<hr />
+<%=print_by_center%>
+
+</body>
+</html>

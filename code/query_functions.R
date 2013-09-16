@@ -248,7 +248,8 @@ notnumeric <- function(var,table=parent.frame(),id=patient){
 ## FORCE NUMBER will take a factor/character to a number without issuing the warnings
 forcenumber <- function(var){
     options(warn = -1)
-    x <- as.numeric(gsub("[^0-9.]","",as.character(var)))
+    neg <- ifelse(substr(var,1,1)=="-","-","")
+    x <- as.numeric(paste0(neg,gsub("[^0-9.]","",as.character(var))))
     options(warn = 1)
     return(x)
 }
