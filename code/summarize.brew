@@ -6,13 +6,13 @@
 <%
 # Run or source some R code here
 writeHTMLtable <- function(table,header=FALSE){
-  start <- "<table border='1'><tr>"
-  end <- "</tr></table>"
+  start <- "<table border='1'>"
+  end <- "</tr></tbody></table>"
   if(header){
     head <- paste(names(table),collapse="</th><th>")
-    table <- paste(start,"<th>",paste(c(head,apply(table,1,paste,collapse="</td><td>&nbsp;")),collapse="</tr><tr><td>"),end,sep="")
+    table <- paste(start,"<thead><tr><th>",head,"</th></tr></thead><tbody><tr><td>",paste(c(apply(table,1,paste,collapse="</td><td>&nbsp;")),collapse="</tr><tr><td>"),end,sep="")
   }
-  if(!header) table <- paste(start,"<td>",paste(apply(table,1,paste,collapse="</td><td>&nbsp;"),collapse="</tr><tr><td>"),end,sep="")
+  if(!header) table <- paste(start,"<tbody><tr><td>",paste(apply(table,1,paste,collapse="</td><td>&nbsp;"),collapse="</tr><tr><td>"),end,sep="")
   return(table)
 }
 
