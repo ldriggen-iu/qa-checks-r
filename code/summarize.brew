@@ -19,8 +19,12 @@
 <%
 # Run or source some R code here
 writeHTMLtable <- function(table,header=FALSE,filtering_enabled=FALSE){
-  if(filtering_enabled){
-    start <- "<br><table border='1' class='filtering_enabled display'>"
+  if(filtering_enabled){    
+    totalRow <- table[nrow(table),]
+    # redefine table excluding total row
+    table <- table[1:nrow(table)-1,]
+    tableFooter <- paste("<tfoot><tr><th scope='row'>Total</th><td>&nbsp;",c(apply(totalRow[,2:ncol(totalRow)],1,paste,collapse="</td><td>&nbsp;")),"</td></tr></tfoot>",sep="")
+    start <- paste("<br><table border='1' class='filtering_enabled display'>",tableFooter,sep="")
   }else{
     start <- "<br><table border='1'>"
   }
