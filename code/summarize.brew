@@ -3,10 +3,28 @@
 <title>Summary of data files (<%=paste(existingtables,collapse=", ")%>) and  query file (<%=useexceptions%>)</title>
 </head>
 <body>
+<script language="javascript" type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" ></script>
+  <script language="javascript" type="text/javascript" src="http://datatables.net/download/build/jquery.dataTables.nightly.js"></script>
+  <script type='text/javascript'>
+    $(document).ready(function(){      
+      $('.filtering_enabled').dataTable();
+    });  
+  </script>
+<style type="text/css">
+  @import "../code/css/demo_table.css";
+  @import "../code/css/demo_page.css";
+</style>
+
+
 <%
 # Run or source some R code here
-writeHTMLtable <- function(table,header=FALSE){
-  start <- "<table border='1'>"
+writeHTMLtable <- function(table,header=FALSE,filtering_enabled=FALSE){
+  if(filtering_enabled){
+    start <- "<br><table border='1' class='filtering_enabled display'>"
+  }else{
+    start <- "<br><table border='1'>"
+  }
+  
   end <- "</tr></tbody></table>"
   if(header){
     head <- paste(names(table),collapse="</th><th>")
@@ -41,13 +59,13 @@ for(i in sort(unique(allquery$center))){
   crecordcounts <- t(sapply(readtables[-c(1:2)],getrecordcounts,subset=unique(enroll_center$id[enroll_center$center==i])))
   crecordcounts <- data.frame(existingtables[-c(1:2)],crecordcounts[,2:3])
   names(crecordcounts) <- c("tbl","records","patients")
-  print_records_by_center <- c(print_records_by_center,paste("<hr />The following table summarizes records and unique patients for center (at date of enrollment)  <strong>",i,"</strong>: ",writeHTMLtable(crecordcounts,header=TRUE),sep=""))
+  print_records_by_center <- c(print_records_by_center,paste("<br><hr /><br>The following table summarizes records and unique patients for center (at date of enrollment)  <strong>",i,"</strong>: ",writeHTMLtable(crecordcounts,header=TRUE),sep=""))
 }
 %>
 <h1>Data Summary</h1>
 <p>This report summarizes <%=sum(recordcounts$records)%> records found among <%=recordcounts$patients[recordcounts$tbl=="tblBAS"]%> patients in a database formulated using the IeDEA data exchange standard. </p>
 <img src="year_gender_barchart.png" />
-<hr />
+<br><hr /><br>
 The following table summarizes the number of records and unique patients for the <strong> entire database</strong>:
 <%=writeHTMLtable(recordcounts,header=TRUE)%>
 <%=print_records_by_center%>
@@ -91,7 +109,7 @@ dev.off()
 ## THIS LOOPS OVER CENTER TO CREATE SUMMARY TABLES
 print_by_center <- NULL
 for(i in sort(unique(allquery$center))){
-  print_by_center <- c(print_by_center,paste("<hr />The following table summarizes exceptions encountered for center (at date of enrollment) <strong>",i,"</strong>: ",writeHTMLtable(geterrtable(unique(allquery$err[allquery$Error != "Table Structure"]),total=TRUE,subset=(!is.na(allquery$center) & allquery$center==i)),header=TRUE),sep=""))
+  print_by_center <- c(print_by_center,paste("<br><hr /><br>The following table summarizes exceptions encountered for center (at date of enrollment) <strong>",i,"</strong>: ",writeHTMLtable(geterrtable(unique(allquery$err[allquery$Error != "Table Structure"]),total=TRUE,subset=(!is.na(allquery$center) & allquery$center==i)),header=TRUE,filtering_enabled=TRUE),sep=""))
 }
 
 excsum <- nrow(allquery)
@@ -102,9 +120,9 @@ patsum <- length(unique(allquery$PID))
 <h2>Patient-level Counts</h2>
 <img src="histbox.png" />
 <img src="counts_by_enrol_d.png" />
-<hr />
+<br><hr /><br>
 The following table summarizes exceptions encountered for the <strong> entire database</strong>:
-<%=writeHTMLtable(overalltable,header=TRUE)%>
+<%=writeHTMLtable(overalltable,header=TRUE,filtering_enabled=TRUE)%>
 <%=print_by_center%>
 
 </body>
