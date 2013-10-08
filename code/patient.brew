@@ -3,6 +3,17 @@
 <title>Patient-level summary of query file (<%=useexceptions%>)</title>
 </head>
 <body>
+<script language="javascript" type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" ></script>
+  <script language="javascript" type="text/javascript" src="http://datatables.net/download/build/jquery.dataTables.nightly.js"></script>
+  <script type='text/javascript'>
+    $(document).ready(function(){      
+      $('.filtering_enabled').dataTable();
+    });  
+  </script>
+<style type="text/css">
+  @import "../code/css/demo_table.css";
+  @import "../code/css/demo_page.css";
+</style>
 <%
 # Run or source some R code here
 getptlevcounts <- function(subset=TRUE){
@@ -16,8 +27,8 @@ getptlevcounts <- function(subset=TRUE){
 ## THIS LOOPS OVER CENTER TO CREATE SUMMARY TABLES
 print_by_center <- printtext_by_center <- NULL
 for(i in sort(unique(allquery$center))){
-  print_by_center <- c(print_by_center,paste("<hr />The following table summarizes patient-level counts for exceptions among patients from center (at date of enrollment) <strong>",i,"</strong>: ",
-                     writeHTMLtable(getptlevcounts(subset=(!is.na(allquery$center) & allquery$center==i)),header=TRUE),sep=""))
+  print_by_center <- c(print_by_center,paste("<br><hr /><br>The following table summarizes patient-level counts for exceptions among patients from center (at date of enrollment) <strong>",i,"</strong>: ",
+                     writeHTMLtable(getptlevcounts(subset=(!is.na(allquery$center) & allquery$center==i)),header=TRUE,filtering_enabled=TRUE,total_row=FALSE),sep=""))
   printtext_by_center <- c(printtext_by_center,paste0("<p>There were ",sum(allquery$center==i,na.rm=TRUE)," exceptions found among ",length(unique(allquery$PID[allquery$center==i]))," patients enrolled at ",i,". </p>"))
 }
 
@@ -30,7 +41,7 @@ patsum <- length(unique(allquery$PID))
 <h2>Patient-level Counts</h2>
 <img src="histbox.png" />
 <img src="counts_by_enrol_d.png" />
-<hr />
+<br><hr /><br>
 <%=print_by_center%>
 
 </body>

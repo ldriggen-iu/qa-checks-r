@@ -18,13 +18,17 @@
 
 <%
 # Run or source some R code here
-writeHTMLtable <- function(table,header=FALSE,filtering_enabled=FALSE){
-  if(filtering_enabled){    
-    totalRow <- table[nrow(table),]
-    # redefine table excluding total row
-    table <- table[1:nrow(table)-1,]
-    tableFooter <- paste("<tfoot><tr><th scope='row'>Total</th><td>&nbsp;",c(apply(totalRow[,2:ncol(totalRow)],1,paste,collapse="</td><td>&nbsp;")),"</td></tr></tfoot>",sep="")
-    start <- paste("<br><table border='1' class='filtering_enabled display'>",tableFooter,sep="")
+writeHTMLtable <- function(table,header=FALSE,filtering_enabled=FALSE,total_row=FALSE){
+  if(filtering_enabled){
+    if(total_row){
+      totalRow <- table[nrow(table),]
+      # redefine table excluding total row
+      table <- table[1:nrow(table)-1,]
+      tableFooter <- paste("<tfoot><tr><th scope='row'>Total</th><td>&nbsp;",c(apply(totalRow[,2:ncol(totalRow)],1,paste,collapse="</td><td>&nbsp;")),"</td></tr></tfoot>",sep="")
+      start <- paste("<br><table border='1' class='filtering_enabled display'>",tableFooter,sep="")
+    }else{
+      start <- "<br><table border='1' class='filtering_enabled display'>"
+    }    
   }else{
     start <- "<br><table border='1'>"
   }
@@ -113,7 +117,7 @@ dev.off()
 ## THIS LOOPS OVER CENTER TO CREATE SUMMARY TABLES
 print_by_center <- NULL
 for(i in sort(unique(allquery$center))){
-  print_by_center <- c(print_by_center,paste("<br><hr /><br>The following table summarizes exceptions encountered for center (at date of enrollment) <strong>",i,"</strong>: ",writeHTMLtable(geterrtable(unique(allquery$err[allquery$Error != "Table Structure"]),total=TRUE,subset=(!is.na(allquery$center) & allquery$center==i)),header=TRUE,filtering_enabled=TRUE),sep=""))
+  print_by_center <- c(print_by_center,paste("<br><hr /><br>The following table summarizes exceptions encountered for center (at date of enrollment) <strong>",i,"</strong>: ",writeHTMLtable(geterrtable(unique(allquery$err[allquery$Error != "Table Structure"]),total=TRUE,subset=(!is.na(allquery$center) & allquery$center==i)),header=TRUE,filtering_enabled=TRUE,total_row=TRUE),sep=""))
 }
 
 excsum <- nrow(allquery)
@@ -126,7 +130,7 @@ patsum <- length(unique(allquery$PID))
 <img src="counts_by_enrol_d.png" />
 <br><hr /><br>
 The following table summarizes exceptions encountered for the <strong> entire database</strong>:
-<%=writeHTMLtable(overalltable,header=TRUE,filtering_enabled=TRUE)%>
+<%=writeHTMLtable(overalltable,header=TRUE,filtering_enabled=TRUE,total_row=TRUE)%>
 <%=print_by_center%>
 
 </body>
