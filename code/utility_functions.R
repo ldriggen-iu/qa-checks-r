@@ -97,22 +97,22 @@ getbaseline <- function(baselinedate,visitdate,ids,value=value,before=30,after=3
     ids <- ids[window]; vdate <- vdate[window]
     diff <- diff[window]
     if(!missing(value)) values <- values[window]
-    if(type=="closest") keep1 <- unsplit(lapply(split(diff, ids), FUN=function(x) c(min(abs(x)))), ids)
+    if(type=="closest") keep1 <- unsplit(lapply(split(diff, ids), FUN=function(x) c(x[which.min(abs(x))])), ids)
     if(type=="earliest") keep1 <- unsplit(lapply(split(diff, ids), FUN=function(x) c(min(x))), ids)
     if(type=="latest") keep1 <- unsplit(lapply(split(diff, ids), FUN=function(x) c(max(x))), ids)
     if(!missing(value)) {
         if(returndate){
             baselinevalues <- data.frame(ids,vdate,values,stringsAsFactors = FALSE)[keep1==diff & !is.na(values),]
-            names(baselinevalues) <- c(deparse(substitute(id)),paste(deparse(substitute(value)),"_d",sep=""),deparse(substitute(value)))
+            names(baselinevalues) <- c(deparse(substitute(id)),paste(deparse(substitute(value)),"_cmp_d",sep=""),paste0(deparse(substitute(value)),"_cmp"))
         }
         if(!returndate){
             baselinevalues <- data.frame(ids,values,stringsAsFactors = FALSE)[keep1==diff & !is.na(values),]
-            names(baselinevalues) <- c(deparse(substitute(id)),deparse(substitute(value)))
+            names(baselinevalues) <- c(deparse(substitute(id)),paste0(deparse(substitute(value)),"_cmp"))
         }
     }
     if(missing(value)) {
         baselinevalues <- data.frame(ids,vdate,stringsAsFactors = FALSE)[keep1==diff,]
-        names(baselinevalues) <- c(deparse(substitute(id)),deparse(substitute(visitdate)))
+        names(baselinevalues) <- c(deparse(substitute(id)),paste0(deparse(substitute(visitdate)),"_cmp_d"))
     }
     return(baselinevalues)
 }
