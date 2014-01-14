@@ -10,5 +10,3 @@ output/*.html
 .Rproj.user
 *.Rproj
 .Rhistory
-
-tbl_checks.R
