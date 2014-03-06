@@ -1,0 +1,115 @@
+<html>
+<head>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+    <script src="http://malsup.github.com/jquery.cycle2.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+    <script src="js/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js"></script>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">    
+    <link rel="stylesheet" href="css/basic.css" type="text/css">
+</head>
+<body>
+    <div  style="margin:auto;width:910px;padding:30px;">
+        <div id="movie-container" style="width:850px;margin:auto;">
+            <div id="slideshow" class="mySlideshow" style="position: relative;overflow: hidden;height:850px;width:500px;margin:30px auto auto;">
+              <%
+                for(i in 1:maxtime){
+                  png_filename = paste("scroll_images/",panelkey,sprintf("%04d",i),".png",sep="")
+                  cat("<img src='",png_filename,"' style='width:500px;'><br><br>")
+                }
+              %>
+            </div>           
+            <div id="control-panel">
+                <img id="playbutton" class="btn" src="img/playpause.jpg"  style="width:40px;float:left;margin-left:10px;"/>
+                <div id="slider" style="margin-left:10px;margin-top:12px;float:left;width:770px;vertical-align:middle;"></div>
+                <br>
+                <p style="font-size:10pt;text-align: center;">
+                    <label for="amount">Days 0 to </label>
+                    <input type="text" id="amount" style="border:0; color:#f6931f; font-weight:bold; width:30px;">                         
+                </p>                
+            </div>           
+        </div>
+    </div>
+ 
+<script type="text/javascript">
+    
+paused = true;
+
+$(document).ready(function () {
+
+   // slideshow
+   $('#slideshow').cycle({       
+   	fx: "none",
+   	timeout: 1,
+        speed: 1,        
+        continuous: 1,
+        loader: "wait", //wait for all images to load before slideshow starts
+        swipe: true,
+        paused: paused        
+   	});
+   
+   // scroll actions
+   var mousewheelevt = (/Firefox/i.test(navigator.userAgent)) ? "DOMMouseScroll" : "mousewheel"; //FF doesn't recognize mousewheel as of FF3.x
+    $('#slideshow').bind(mousewheelevt, function(e){
+        var evt = window.event || e //equalize event object     
+        evt = evt.originalEvent ? evt.originalEvent : evt; //convert to originalEvent if possible               
+        var delta = evt.detail ? evt.detail*(-40) : evt.wheelDelta //check for detail first, because it is used by Opera and FF
+        if(delta > 0) {
+            //scroll up
+            $('#slideshow').cycle('prev');
+        }
+        else{
+            //scroll down
+            $('#slideshow').cycle('next');
+        }   
+    });	
+
+    // play button functionality
+    $("#playbutton").click(function() {
+        if(paused){
+            $("#playbutton").attr("src","img/playpausepressed.jpg");
+            $('#slideshow').cycle('resume');            
+            paused = false;
+        }else{
+            $("#playbutton").attr("src","img/playpause.jpg");
+            $('#slideshow').cycle('pause');
+            paused = true;
+        }
+    });
+    
+    // slider function
+    $(function() {
+        $( "#slider" ).slider({
+            range: "min",
+            value: 37,
+            min: 1,
+            max: <%=maxtime%>,
+            slide: function( event, ui ) {
+                // update the following as slider is dragged
+                $("#amount").val( ui.value );
+                $('#slideshow').cycle('goto', ui.value-1);
+            }
+        });
+        $( "#amount" ).val( $( "#slider" ).slider( "value" ) );
+        $('#slideshow').cycle('goto', $("#slider").slider("value")-1);
+    });
+
+    
+});
+
+// update slider value as movie is played
+$(document).on( 'cycle-update-view', function( e, opts, slideOpts, currSlide ) {
+    var currentSlideIndex = $("#slideshow").data("cycle.opts").currSlide;
+
+    if($("#slider").slider("value") != currentSlideIndex+1){
+      // move slider
+      $( "#slider" ).slider( "value", currentSlideIndex+1 );
+      $( "#amount" ).val( $( "#slider" ).slider( "value" ) );
+
+    }        
+});
+
+
+</script>   
+</body>
+
+</html>
