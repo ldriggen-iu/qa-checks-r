@@ -145,6 +145,10 @@ getselectdate <- function(date,id,type="first",data=data,dateformat=dateformat){
         dates <- get(deparse(substitute(date)),data)
         ids <- get(deparse(substitute(id)),data)
     }
+    if(missing(data)){
+        dates <- get(deparse(substitute(date)),data)
+        ids <- get(deparse(substitute(id)),data)
+    }
     if(!missing(dateformat)){
         dates <- as.Date(dates,dateformat)
     }
