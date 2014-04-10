@@ -30,7 +30,7 @@ rm(list=ls()) # clear namespace
 databaseclose <- "2013-12-01"
 
 ## READ QUERY_FUNCTIONS.R
-source("code/query_functions.R")
+source("code/query_functions2.R")
 ## INDEX NUMBER FOR QUERY FILES
 index <- 1
 ## EMPTY MATRIX FOR ALL QUERIES and ALL CHECKS
@@ -44,39 +44,30 @@ databaseclose <- ifelse(is.na(databaseclose),Sys.Date(),databaseclose)
 expectedtables <- c("center","program","basic","ltfu","cd4","rna","art","dis","visit")
 expecteddestables <- c("tblCENTER","tblPROGRAM","tblBAS","tblLTFU","tblLAB_CD4","tblLAB_RNA","tblART","tblDIS","tblVIS")
 ## CHOOSE FIRST SELECTS THE TEXT STRING OCCURING BEFORE THE SPECIFIED SEPARATER
-choosefirst <- function(var,sep=".") unlist(lapply(strsplit(var,sep,fixed=TRUE),function(x) x[1]))
+# choosefirst <- function(var,sep=".") unlist(lapply(strsplit(var,sep,fixed=TRUE),function(x) x[1]))
 ## DETERMINE WHICH TABLES EXIST IN '/input'
-existingtables <- choosefirst(list.files("input"))
-readtables <- expectedtables[match(existingtables,expecteddestables)]
+# existingtables <- choosefirst(list.files("input"))
+# readtables <- expectedtables[match(existingtables,expecteddestables)]
 ## READ IN ALL EXISTING TABLES
-for(i in 1:length(readtables)){
-  if(!is.na(readtables[i])){
-     readcsv <- read.csv(paste("input/",existingtables[i],".csv",sep=""),header=TRUE,stringsAsFactors = FALSE,na.strings=c(NA,""))
-     names(readcsv) <- tolower(names(readcsv))
-     assign(readtables[i],readcsv)
-   }
+fn <- file.path('input', sprintf("%s.csv", expecteddestables))
+for(i in which(file.access(fn, mode=4) == 0)) {
+  readcsv <- read.csv(fn[i], header=TRUE, stringsAsFactors = FALSE, na.strings=c(NA,""))
+  names(readcsv) <- tolower(names(readcsv))
+  assign(expectedtables[i], readcsv)
 }
 
-################### QUERY CHECK PROGRAMS BEGIN HERE #################
+art_id_codebook <- read.csv("resource/art_id_codebook.csv",header=TRUE,stringsAsFactors = FALSE,na.strings="")
+art_rs_codebook <- read.csv("resource/art_rs_codebook.csv",header=TRUE,stringsAsFactors = FALSE,na.strings="")
+dis_id_codebook <- read.csv("resource/dis_id_codebook.csv",header=TRUE,stringsAsFactors = FALSE,na.strings="")
+dis_wd_codebook <- read.csv("resource/dis_wd_codebook.csv",header=TRUE,stringsAsFactors = FALSE,na.strings="")
 
-if(exists("center")) source("code/tblCENTER_checks.R")
-if(exists("program")) source("code/tblPROGRAM_checks.R")
-if(exists("basic")) source("code/tblBAS_checks.R")
-if(exists("ltfu")) source("code/tblLTFU_checks.R")
-if(exists("cd4")) source("code/tblLAB_CD4_checks.R")
-if(exists("rna")) source("code/tblLAB_RNA_checks.R")
-if(exists("art")) source("code/tblART_checks.R")
-if(exists("dis")) source("code/tblDIS_checks.R")
-if(exists("visit")) source("code/tblVIS_checks.R")
-
-################### QUERY CHECK PROGRAMS END HERE ###################
-
-## COMBINE ALL QUERY FILES
-allquery <- do.call(rbind,lapply(paste("query",1:(index-1),sep=""),get))
-
-## WRITE QUERY FILES
-## REORDER QUERY FILE ACCORDING TO SPECS
-allquery <- allquery[,c(4:5,2:3,1,6)]
-## WRITE QUERY FILES -- CREATE OUTPUT DIRECTORY (IF NEEDED)
-wd <- getwd(); if(!file.exists("output")){dir.create(file.path(wd,"output"))}
-write.csv(allquery,paste("output/tbl_query_",format(Sys.Date(),"%Y%m%d"),".csv",sep=""),row.names=FALSE)
+qa.fn <- file.path('rules', sprintf("%s.csv", expectedtables))
+errs <- vector('list', length(qa.fn))
+for(i in which(file.access(qa.fn, mode=4) == 0)) {
+  if(exists(expectedtables[i])) {
+    readcsv <- read.csv(qa.fn[i], header=TRUE, stringsAsFactors = FALSE)
+    errs[[i]] <- check(readcsv)
+  }
+}
+all.errs <- do.call(rbind, errs)[,c(4,5,2,3,1,6)]
+write.csv(all.errs, 'output/myerrs.csv', row.names=FALSE)

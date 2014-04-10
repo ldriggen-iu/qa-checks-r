@@ -33,4 +33,6 @@
 "validate","badcodes","birth_d_a","c('<','>','D','M','Y','U')","","","","",""
 "validate","badcodes","enrol_d_a","c('<','>','D','M','Y','U')","","","","",""
 "validate","badcodes","haart_d_a","c('<','>','D','M','Y','U')","","","","",""
+"branch","exists('program')","","","","","",,,
 "validate","badrecord","program","basic","program","","","",""
+"branch","END","","","","","",,,
