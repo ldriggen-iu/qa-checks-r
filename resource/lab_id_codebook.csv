@@ -1,0 +1,55 @@
+code,label
+A1C,Haemoglobin A1C
+ACRA,Albumin Creatinin Ratio 
+ALB,Albumine
+AFP,Alfa Fetoprotein
+ALP,Alkaline Phosphatase
+ALT,Alanin-Aminotransferase
+AMY,Amylase
+AST,Aspartat aminotransferase
+BIL,Total Bilirubin
+BUN,Blood Urea Nitrogen
+CD3,CD3
+CD3P,% CD3 of leukocytes
+CD8,CD8
+CD8P,% CD8 of leukocytes
+CHOL,Total Cholesterol
+CL-,Cl-[1]
+CRE,Creatinine
+DIPG,Dipstick result for glucose in Urine
+DIPP,Dipstick result for protein in Urine
+GGT,Gamma-glutamyltransferase
+GLUC,Glucose
+GLUCF,Glucose – fasting
+GLUCNF,Glucose – non-fasting
+HAEM,Haemoglobin
+HDL,Serum HDL
+HEMA,Hematocrit
+INR,Quick/INR
+LACT,Lactate
+LDL,Serum LDL
+LEUK,Leukocytes
+LYM,Lymphocytes
+LYMP,% Lymphocytes of leukocytes
+MCV,MCV
+NA,Na+
+NEU,Neutrophils
+PCRA,Protein Creatinin Ratio
+PHA,PH arterial1
+PHV,PH venous1
+PP,"PP factor (II, VII, X) 1"
+PROT,Protein
+PSA,Prostate-specific antigen
+PTH,Parathyroid Hormone1
+PTR,Prothrombin rate
+TBC,TB culture
+TBM,TB microscopy
+TBS,TB sensitivity
+TBGE,TB GeneXpert
+TBLP,TB Line Probe Assay
+THR,Thrombocytes/platelets
+TRIG,Serum Triglyceride
+URA,Uric acid
+UREA,Urea/Blood Urea Nitrogen
+,
+ ,

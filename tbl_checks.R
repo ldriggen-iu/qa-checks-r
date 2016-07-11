@@ -17,14 +17,16 @@
 # a listing of data queries in /output.
 #
 # Created: 9 November 2012
-# Revisions:
+# Revisions: 24 February 2016 Larry Riggen added code for 
+#            tblDELIVERY_CHILD, ???? complete list when all new 
+#            tables are defined ????
 #
 #############################################################
 rm(list=ls()) # clear namespace
 
 
 ## USER -- PLEASE REVISE or CHANGE THE APPROPRIATE WORKING DIRECTORY AND SET THE APPROPRIATE DATABASE CLOSE DATE
-#setwd("/home/blevinml/Projects/IeDEAS/qa-checks-r")
+setwd("I:/Projects/IeDEA/Grants/Yiannoutsos/BD2K/IeDEA_DES/GitRepository")
 
 ## IN ORDER TO ASSESS DATES OCCURRING IN THE FUTURE, WE NEED A DATABASE CLOSE DATE (YYYY-MM-DD)
 databaseclose <- "2013-12-01"
@@ -41,8 +43,10 @@ databaseclose <- as.Date(databaseclose,"%Y-%m-%d")
 databaseclose <- ifelse(is.na(databaseclose),Sys.Date(),databaseclose)
 
 ## IDENTIFY WHICH TABLES TO EXPECT FROM DES
-expectedtables <- c("center","program","basic","ltfu","cd4","rna","art","dis","visit")
-expecteddestables <- c("tblCENTER","tblPROGRAM","tblBAS","tblLTFU","tblLAB_CD4","tblLAB_RNA","tblART","tblDIS","tblVIS")
+expectedtables <- c("center","program","basic","ltfu","cd4","rna","bp","viro","res","reslvl2","reslvl3","art","med",
+                    "dis","distb","visit","deliverychild","deliverymum","lab","canc","cep","newborn","newbornabnorm","pregout","preg")
+expecteddestables <- c("tblCENTER","tblPROGRAM","tblBAS","tblLTFU","tblLAB_CD4","tblLAB_RNA","tblLAB_BP","tblLAB_VIRO","tblLAB_RES","tblLAB_RES_LVL_2","tblLAB_RES_LVL_3","tblART","tblMED","tblDIS","tblDIS_TB","tblVIS",
+                       "tblDELIVERY_CHILD","tblDELIVERY_MUM","tblLAB","tblCANC","tblCEP","tblNEWBORN","tblNEWBORN_ABNORM","tblPREG_OUT","tblPREG")
 ## CHOOSE FIRST SELECTS THE TEXT STRING OCCURING BEFORE THE SPECIFIED SEPARATER
 choosefirst <- function(var,sep=".") unlist(lapply(strsplit(var,sep,fixed=TRUE),function(x) x[1]))
 ## DETERMINE WHICH TABLES EXIST IN '/input'
@@ -68,7 +72,22 @@ if(exists("rna")) source("code/tblLAB_RNA_checks.R")
 if(exists("art")) source("code/tblART_checks.R")
 if(exists("dis")) source("code/tblDIS_checks.R")
 if(exists("visit")) source("code/tblVIS_checks.R")
-
+if(exists("deliverychild")) source("code/tblDELIVERY_CHILD_checks.R")
+if(exists("deliverymum")) source("code/tblDELIVERY_MUM_checks.R")
+if(exists("lab")) source("code/tblLAB_checks.R")
+if(exists("canc")) source("code/tblCANC_checks.R")
+if(exists("cep")) source("code/tblCEP_checks.R")
+if(exists("distb")) source("code/tblDIS_TB_checks.R")
+if(exists("bp")) source("code/tblLAB_BP_checks.R")
+if(exists("viro")) source("code/tblLAB_VIRO_checks.R")
+if(exists("res")) source("code/tblLAB_RES_checks.R")
+if(exists("reslvl2")) source("code/tblLAB_RES_LVL_2_checks.R")
+if(exists("reslvl3")) source("code/tblLAB_RES_LVL_3_checks.R")
+if(exists("med")) source("code/tblMED_checks.R")
+if(exists("newbornabnorm")) source("code/tblNEWBORN_ABNORM_checks.R")
+if(exists("newborn")) source("code/tblNEWBORN_checks.R")
+if(exists("pregout")) source("code/tblPREG_OUT_checks.R")
+if(exists("preg")) source("code/tblPREG_checks.R")
 ################### QUERY CHECK PROGRAMS END HERE ###################
 
 ## COMBINE ALL QUERY FILES

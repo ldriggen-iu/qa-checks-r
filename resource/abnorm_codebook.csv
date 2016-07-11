@@ -1,0 +1,26 @@
+code,label
+1.1,Hydrocephalus 
+1.2,Microcephaly
+1.3,Neural tube defects
+1.4,Central Nervous System (CNS) - Other
+2.1,Cleft lip and palate
+2.2,"Eye, Ear, Face and Neck - Other"
+3.1,"Acyanotic defects (ASD, VSD, AV canal, PDA, etc)"
+3.2,"Cyanotic defects (e.g. Tetralogy of Fallot, transposition, pulmonary atresia, truncus,Ebstein's)"
+3.3,Heart - Other 
+4.1,Gastroschisis
+4.2,Intestinal atresia
+4.3,Tracheo-esophageal Fistula
+4.4,Omphalocele
+4.5,Anorectal malformation
+4.6,Gastro-intestinal system - Other
+5.1,Ambiguous genitalia
+5.2,Hypospadias
+5.3,Genitals - Other
+6.1,Posterior Urethral valves
+6.2,Renal and urinary system - Other
+7.1,Talipes equinovarus (club foot)
+7.2,Limb defects – Other
+8.1,Down syndrome
+8.2,Chromosomal anomaly – Other
+9.1,Other Organ System(s) Abnormality

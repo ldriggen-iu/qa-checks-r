@@ -1,0 +1,24 @@
+code,label
+10,MTCT - antenatal (mother)
+11,MTCT – peripartum (mother)
+12,MTCT – postpartum (mother)
+13,MTCT – timing unknown (mother)
+20,MTCT – peripartum (infant)
+21,MTCT – postpartum (infant)
+22,MTCT – timing unknown (infant)
+30,ARV as treatment
+30.1,HAART as treatment for own health (i.e. based on CD4 count/ Clinical Stage/ tuberculosis co-infection/ age e.g. <5 years old in children) NOT started within the PMTCT programme
+30.2,HAART in patient NOT eligible on basis of CD4 count/ Clinical Stage/ tuberculosis co-infection/age  –(i.e. “Test and treat”) NOT started within the PMTCT programme
+31,Maternal HAART started within PMTCT programme - pregnant – ART eligibility for own health unknown
+31.1,Maternal HAART started within PMTCT programme – pregnant - for own health (based on CD4 count/Clinical stage)
+31.2,Maternal HAART started for PMTCT – pregnant - NOT otherwise eligible for ART based on CD4 count/Clinical stage)
+32,Maternal HAART started within PMTCT programme - breastfeeding - ART eligibility for own health unknown
+32.1,Maternal HAART started within PMTCT programme – breastfeeding - for own health (based on CD4 count/Clinical stage)
+32.2,Maternal HAART started within PMTCT programme – breastfeeding – NOT otherwise eligible for ART based on CD4 count/Clinical stage
+33,Maternal HAART started within PMTCT programme – not known whether started during pregnancy or breastfeeding - ART eligibility for own health unknown
+33.1,Maternal HAART started within PMTCT programme – not known whether started during pregnancy or breastfeeding - for own health (based on CD4 count/Clinical stage)
+33.2,Maternal HAART started within PMTCT programme – not known whether started during pregnancy or breastfeeding – NOT otherwise eligible based on on CD4 count/Clinical stage
+40,PEP – Post Exposure Prophylaxis
+50,PREP
+95,Not ascertained
+99,Unknown despite attempting ascertainment

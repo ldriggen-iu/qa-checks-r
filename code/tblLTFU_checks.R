@@ -17,15 +17,18 @@
 #          a listing of data queries.
 #
 #   Created: 29 March 2013
-#   Revisions: 
+#   Revisions: Larry Riggen 22 June 2016
+#              add MOTHERDEATH_Y, MOTHERDEATH_D(_A), FATHERDEATH_Y,
+#              and FATHERDEATH_D(_A) for BD2K
 #     
 #############################################################
 
 ## NAME OF TABLE FOR WRITING QUERIES
 tablename <- "tblLTFU"
 ## NAMES EXPECTED FROM HICDEP+/IeDEAS DES
-expectednames <- c("patient","drop_y","death_y","death_d","l_alive_d","transfer_d")
-acceptablenames <- c(expectednames,"death_d_a","l_alive_d_a","transfer_d_a")
+expectednames <- c("patient","drop_y","death_y","death_d","l_alive_d","transfer_d",
+                   "motherdeath_y","motherdeath_d","fatherdeath_y","fatherdeath_d")
+acceptablenames <- c(expectednames,"death_d_a","l_alive_d_a","transfer_d_a","motherdeath_d_a","fatherdeath_d_a")
 
 ################### QUERY CHECKING BEGINS HERE ###################
 
@@ -37,6 +40,8 @@ missvar(expectednames,ltfu)
 notdate(death_d,ltfu)
 notdate(l_alive_d,ltfu)
 notdate(transfer_d,ltfu)
+notdate(motherdeath_d,ltfu)
+notdate(fatherdeath_d,ltfu)
 
 ## CHECK FOR MISSING DATA
 # missingvalue(death_d,ltfu)
@@ -47,17 +52,21 @@ missingvalue(l_alive_d,ltfu)
 if(exists("death_d",ltfu)){ltfu$death_d <- convertdate(death_d,ltfu)}
 if(exists("l_alive_d",ltfu)){ltfu$l_alive_d <- convertdate(l_alive_d,ltfu)}
 if(exists("transfer_d",ltfu)){ltfu$transfer_d <- convertdate(transfer_d,ltfu)}
+if(exists("motherdeath_d",ltfu)){ltfu$motherdeath_d <- convertdate(motherdeath_d,ltfu)}
+if(exists("fatherdeath_d",ltfu)){ltfu$fatherdeath_d <- convertdate(fatherdeath_d,ltfu)}
 
 ## CHECK FOR DATES OCCURRING IN THE WRONG ORDER
 if(exists("basic")){
 	basltfu <- merge(ltfu,with(basic,data.frame(patient,birth_d,enrol_d)),all.x=TRUE)
 	basltfu$birth_d <- convertdate(birth_d,basltfu)
+	basltfu$enrol_d <- convertdate(enrol_d,basltfu)
 	outoforder(birth_d,death_d,basltfu,table2="tblBAS")
 	outoforder(birth_d,l_alive_d,basltfu,table2="tblBAS")
 	outoforder(birth_d,transfer_d,basltfu,table2="tblBAS")
 	outoforder(enrol_d,death_d,basltfu,table2="tblBAS")
 	outoforder(enrol_d,l_alive_d,basltfu,table2="tblBAS")
 	outoforder(enrol_d,transfer_d,basltfu,table2="tblBAS")
+	outoforder(birth_d,motherdeath_d,basltfu,table2="tblBAS")
 }
 
 ## CHECK FOR DATES OCCURRING IN THE WRONG ORDER
@@ -68,6 +77,8 @@ outoforder(transfer_d,death_d,ltfu)
 futuredate(death_d,ltfu)
 futuredate(l_alive_d,ltfu)
 futuredate(transfer_d,ltfu)
+futuredate(motherdeath_d,ltfu)
+futuredate(fatherdeath_d,ltfu)
 
 ## CHECK FOR DUPLICATE PATIENT IDs
 queryduplicates(patient,ltfu)

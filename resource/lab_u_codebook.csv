@@ -1,0 +1,19 @@
+code,label
+1,mmol/L
+2,g/L
+3,g/dL
+4,mg/dL
+5,IU/L (u/L)
+6,µmol/L
+7,INR
+8,1E+9/L
+9,1E+6/L
+10,cells/µL
+11,µkat/L
+12,%
+13,µg/L = ng/mL
+14,mg/24h
+15,mg/mmol
+16,fl (Femtoliter)
+17,µg/mL = mg/L
+99,no units (e.g. for Dipstick results)

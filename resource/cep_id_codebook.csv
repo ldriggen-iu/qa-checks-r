@@ -1,0 +1,17 @@
+code,label
+AMI,Acute myocardial infarction
+CLD,Chronic liver disease
+DIA,Diabetes mellitus
+ESRD,End stage renal disease
+FIBS,Fibroscan stiffness (add elasticity value in CEP_V)
+HEP,Hepatic encephalopathy
+HESY,Hepatorenal syndrome
+ICP,Invasive Cardiovascular Procedures
+JAUN,Jaundice
+LIVB,Liver biopsy
+LIVD,Liver decompensation
+LIVT,Liver transplantation
+NADM,Non-AIDS defining malignancies
+STR,Stroke (infarction or haemorrhagia)
+USAB,Ultrasound imaging of the abdomen
+USAB,Ultrasound imaging of the pelvis

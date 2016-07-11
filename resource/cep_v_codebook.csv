@@ -1,0 +1,4 @@
+code,label
+FIBS-,Fibroscan elasticity given in (KPa)
+HOSP-,Number of days addmited to the hospital
+ICU-,Number of days addmited to the ICU

@@ -17,14 +17,16 @@
 #          a listing of data queries.
 #
 #   Created: 16 January 2013
-#   Revisions: 
+#   Revisions: June 2016 Larry Riggen added new variables for BD2K
 #     
 #############################################################
 
 ## NAME OF TABLE FOR WRITING QUERIES
 tablename <- "tblVIS"
 ## NAMES EXPECTED FROM HICDEP+/IeDEAS DES
-expectednames <- c("patient","center","vis_d","weigh","heigh","cdc_stage","who_stage")
+expectednames <- c("patient","center","vis_d","weigh","heigh","cdc_stage","who_stage","smoking_y",
+                   "preg_y","breastf_y","feedoth_y","brought_patient","live_with",
+                    "hiv_status","status_known","school","school_lvl","gender_id")
 acceptablenames <- c(expectednames,"vis_d_a")
 
 ################### QUERY CHECKING BEGINS HERE ###################
@@ -83,6 +85,18 @@ lowerrangecheck(heigh,0,visit) # consider specifying lower limit for adult popul
 badcodes(who_stage,c(1:4,9),visit)
 badcodes(cdc_stage,c("A","A1","A2","A3","B","B1","B2","B3","C","C1","C2","C3","9"),visit)
 badcodes(vis_d_a,c("<",">","D","M","Y","U"),visit)
+badcodes(smoking_y,c(0,1,9),visit)
+badcodes(preg_y,c(0,1,9),visit)
+badcodes(breastf_y,c(0,1,9),visit)
+badcodes(feedoth_y,c(0,1,9),visit)
+badcodes(brought_patient,c(1,2,3,4,5,6,7,8,9),visit)
+badcodes(hiv_status,c(1,2,3),visit)
+badcodes(status_unknown,c(0,1,2,9),visit)
+badcodes(school,c(0,1,9),visit)
+school_lvl_codebook <- read.csv("resource/school_lvl_codebook.csv",header=TRUE,stringsAsFactors = FALSE,na.strings="")
+badcodes(school_lvl,school_lvl_codebook$code,visit,id=patient)
+badcodes(gender_id,c("1","2","3","4","5","9"),visit)
+
 
 ## QUERY PATIENTS WITH NO RECORD IN tblBAS (bad ID)
 badrecord(patient,visit,basic)
@@ -112,6 +126,8 @@ if(exists("heigh",visit)){
 	assign(paste("query",index,sep=""),query,envir=globalenv()); index <<- index + 1
     }
 }
+
+## 
 ################### QUERY CHECKING ENDS HERE ###################
 
 

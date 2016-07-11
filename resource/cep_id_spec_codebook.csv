@@ -1,0 +1,91 @@
+code,Description
+AMI-,Acute myocardial infarction
+AMI-DAMI,Definitive Myocardial infarction
+AMI-PAMI,Possible Myocardial infarction
+ASCI-,Ascites
+ASP-,Invasive aspergillosis
+AVN-,Avascular necrosis in the femural head
+BACT-,Bacteremia
+BART-,Bartonellosis
+CERC-,Cervical cerclage
+CHAG-,Chagas disease (American trypanosomiasis) of the CNS
+CLD-,Chronic liver disease
+DIA-,Diabetes mellitus
+ENDO-,Endocarditis
+ESRD-,End stage renal disease
+FAT-,Fatal case with insufficient data
+FIBS-,Fibroscan stiffness (add elasticity value in CEP_V)
+FRA-,Bone fracture (irrespective of location)
+HEP-,Hepatic encephalopathy
+HEP-I,Hepatic encephalopathy stage I
+HEP-II,Hepatic encephalopathy stage II
+HEP-III,Hepatic encephalopathy stage III
+HEP-III+IV,Hepatic encephalopathy stage III or IV
+HEP-IV,Hepatic encephalopathy stage IV
+HESY-,Hepatorenal syndrome
+HOSP-,Hospitalisation
+ICP-,Invasive Cardiovascular Procedures
+ICP-ANG,Invasive Cardiovascular Procedures: Coronary angioplasty/stenting
+ICP-BYP,Invasive Cardiovascular Procedures: Coronary artery by-pass grafting
+ICP-END,Invasive Cardiovascular Procedures: Carotic endarterectomy
+ICU-,Admission for the ICU
+JAUN-,Jaundice
+LAC-,Lactic acidosis
+LEIS-,"Leishmaniasis, visceral"
+LIVB-,Liver biopsy
+LIVB-F0,no fibrosis
+LIVB-F1,portal fibrosis without septa
+LIVB-F2,portal fibrosis with few septa
+LIVB-F3,numerous septa without cirrhosis
+LIVB-F4,cirrhosis
+LIVD-,Liver decompensation
+LIVT-,Liver transplantation
+MCDI-,Microsporidosis diarrhoes (dur. > 1 month)
+MENI-,Meningitis
+NADM-,Non-AIDS defining malignancies
+NADM-ALL,Leukemia: Acute lymphoid
+NADM-AML,Leukemia: Acute myeloid
+NADM-ANAL,"Anal dysplasia, grade 2 or higher"
+NADM-ANUS,Anal cancer
+NADM-BLAD,Bladder cancer
+NADM-BRAIN,Brain cancer
+NADM-BRCA,Breast cancer
+NADM-CERV,"Cervical dysplasia/carcinoma in situ, grade 2 or higher"
+NADM-CLL,Leukemia: Chronic lymphoid
+NADM-CML,Leukemia: Chronic myeloid
+NADM-COLO,Colon cancer
+NADM-COTC,Connective tissue cancer
+NADM-HDL,Hodgkin lymphoma
+NADM-HENE,Head and neck cancer
+NADM-KIDN,Kidney cancer
+NADM-LEUK,Leukemia: unspecified
+NADM-LIPC,Lip cancer
+NADM-LIVR,Liver cancer
+NADM-LUNG,Lung cancer
+NADM-MALM,Malignant melanoma
+NADM-MEAC,Metastasis: of adenocarcinoma
+NADM-MEOC,Metastasis: of other cancertype
+NADM-MESC,Metastasis: of squamuos cell carcinoma
+NADM-META,Metastasis: unspecified
+NADM-MULM,Multiple myeloma
+NADM-PENC,Penile cancer
+NADM-PROS,Prostate cancer
+NADM-RECT,Rectum cancer
+NADM-STOM,Stomach cancer
+NADM-TESE,Testicular seminoma
+NADM-UTER,Uterus cancer
+NOCA-,Nocardiosis
+OESO-,Oesophageal variceal bleeding
+OSTI-,Ostitis
+PAN-,Pancreatitis
+PCE-,Pneumocystis carinii extrapulmonary
+PERI-,Spontaneous bacterial peritonitis
+PMAR-,"Penicillium marneffei, disseminated"
+PNEU-,Pneumonia
+PYEL-,Pyelonephritis
+REQU-,Rhodococcus equi disease
+STR-,Stroke (infarction or haemorrhagia)
+STR-SHAE,Stroke: Haemorrhagia
+STR-SINF,Stroke: Infarction
+STR-SUNK,Stroke: Unknown
+USAB-,Ultrasound imaging of the abdomen

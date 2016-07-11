@@ -1,0 +1,62 @@
+Code,label
+1,"Treatment failure (i.e. virological, immunological, and/or clinical failure)"
+1.1,Virological failure
+1.2,Partial virological failure
+1.3,Immunological failure - CD4 drop
+1.4,Clinical progression
+2,Abnormal fat redistribution
+3,Concern of cardiovascular disease
+3.1,Dyslipidaemia
+3.2,Cardiovascular disease
+4,Hypersensitivity reaction (skin eruption etc.)
+5,"Toxicity, predominantly from abdomen/G-I tract"
+5.1,Toxicity - GI tract
+5.2,Toxicity - Liver
+5.3,Toxicity - Pancreas
+6,"Toxicity, predominantly from nervous system"
+6.1,Toxicity - peripheral neuropathy
+6.2,Toxicity - neuropsychiatric
+6.3,Toxicity - headache
+7,"Toxicity, predominantly from kidneys"
+8,"Toxicity, predominantly from endocrine system"
+8.1,Diabetes
+9,Haematological toxicity (anemia etc.)
+10,Hyperlactataemie/lactic acidosis
+11,Bone toxicity
+15,Social contra-indication
+16,Contra-indication unspecified
+16.8,Contra-indication expired
+16.9,Contra-indication – other
+17,MTCT regimen completed
+70,Pregnancy - toxicity concerns (during pregnancy)
+75,Pregnancy - switch to a more appropriate regimen for PMTCT
+88,Death
+90,Side effects - any of the above but unspecified
+90.1,Comorbidity
+91,"Toxicity, not mentioned above"
+91.1,"Toxicity, unspecified"
+92,Availability of more effective treatment (not specifically failure or side effect related)
+92.1,Simplified treatment available
+92.2,Treatment too complex
+92.3,Drug interaction
+92.31,Drug interaction - commencing TB/BCG treatment
+92.32,Drug interaction - ended TB/BCG treatment
+92.33,Change in eligibility criteria (e.g. child old enough for tablets; refrigerator no longer available)
+92.4,Protocol change
+92.5,"Regular treatment termination (e.g. DAA's for HCV, antibiotics"
+92.9,"Change in treatment not due to side-effects, failure, poor adherence or contra-indication"
+93,Structured Treatment Interruption (STI)
+93.1,Structured Treatment Interruption (STI) - at high CD4
+94,"Patient's wish/decision, not specified above"
+94.1,Non-compliance
+94.2,Defaulter
+95,"Physician's decision, not specified above"
+96,Pregnancy
+96.1,Pregnancy intended
+96.2,Pregnancy ended
+97,Study treatment
+97.1,Study treatment commenced
+97.2,Study treatment completed
+97.6,Drug not available
+98,"Other causes, not specified above"
+99,Unknown

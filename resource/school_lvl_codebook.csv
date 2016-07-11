@@ -1,0 +1,7 @@
+code,label
+1,primary education (ISCED97-1)
+2,lower secondary (ISCED97-2) OR end of basic education
+3,upper secondary or post-secondary non-tertiary (ISCED97 3 and 4)
+4,university or post-graduate (ISCED97 5A and 5B)
+8,"other, only if none of the codes 0 to 4 applies"
+9,Unknown

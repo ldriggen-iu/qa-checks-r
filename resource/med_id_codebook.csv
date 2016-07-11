@@ -1,0 +1,109 @@
+code,label
+A10A,Insulin or derivatives hereof
+A10B,Oral antidiabetic agents
+A11CC,vitamin D
+A14A,Anabolic steroids/appetite stimulants
+B01AC,Anti-platelets
+C-HYP,"Other anti-hypertensive agents [C02, C03, C04, C07, C08]"
+C09,ACE inhibitors
+C10,Lipid lowering agents
+G02CA,Tocolysis
+H02,Corticosteroids
+J01,Antibiotics
+J01AA08,Minocycline (MINOCIN)
+J01EA01,"Trimethoprim (MONOTRIM, NOPIL)"
+J01EC02,Sulfadiazine
+J01EE,"Cotrimoxazole - Comb. of sulfonamides and trimethoprim (BACTRIM, EUSAPRIM, NOPIL)"
+J01EE01,Sulfamethoxazole and trimethoprim (Bactrim)
+J01EE03,Sulfametrole and trimethoprim - Cosoltrime (MADERAN)
+J01FA09,Clarithromycine (KLACID)
+J01FA10,Azithomycine (ZITHROMAX)
+J01FF01,Clindamycine (DALACIN)
+J01GA01,streptomycin
+J01GB06,Amikacine (AMIKINE)
+J01MA02,"Ciprofloxacine (CIPROXINE, CILOXAN)"
+J01MA12,Levofloxacin (TAVANIC)
+J01MA14,Moxifloxacin 
+J01RA02,Cosoltrime (MADERAN)
+J02AA01,Amphotericin B (FUNGIZON)
+J02AB,"Imidazoles (DAKTARIN, NIZORAL, PEVARYL …)"
+J02AB02,Ketoconazole
+J02AC01,Fluconazole (DIFLUCAN)
+J02AC02,Itraconazole (SPORANOX)
+J02AC03,Voriconazole
+J02AC04,Posaconazole
+J02AC05,Isavuconazole
+J02AX01,Flucytosine
+J02AX04,caspofungin
+J04AB02,Rifampin (RIMATICIN)
+J04AB04,Rifabutin (MYCOBUTIN)
+J04AB05,Rifapentine (Priftin)
+J04AC01,Isoniazide (RIMIFON)
+J04AK01,Pyrazinamide (PYRAZINAMID)
+J04AK02,"Ethambutol (EMB, MYAMBUTOL)"
+J04AM05,RIFATER
+J04BA01,Clofazimine (LAMPREN)
+J04BA02,Dapsone
+J05AB01,Aciclovir (ZIVORAX)
+J05AB04,Ribavirin
+J05AB06,Ganciclovir (CYMEVENE)
+J05AB09,Famciclovir
+J05AB11,Valaciclovir (VALTEX)
+J05AB12,Cidofovir (VISTIDE)
+J05AB15,Valganciclovir
+J05AD01,Foscarnet (FOSCAVIR)
+J05AE11,"Telaprevir (INCIVEK, INCIVO)"
+J05AE12,Boceprevir (VICTRELIS)
+J05AE13,Faldaprevir
+J05AE14,Simeprevir
+J05AE15,Asunaprevir
+J05AF08,Adefovir (PREVEON)
+J05AF10,Entecavir
+J05AF11,Telbivudine
+J05AF12,Clevudine
+J05AR-DAAS,Daclatasvir/Asunaprevir
+J05AX GRAZ-ELB,Grazoprevir/Elbasvir
+J05AX14,Daclatasvir
+J05AX15,Sofosbuvir
+J05AX16,Dasabuvir
+J05AX65,Ledipasvir/Sofosbuvir
+J05AX67,"Ombitasvir, paritaprevir(ABT-450) and ritonavir"
+J07BM0,HPV Vaccine
+J07BM01,"HPV Vaccine (types 6, 11, 16, 18)"
+J07BM02,"HPV Vaccine (types 16, 18)"
+J07BM03,"HPV Vaccine (types 6, 11, 16, 18, 31, 33, 45, 52, 58)"
+L01AA01,Cyclophosphamide (ENDOXAN)
+L01AD02,CCNU (LOMUSTINE)
+L01AX04,Dacabazine (DTIC - Dome)
+L01BA01,Methotrexate
+L01CA01,Vinblastin (VELBE)
+L01CA02,Oncovin (VINCRISTINE)
+L01CB01,"Etoposide (VEPESIDE, EXITOP 100)"
+L01DB01,"Doxorubicine, Adriamycine (DOXIL, CAELYX, ADRIBLASTIN)"
+L01DC01,Bleomycine
+L01XB01,Procarbazine (NATULAN)
+L03AA02,G-CSF/Filgastrim (NEUPOGEN)
+L03AB,Interferons
+L03AB-AL2,"Peginterferon alfa-2a/alfa-2b (PEGINTRON, PEGASYS)"
+L03AB10,Peginterferon alfa-2b (PEGINTRON)
+L03AB11,Peginterferon alfa-2a (PEGASYS)
+L03AC-IL2,Interleukin 2 (PROLEUKIN)
+M05BA,bisphosphonate
+N03A,Antiepileptics
+N05A,Antipsychotics
+N05CD,Benzodiazepine derivatives
+N05CF,Benzodiazepine related drugs
+N06A,Antidepressant
+N07BC,Other drugs used in opioid dependence
+N07BC01,Buprenorphine
+N07BC02,Methadone
+N07BC03,Levacetylmethadol
+N07BC04,Lofexidine
+N07BC51,"Buprenorphine, combinations"
+P01AX06,"Atovaquone (WELLVONE, MEPRONE)"
+P01BA03,Primaquine
+P01BD01,Pyrimethamine (DARAPRIM)
+P01BD51,Pyrimethamine/Sulfadoxine (FANSIDAR)
+P01CX01,Pentamidine aerosol (PENTACARNET)
+V03AB15,Naloxone
+V03AF03,Folinate of calcium (LEUCOVORINE)

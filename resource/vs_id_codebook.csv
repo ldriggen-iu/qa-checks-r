@@ -1,0 +1,38 @@
+code,label
+BVA,Bacterial vaginosis unspecified method
+BVAC,Bacterial vaginosis – clinical
+BVAG,Bacterial vaginosis - gram stain
+CHLA,Chlamydia
+CMVA,CMV anitbodies
+CRYP,Cryptococcal antigen test
+GONO,Gonorrhoea
+HBV,Marker for hepatitis B infection (=HBVAC) - test unknown
+HBVAC,HBV antibody (core)
+HBVACIGM,HBV antibody (core IgM)
+HBVACIGG,HBG antibody (core IgG)
+HBVAE,HBV antibody (envelope)
+HBVAS,HBV antibody (surface)
+HBVD,HBV-DNA
+HBVGE,HBV antigen (envelope)
+HBVGS,HBV antigen (surface)
+HCV,Marker for hepatitis C infection - test unknown
+HCVA,HCV antibody
+HCVG,HCV antigen
+HCVBD,HCV b-DNA
+HCVR,HCV-RNA
+HDVA,Hepatitis delta antibody
+HIV-1,HIV-1 test
+HIV-1S,HIV-1 serology test
+HIV-1PCR,HIV-1 DNA PCR test
+HIV-2,HIV-2 test
+HIV-2S,HIV-2 serology test
+HIV-2PCR,HIV-2 DNA PCR test
+HIVAE,HIV antibodies ELISA
+HIVAWB,HIV antibodies Western blot
+MYCO,Mycoplasma
+P24AG,P24 Ag
+RUB,Rubella
+STR,"Streptococcus, group B"
+SYPH,Syphilis
+TOXA,Toxo antibodies
+UREP,Ureaplasma

@@ -17,7 +17,9 @@
 #          a listing of data queries.
 #
 #   Created: 9 October 2013
-#   Revisions: 
+#   Revisions: Larry Riggen 22 June 2016
+#              Added variables ART_FORM, ART_COMB, and ARTSTART_RS for
+#              BD2K
 #     
 #############################################################
 
@@ -25,7 +27,7 @@
 tablename <- "tblART"
 ## READ TABLE
 ## NAMES EXPECTED FROM HICDEP+/IeDEAS DES
-expectednames <- c("patient","art_id","art_sd","art_ed","art_rs")
+expectednames <- c("patient","art_id","art_sd","art_ed","art_rs","art_rs2","art_rs3","art_rs4","art_form","art_comb","artstart_rs")
 acceptablenames <- c(expectednames,"art_sd_a","art_ed_a")
 
 ################### QUERY CHECKING BEGINS HERE ###################
@@ -75,15 +77,26 @@ for(i in unique(art$art_id)[!is.na(unique(art$art_id))]){
 
 ## CHECK FOR INCORRECT VARIABLE TYPE (prior to range checks, if applicable)
 notnumeric(art_rs,art)
+notnumeric(art_rs1,art)
 
 ## CHECK FOR UNEXPECTED CODING
 art_id_codebook <- read.csv("resource/art_id_codebook.csv",header=TRUE,stringsAsFactors = FALSE,na.strings="")
 art_rs_codebook <- read.csv("resource/art_rs_codebook.csv",header=TRUE,stringsAsFactors = FALSE,na.strings="")
-badcodes(art_id,art_id_codebook$code,art)
-badcodes(art_rs,art_rs_codebook$code,art)
+badcodes(art_id,art_id_codebook$code,art,id=patient)
+## ???? need to figure out how to check that populated rs->rs_2->rs_3->rs_4 and only check those that are populated.
+## ???? the code below forces art_rs to always be populated (even if 99 - unknown) and art_rs2, art_rs3, art_rs4 to
+## ???? be a valid code if they contain an entry
+badcodes(art_rs,art_rs_codebook$code,art,id=patient)
+badcodes(art_rs2,art_rs_codebook$code,art[art$art_rs2 !=' ',],id=patient)
+badcodes(art_rs3,art_rs_codebook$code,art[art$art_rs3 !=' ',],id=patient)
+badcodes(art_rs4,art_rs_codebook$code,art[art$art_rs4 !=' ',],id=patient)
+badcodes(art_form,c("1","2","3","4","5","6","9"),art)
+badcodes(art_comb,c("0","1","9"),art)
 badcodes(art_sd_a,c("<",">","D","M","Y","U"),art)
 badcodes(art_ed_a,c("<",">","D","M","Y","U"),art)
-
+## ???? Stephany had comments concerning changing the reason for start specification
+art_startrs_codebook <- read.csv("resource/art_startrs_codebook.csv",header=TRUE,stringsAsFactors = FALSE,na.strings="")
+badcodes(artstart_rs,art_startrs_codebook$code,art)
 # ## NEED TO PROGRAM:
 # Overlapping periods of same drug
 # Double reporting - records reported for both combination drugs and their components
