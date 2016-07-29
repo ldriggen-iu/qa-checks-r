@@ -112,6 +112,21 @@ badcodes(ultr_3,c(0,1,2,9),preg,id=mother_id)
 
 ## CHECK FOR ULTRASOUNDS UNPOPULATED IN EARLIER TRIMESTERS,
 ## BUT POPULATED in LATER TRIMESTERS
-##???? need to write a function to do this
+##???? The checks below aren't perfect, but they are close... it needs to be modified so that
+##???? only totally missing prior ultr_* values are reported - not to include populated (but invalid) values, too.
+##???? for example and ultr_1 value of x will be reported both as a badcode on its own as well as
+##???? an invalid preceding code to a populated ultr_2/ultr_3 variable
+
+subsetofinterest<-((preg$ultr_3 %in% c('0','1','2','9')) & !is.na(preg$ultr_3) & ((is.na(preg$ultr_2) | preg$ultr_2 == " " )))
+badcodes(ultr_2,c('0','1','2','9'),preg[subsetofinterest,],id=mother_id,
+         auxcriteria = paste(": ultr_2 is missing with ultr_3 equal to ",preg[subsetofinterest,]$ultr_3),error="logic",query="Inconsistent values")
+
+subsetofinterest<-((preg$ultr_3 %in% c('0','1','2','9')) & !is.na(preg$ultr_3) & ((is.na(preg$ultr_1) | preg$ultr_1 == " " )))
+badcodes(ultr_1,c('0','1','2','9'),preg[subsetofinterest,],id=mother_id,
+         auxcriteria = paste(": ultr_1 is missing ultr_3 equal to ",preg[subsetofinterest,]$ultr_3),error="logic",query="Inconsistent values")
+
+subsetofinterest<-((preg$ultr_2 %in% c('0','1','2','9')) & !is.na(preg$ultr_2) & ((is.na(preg$ultr_1) | preg$ultr_1 == " " )))
+badcodes(ultr_1,c('0','1','2','9'),preg[subsetofinterest,],id=mother_id,
+         auxcriteria = paste(": ultr_1 is missing with ultr_2 equal to ",preg[subsetofinterest,]$ultr_2),error="logic",query="Inconsistent values")
 
 ################### QUERY CHECKING ENDS HERE ###################

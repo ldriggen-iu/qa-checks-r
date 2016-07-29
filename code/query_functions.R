@@ -101,22 +101,66 @@ futuredate <- function(var,table=parent.frame(),id=patient){
   }
 }
 ## WRITE FUNCTION TO CHECK FOR UNEXPECTED CODES
-badcodes <- function(var,codelist,table=parent.frame(),id=patient){
+## LDR 2016-07-15 - this is the original badcodes function
+##badcodes <- function(var,codelist,table=parent.frame(),id=patient){
+##  var <- deparse(substitute(var))
+##  if(exists(var,table)){
+##    coderr <- !is.na(get(var,table)) & !(get(var,table) %in% codelist)
+##    if(any(coderr)){
+##      query<-data.frame(get(deparse(substitute(id)),table)[coderr],
+##      									tablename,var,"Value Error",
+##      									"Unexpected Code",
+##      									paste(var,"=",get(var,table)[coderr],sep=""),
+##      									stringsAsFactors=FALSE)
+##      names(query) <- names(emptyquery)
+##      assign(paste("query",index,sep=""),query,envir=globalenv())
+##      index <<- index + 1
+##    }
+##  }
+##}
+
+## WRITE FUNCTION TO CHECK FOR UNEXPECTED CODES
+## LDR 2016-07-15 - the badcodes function below has updates to allow for text for
+##                  Auxiliary critera specified on subsetting the input table and
+##                  also to allow for the error and query values to be overridden
+badcodes <- function(var,codelist,table=parent.frame(),id=patient,auxcriteria=NA,error="Value Error",query="Unexpected Code"){
   var <- deparse(substitute(var))
   if(exists(var,table)){
     coderr <- !is.na(get(var,table)) & !(get(var,table) %in% codelist)
+    print(coderr)
     if(any(coderr)){
-      query<-data.frame(get(deparse(substitute(id)),table)[coderr],
-      									tablename,var,"Value Error",
-      									"Unexpected Code",
-      									paste(var,"=",get(var,table)[coderr],sep=""),
-      									stringsAsFactors=FALSE)
+      print(get(deparse(substitute(id)),table)[coderr])
+      print(tablename)
+      print(var)
+      print(error)
+      print(query)
+      print(paste(var,"=",get(var,table)[coderr],auxcriteria[coderr],sep=""))
+      print(auxcriteria)
+      print(length(auxcriteria))
+      print(class(auxcriteria))
+     if (class(auxcriteria)!="logical") {
+          query<-data.frame(get(deparse(substitute(id)),table)[coderr],
+                            tablename,var,error,
+                            query,
+                            paste(var,"=",get(var,table)[coderr],auxcriteria[coderr],sep=""),
+                            stringsAsFactors=FALSE)
+      }
+      else {
+          query<-data.frame(get(deparse(substitute(id)),table)[coderr],
+                            tablename,var,error,
+                            query,
+                            paste(var,"=",get(var,table)[coderr],sep=""),
+                            stringsAsFactors=FALSE)
+      }
+
+        
       names(query) <- names(emptyquery)
       assign(paste("query",index,sep=""),query,envir=globalenv())
       index <<- index + 1
     }
   }
 }
+
 ## WRITE FUNCTION TO CHECK FOR DUPLICATES OF UNIQUEID
 queryduplicates <- function(uniqueid,table=parent.frame(),date=date,subsettext="",id=patient){
   uniqueid <- deparse(substitute(uniqueid))
@@ -228,17 +272,43 @@ lowerrangecheck <- function(var,value,table=parent.frame(),subsettext="",id=pati
     }
   }
 }
+## Original
+## WRITE FUNCTION TO CHECK FOR UNEXPECTED VARIABLE TYPE
+#notnumeric <- function(var,table=parent.frame(),id=patient){
+#  var <- deparse(substitute(var))
+#  if(exists(var,table)){
+#    numerr <- grepl("[:alpha:]",get(var,table))
+#    if(any(numerr)){
+#      query<-data.frame(get(deparse(substitute(id)),table)[numerr],
+#      						tablename,var,"Value Error",
+#      						"Unexpected Type",
+#      						paste(var,"=",get(var,table)[numerr],"&type=numeric",sep=""),
+#      						stringsAsFactors=FALSE)
+#      names(query) <- names(emptyquery)
+#      assign(paste("query",index,sep=""),query,envir=globalenv())
+#      index <<- index + 1
+#    }
+#  }
+#}
+## LDR 2016-07-29 - syntax error ([:alpha:] in grepl s/b [[:alpha:]]) correct in version below
 ## WRITE FUNCTION TO CHECK FOR UNEXPECTED VARIABLE TYPE
 notnumeric <- function(var,table=parent.frame(),id=patient){
+  print(table$var)
+  print(table)
+  print(table$id)
   var <- deparse(substitute(var))
+  print(var)
+  print(exists(var,table))
   if(exists(var,table)){
-    numerr <- grepl("[:alpha:]",get(var,table))
+    print(get(var,table))
+    numerr <- grepl("[[:alpha:]]",get(var,table))
+    print(numerr)
     if(any(numerr)){
       query<-data.frame(get(deparse(substitute(id)),table)[numerr],
-      						tablename,var,"Value Error",
-      						"Unexpected Type",
-      						paste(var,"=",get(var,table)[numerr],"&type=numeric",sep=""),
-      						stringsAsFactors=FALSE)
+                        tablename,var,"Value Error",
+                        "Unexpected Type",
+                        paste(var,"=",get(var,table)[numerr],"&type=numeric",sep=""),
+                        stringsAsFactors=FALSE)
       names(query) <- names(emptyquery)
       assign(paste("query",index,sep=""),query,envir=globalenv())
       index <<- index + 1
@@ -278,6 +348,7 @@ notdate <- function(var,table=parent.frame(),id=patient){
   }
 }
 
+## ???? LDR missrecord and badrecord functions appear to be identical - need to review prior downloads from github ????
 ## WRITE FUNCTION TO CHECK FOR RECORDS THAT EXIST WHEN NOT PROPERLY INDICATED (eg, tblBAS)
 badrecord <- function(uniqueid,subset=parent.frame(),superset=parent.frame(),subsettext="",id=patient){
   uniqueid <- deparse(substitute(uniqueid))
@@ -298,22 +369,49 @@ badrecord <- function(uniqueid,subset=parent.frame(),superset=parent.frame(),sub
     }
   }
 }
-
+## ???? LDR missrecord and badrecord functions appear to be identical - need to review prior downloads from github ????
+## Original
 ## WRITE FUNCTION TO CHECK FOR RECORDS THAT SHOULD EXIST WHEN NOT PROPERLY INDICATED (eg, tblBAS)
-missrecord <- function(uniqueid,subset=parent.frame(),superset=parent.frame(),subsettext="",id=patient){
+#missrecord <- function(uniqueid,subset=parent.frame(),superset=parent.frame(),subsettext="",id=patient){
+#  uniqueid <- deparse(substitute(uniqueid))
+#  subvar <- unlist(strsplit(subsettext,"="))[1]
+#  subvar <- gsub("!","",subvar)
+#  if(exists(uniqueid,subset) & exists(uniqueid,superset)){
+#    if(any(!(get(uniqueid,subset) %in% get(uniqueid,superset)))){
+#      recerr <- !(get(uniqueid,subset) %in% get(uniqueid,superset))
+#      	query <- data.frame(get(deparse(substitute(id)),subset)[recerr],
+#      										tablename,
+#      										ifelse(!is.na(subvar),paste(uniqueid,subvar,sep=""),uniqueid),
+#      										"Logic",
+#      										"Missing Record",
+#      										paste(paste(uniqueid,"=",get(uniqueid,subset)[recerr]),subsettext,sep=""),
+#      										stringsAsFactors=FALSE)
+#      names(query) <- names(emptyquery)
+#      assign(paste("query",index,sep=""),query,envir=globalenv()); index <<- index + 1
+#    }
+#  }
+#}
+## LDR Modifed
+## WRITE FUNCTION TO CHECK FOR RECORDS THAT SHOULD EXIST WHEN NOT PROPERLY INDICATED (eg, tblBAS)
+missrecord <- function(uniqueid,subset=parent.frame(),superset=parent.frame(),subsettext="",id=patient,subsettext_txtonly="No"){
   uniqueid <- deparse(substitute(uniqueid))
-  subvar <- unlist(strsplit(subsettext,"="))[1]
-  subvar <- gsub("!","",subvar)
+  if (subsettext_txtonly=="No") {
+      subvar <- unlist(strsplit(subsettext,"="))[1]
+      subvar <- gsub("!","",subvar)
+  }
+  else {
+    subvar <- ""
+  }
   if(exists(uniqueid,subset) & exists(uniqueid,superset)){
     if(any(!(get(uniqueid,subset) %in% get(uniqueid,superset)))){
       recerr <- !(get(uniqueid,subset) %in% get(uniqueid,superset))
-      	query <- data.frame(get(deparse(substitute(id)),subset)[recerr],
-      										tablename,
-      										ifelse(!is.na(subvar),paste(uniqueid,subvar,sep=""),uniqueid),
-      										"Logic",
-      										"Missing Record",
-      										paste(paste(uniqueid,"=",get(uniqueid,subset)[recerr]),subsettext,sep=""),
-      										stringsAsFactors=FALSE)
+      query <- data.frame(get(deparse(substitute(id)),subset)[recerr],
+                          tablename,
+                          ifelse(!is.na(subvar),paste(uniqueid,subvar,sep=""),uniqueid),
+                          "Logic",
+                          "Missing Record",
+                          paste(paste(uniqueid,"=",get(uniqueid,subset)[recerr]),subsettext,sep=""),
+                          stringsAsFactors=FALSE)
       names(query) <- names(emptyquery)
       assign(paste("query",index,sep=""),query,envir=globalenv()); index <<- index + 1
     }

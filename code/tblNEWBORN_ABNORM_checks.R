@@ -49,6 +49,22 @@ badcodes(abnorm4,abnorm_codebook$code,newbornabnorm,id=child_id)
 badcodes(abnorm5,abnorm_codebook$code,newbornabnorm,id=child_id)
 
 ## CHECK FOR CHILD_IDs NOT IN NEWBORN
+if (exists("newborn")) {
+  if (nrow(newbornabnorm)>0){
+    missrecord(child_id,subset=newbornabnorm,superset=newborn,
+               subsettext=": child_id in tblNEWBORN_ABNORM is not found in tblNEWBORN",id=child_id,subsettext_txtonly="Yes")
+  }
+}
+
+## check that all the child_ids in newbornabnorm have a row in newborn with abnorm_y="1"
+if (exists("newborn")) {
+  if (nrow(newbornabnorm)>0){
+    missrecord(child_id,subset=newbornabnorm,superset=newborn[newborn$abnorm_y=="1" &  !is.na(newborn$abnorm_y),],
+               subsettext=": child_id in tblNEWBORN_ABNORM is not found in tblNEWBORN with abnorm_y='1' ",id=child_id,subsettext_txtonly="Yes")
+  }
+}
+
+
 
 
 ################### QUERY CHECKING ENDS HERE ###################

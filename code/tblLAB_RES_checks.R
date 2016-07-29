@@ -58,7 +58,7 @@ if(exists("ltfu")){
   ltfures <- merge(res,with(ltfu,data.frame(patient,death_d)),all.x=TRUE)
 	ltfures$death_d <- convertdate(death_d,ltfures)
 	outoforder(sample_d,death_d,ltfures,table2="tblLTFU")
-	outoforder(sample_d,death_d,ltfulres,table2="tblLTFU")
+# ???? other ooo date checks ????	outoforder(sample_d,death_d,ltfures,table2="tblLTFU")
 }
 
 ## CHECK FOR DATES OCCURRING IN THE WRONG ORDER

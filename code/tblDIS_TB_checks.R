@@ -59,8 +59,8 @@ if(exists("basic")){
 	if(exists("tbdx_d",distb)){outoforder(birth_d,tbtx_d,basdistb,table2="tblBAS")}
 }
 if(exists("ltfu")){
-        ltfudistb <- merge(distb,with(ltfu,data.frame(patient,death_d)),all.x=TRUE)
-	ltfudistb$death_d <- convertdate(death_d,ltfuart)
+  ltfudistb <- merge(distb,with(ltfu,data.frame(patient,death_d)),all.x=TRUE)
+	ltfudistb$death_d <- convertdate(death_d,ltfudistb)
 	outoforder(tbtx_sd,death_d,ltfudistb,table2="tblLTFU")
 	outoforder(tbtx_ed,death_d,ltfudistb,table2="tblLTFU")
 	if(exists("tbdx_d",distb)){outoforder(tbdx_d,death_d,ltfudistb,table2="tblBAS")}
