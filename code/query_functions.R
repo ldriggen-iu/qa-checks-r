@@ -42,37 +42,75 @@ missvar <- function(expectednames,table=parent.frame()){
     assign(paste("query",index,sep=""),query,envir=globalenv()); index <<- index + 1
   }
 }
+## Original 
+## WRITE FUNCTION TO CHECK FOR MISSING PATIENT VALUES
+#missingvalue <- function(var,table=parent.frame(),id=patient){
+#  var <- deparse(substitute(var))
+#  id <- deparse(substitute(id))
+#if(exists(var,table)){
+#    if(!exists(paste(var,"_a",sep=""),table)){
+#	if(any(is.na(get(var,table)))){
+#	  query <- data.frame(get(id,table)[is.na(get(var,table))],
+#											  tablename,
+#											  var,
+#											  "Missing Value",
+#											  "Missing Value","",
+#											  stringsAsFactors=FALSE)
+#	  names(query) <- names(emptyquery)
+#	  assign(paste("query",index,sep=""),query,envir=globalenv()); index <<- index + 1
+#	}
+ #     }
+#    ## THIS SECOND LOOP IS PERTINENT FOR DATE VARIABLES WITH FLAG THAT THE DATE IS UNKNOWN *_D_A="U"
+#    if(exists(paste(var,"_a",sep=""),table)){
+#	if(any(!(!is.na(get(paste(var,"_a",sep=""),table)) & get(paste(var,"_a",sep=""),table)=="U") & is.na(get(var,table)))){
+#	  miserr <- !(!is.na(get(paste(var,"_a",sep=""),table)) & get(paste(var,"_a",sep=""),table)=="U") & is.na(get(var,table))
+#	  query <- data.frame(get(id,table)[miserr],
+#											  tablename,
+#											  var,
+#											  "Missing Value",
+#											  "Missing Value","",
+#											  stringsAsFactors=FALSE)
+#	  names(query) <- names(emptyquery)
+#	  assign(paste("query",index,sep=""),query,envir=globalenv()); index <<- index + 1
+#	}
+#     }
+#  }
+#}
+
 ## WRITE FUNCTION TO CHECK FOR MISSING PATIENT VALUES
 missingvalue <- function(var,table=parent.frame(),id=patient){
   var <- deparse(substitute(var))
   id <- deparse(substitute(id))
-if(exists(var,table)){
+  #print(var) 
+  #print(id)
+  #print(exists(var,table))
+  if(exists(var,table)){
     if(!exists(paste(var,"_a",sep=""),table)){
-	if(any(is.na(get(var,table)))){
-	  query <- data.frame(get(id,table)[is.na(get(var,table))],
-											  tablename,
-											  var,
-											  "Missing Value",
-											  "Missing Value","",
-											  stringsAsFactors=FALSE)
-	  names(query) <- names(emptyquery)
-	  assign(paste("query",index,sep=""),query,envir=globalenv()); index <<- index + 1
-	}
+      if(any(is.na(get(var,table)))){
+        query <- data.frame(get(id,table)[is.na(get(var,table))],
+                            tablename,
+                            var,
+                            "Missing Value",
+                            "Missing Value","",
+                            stringsAsFactors=FALSE)
+        names(query) <- names(emptyquery)
+        assign(paste("query",index,sep=""),query,envir=globalenv()); index <<- index + 1
       }
+    }
     ## THIS SECOND LOOP IS PERTINENT FOR DATE VARIABLES WITH FLAG THAT THE DATE IS UNKNOWN *_D_A="U"
     if(exists(paste(var,"_a",sep=""),table)){
-	if(any(!(!is.na(get(paste(var,"_a",sep=""),table)) & get(paste(var,"_a",sep=""),table)=="U") & is.na(get(var,table)))){
-	  miserr <- !(!is.na(get(paste(var,"_a",sep=""),table)) & get(paste(var,"_a",sep=""),table)=="U") & is.na(get(var,table))
-	  query <- data.frame(get(id,table)[miserr],
-											  tablename,
-											  var,
-											  "Missing Value",
-											  "Missing Value","",
-											  stringsAsFactors=FALSE)
-	  names(query) <- names(emptyquery)
-	  assign(paste("query",index,sep=""),query,envir=globalenv()); index <<- index + 1
-	}
+      if(any(!(!is.na(get(paste(var,"_a",sep=""),table)) & get(paste(var,"_a",sep=""),table)=="U") & is.na(get(var,table)))){
+        miserr <- !(!is.na(get(paste(var,"_a",sep=""),table)) & get(paste(var,"_a",sep=""),table)=="U") & is.na(get(var,table))
+        query <- data.frame(get(id,table)[miserr],
+                            tablename,
+                            var,
+                            "Missing Value",
+                            "Missing Value","",
+                            stringsAsFactors=FALSE)
+        names(query) <- names(emptyquery)
+        assign(paste("query",index,sep=""),query,envir=globalenv()); index <<- index + 1
       }
+    }
   }
 }
 ## WRITE FUNCTION TO CHECK FOR DATES OCCURRING IN FUTURE
@@ -127,17 +165,17 @@ badcodes <- function(var,codelist,table=parent.frame(),id=patient,auxcriteria=NA
   var <- deparse(substitute(var))
   if(exists(var,table)){
     coderr <- !is.na(get(var,table)) & !(get(var,table) %in% codelist)
-    print(coderr)
+    #print(coderr)
     if(any(coderr)){
-      print(get(deparse(substitute(id)),table)[coderr])
-      print(tablename)
-      print(var)
-      print(error)
-      print(query)
-      print(paste(var,"=",get(var,table)[coderr],auxcriteria[coderr],sep=""))
-      print(auxcriteria)
-      print(length(auxcriteria))
-      print(class(auxcriteria))
+      #print(get(deparse(substitute(id)),table)[coderr])
+      #print(tablename)
+      #print(var)
+      #print(error)
+      #print(query)
+      #print(paste(var,"=",get(var,table)[coderr],auxcriteria[coderr],sep=""))
+      #print(auxcriteria)
+      #print(length(auxcriteria))
+      #print(class(auxcriteria))
      if (class(auxcriteria)!="logical") {
           query<-data.frame(get(deparse(substitute(id)),table)[coderr],
                             tablename,var,error,
@@ -255,17 +293,39 @@ upperrangecheck <- function(var,value,table=parent.frame(),subsettext="",id=pati
   }
 }
 ## WRITE FUNCTION TO CHECK FOR OUT OF RANGE DATA
+#lowerrangecheck <- function(var,value,table=parent.frame(),subsettext="",id=patient){
+#  var <- deparse(substitute(var))
+#  subvar <- unlist(strsplit(subsettext,"="))[1]
+#  if(exists(var,table)){
+#    coderr <- !is.na(get(var,table)) & get(var,table) < value
+#    if(any(coderr)){
+#      query<-data.frame(get(deparse(substitute(id)),table)[coderr],
+#      						tablename,ifelse(!is.na(subvar),paste(var,subvar,sep=""),var),"Logic",
+#      						"Out of Range",
+#      						paste(var,"=",get(var,table)[coderr],subsettext,sep=""),
+#      						stringsAsFactors=FALSE)
+#      names(query) <- names(emptyquery)
+#      assign(paste("query",index,sep=""),query,envir=globalenv())
+#      index <<- index + 1
+#    }
+#  }
+#}
+
+## WRITE FUNCTION TO CHECK FOR OUT OF RANGE DATA
 lowerrangecheck <- function(var,value,table=parent.frame(),subsettext="",id=patient){
   var <- deparse(substitute(var))
   subvar <- unlist(strsplit(subsettext,"="))[1]
   if(exists(var,table)){
     coderr <- !is.na(get(var,table)) & get(var,table) < value
     if(any(coderr)){
+      #print(value)
+      #print(get(var,table))
+      #print(coderr)
       query<-data.frame(get(deparse(substitute(id)),table)[coderr],
-      						tablename,ifelse(!is.na(subvar),paste(var,subvar,sep=""),var),"Logic",
-      						"Out of Range",
-      						paste(var,"=",get(var,table)[coderr],subsettext,sep=""),
-      						stringsAsFactors=FALSE)
+                        tablename,ifelse(!is.na(subvar),paste(var,subvar,sep=""),var),"Logic",
+                        "Out of Range",
+                        paste(var,"=",get(var,table)[coderr],subsettext,sep=""),
+                        stringsAsFactors=FALSE)
       names(query) <- names(emptyquery)
       assign(paste("query",index,sep=""),query,envir=globalenv())
       index <<- index + 1
@@ -293,16 +353,16 @@ lowerrangecheck <- function(var,value,table=parent.frame(),subsettext="",id=pati
 ## LDR 2016-07-29 - syntax error ([:alpha:] in grepl s/b [[:alpha:]]) correct in version below
 ## WRITE FUNCTION TO CHECK FOR UNEXPECTED VARIABLE TYPE
 notnumeric <- function(var,table=parent.frame(),id=patient){
-  print(table$var)
-  print(table)
-  print(table$id)
+  #print(table$var)
+  #print(table)
+  #print(table$id)
   var <- deparse(substitute(var))
-  print(var)
-  print(exists(var,table))
+  #print(var)
+  #print(exists(var,table))
   if(exists(var,table)){
-    print(get(var,table))
+    #print(get(var,table))
     numerr <- grepl("[[:alpha:]]",get(var,table))
-    print(numerr)
+    #print(numerr)
     if(any(numerr)){
       query<-data.frame(get(deparse(substitute(id)),table)[numerr],
                         tablename,var,"Value Error",

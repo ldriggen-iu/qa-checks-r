@@ -23,6 +23,7 @@
 ## USER -- PLEASE REVISE or CHANGE THE APPROPRIATE WORKING DIRECTORY AND SET THE APPROPRIATE DATABASE CLOSE DATE
 #setwd("/home/blevinml/Projects/IeDEAS/qa-checks-r")
 #setwd("C:/Documents and Settings/blevinml/My Documents/Projects/IeDEAS/qa-checks-r")
+setwd("I:/Projects/IeDEA/Grants/Yiannoutsos/BD2K/IeDEA_DES/GitRepository/")
 
 ## IDENTIFY WHICH TABLES TO EXPECT FROM DES
 expectedtables <- c("center","program","basic","cd4","rna","art","dis","visit")

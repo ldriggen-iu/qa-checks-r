@@ -80,9 +80,9 @@ futuredate(outcome_d,pregout)
 #}
 
 ## CHECK FOR INCORRECT VARIABLE TYPE (prior to range checks, if applicable)
-notnumeric(preg_seq,pregout)
-notnumeric(outcom,pregout)
-notnumeric(b_gagew,pregout)
+notnumeric(preg_seq,pregout,id=mother_id)
+notnumeric(outcom,pregout,id=mother_id)
+notnumeric(b_gagew,pregout,id=mother_id)
 
 
 ## CHECK FOR UNEXPECTED CODING

@@ -73,12 +73,12 @@ missvar(expectednames,deliverymum)
 #}
 
 ## CHECK FOR INCORRECT VARIABLE TYPE (prior to range checks, if applicable)
-notnumeric(preg_seq,deliverymum)
-notnumeric(rom_dur,deliverymum)
-notnumeric(deliv_location,deliverymum)
-notnumeric(planned_home,deliverymum)
-notnumeric(deliv_assist,deliverymum)
-notnumeric(tear_y,deliverymum)
+notnumeric(preg_seq,deliverymum,id=mother_id)
+notnumeric(rom_dur,deliverymum,id=mother_id)
+notnumeric(deliv_location,deliverymum,id=mother_id)
+notnumeric(planned_home,deliverymum,id=mother_id)
+notnumeric(deliv_assist,deliverymum,id=mother_id)
+notnumeric(tear_y,deliverymum,id=mother_id)
 
 ## CHECK FOR UNEXPECTED CODING
 upperrangecheck(preg_seq,25,deliverymum,subsettext="",id=mother_id)

@@ -84,6 +84,7 @@ badcodes(lab_id,lab_id_codebook$code,lab)
 ## ??? need to think about how to accommodate numeric values as well as the coded dipstick results
 ## ??? just allow any numeric value - can this be qualified by test by using the known dipstick tests ???
 ## ??? are only the test that have "Dipstick" in their name dipstick tests???
+## ??? Need to apply ranges Stephany supplied for labs???
 badcodes(lab_v,c(-1,0,1,2,3,4,9,99),lab)
 badcodes(lab_u,lab_u_codebook$code,lab)
 badcodes(lab_fa,c(0,1,9),lab)

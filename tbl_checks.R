@@ -20,6 +20,9 @@
 # Revisions: 24 February 2016 Larry Riggen added code for 
 #            tblDELIVERY_CHILD, ???? complete list when all new 
 #            tables are defined ????
+#            added code to process North America (NA) region codes
+#            as text instead of missing values.
+#            
 #
 #############################################################
 rm(list=ls()) # clear namespace
@@ -53,13 +56,37 @@ choosefirst <- function(var,sep=".") unlist(lapply(strsplit(var,sep,fixed=TRUE),
 existingtables <- choosefirst(list.files("input"))
 readtables <- expectedtables[match(existingtables,expecteddestables)]
 ## READ IN ALL EXISTING TABLES
+## ???? LDR original code
+#for(i in 1:length(readtables)){
+#  if(!is.na(readtables[i])){
+#     readcsv <- read.csv(paste("input/",existingtables[i],".csv",sep=""),header=TRUE,stringsAsFactors = FALSE,na.strings=c(NA,""))
+#     names(readcsv) <- tolower(names(readcsv))
+#     assign(readtables[i],readcsv)
+#   }
+#}
+## ???? LDR code to handle "NA" North America region code as text instead of missing values
 for(i in 1:length(readtables)){
   if(!is.na(readtables[i])){
-     readcsv <- read.csv(paste("input/",existingtables[i],".csv",sep=""),header=TRUE,stringsAsFactors = FALSE,na.strings=c(NA,""))
-     names(readcsv) <- tolower(names(readcsv))
-     assign(readtables[i],readcsv)
-   }
+    if (readtables[i] == "center" || readtables[i]== "program")  {
+      # read the table in with na.strings=c("") to pick up the region as text
+      read1 <- read.csv(paste("input/",existingtables[i],".csv",sep=""),header=TRUE,stringsAsFactors = FALSE,na.strings=c(""))
+      names(read1) <- tolower(names(read1))
+      read2 <- read.csv(paste("input/",existingtables[i],".csv",sep=""),header=TRUE,stringsAsFactors = FALSE,na.strings=c(NA,""))
+      names(read2) <- tolower(names(read2))
+      center_region<-subset(read1,select=c("region"))
+      center_rest<-subset(read1,select= - region)
+      readcsv<-cbind(center_region,center_rest)
+      assign(readtables[i],readcsv)     
+    }
+    else {
+      readcsv <- read.csv(paste("input/",existingtables[i],".csv",sep=""),header=TRUE,stringsAsFactors = FALSE,na.strings=c(NA,""))
+      names(readcsv) <- tolower(names(readcsv))
+      assign(readtables[i],readcsv)
+
+    }
+  }
 }
+
 
 ################### QUERY CHECK PROGRAMS BEGIN HERE #################
 

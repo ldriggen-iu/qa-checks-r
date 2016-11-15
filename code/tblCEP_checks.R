@@ -21,7 +21,8 @@
 #     
 #############################################################
 #??? USAB duplicates in cep_id_codebook ????
-#??? 2015-03-31 LDR I believe all the HICDEP QC checks have been applied to this table.
+#??? 2016-08-01 LDR EVENT_ID - how is it used as a foreign key to other tables.
+#???            Stephany has some significant comments on this table, including splitting it up.
 ## NAME OF TABLE FOR WRITING QUERIES
 tablename <- "tblCEP"
 ## NAMES EXPECTED FROM HICDEP+/IeDEAS DES
@@ -37,17 +38,21 @@ acceptablenames <- c(expectednames)
 extravar(acceptablenames,cep)
 missvar(expectednames,cep)
 
+## CHECK FOR MISSING DATA
+## ???? LDR  the assumption that the variables below are required needs to be validated.
+##need to research the use of missingvalue function vs coding/notdate
+missingvalue(event_id,cep,id=patient)
+missingvalue(patient,cep)
+missingvalue(cep_d,cep)
+missingvalue(cep_id,cep)
+
 ## PRIOR TO CONVERTING DATES, CHECK THAT THE TYPE IS APPROPRIATE 
 notdate(cep_d,cep,id=patient)
 
-## CHECK FOR MISSING DATA
-##???? need to research the use of missingvalue function vs coding/notdate
-#missingvalue(art_id,deliverychild)
-#missingvalue(art_sd,deliverychild)
+
 
 ## CONVERT DATES USING EXPECTED FORMAT (will force NA if format is incorrect)
 ## ???? assuming date is required
-#if(exists("cep_d",cep)){cep$cep_d <- convertdate(cep_d,cep)}
 cep$cep_d <- convertdate(cep_d,cep)
 
 ## CHECK FOR DATES OCCURRING IN THE WRONG ORDER
@@ -79,11 +84,13 @@ notnumeric(cep_v,cep)
 ## CHECK FOR UNEXPECTED CODING
 cep_id_spec_codebook <- read.csv("resource/cep_id_spec_codebook.csv",header=TRUE,stringsAsFactors = FALSE,na.strings="")
 badcodes(cep_d_a,c("<",">","D","M","Y","U"),cep)
-## ???? Do the two lines of code immediately below need to be repeated for blanks ???  
+
 cep$cep_id_cep_spec[is.na(cep$cep_spec) == FALSE]<- paste(cep$cep_id,"-",cep$cep_spec,sep="")[is.na(cep$cep_spec) == FALSE]
 cep$cep_id_cep_spec[is.na(cep$cep_spec) == TRUE]<- paste(cep$cep_id,"-","",sep="")[is.na(cep$cep_spec) == TRUE]
 badcodes(cep_id_cep_spec,cep_id_spec_codebook$code,cep[is.na(cep$cep_spec)==FALSE,])
 
+# check to see if the patient in tblCEP is also in tblBAS
+badrecord(patient,cep,basic,id=patient)
 
 
 

@@ -1,0 +1,6 @@
+mother_id,preg_seq,rom_dur,rom_dur_a,deliv_location,planned_home,deliv_assist,tear_y,forced_errors
+1000,1,0,=,1,0,1,1,
+1001,2,1,>,,1,2,12,future date
+1002,x,88,<,x,0,3,999,all
+1003,0,-1,X,1,X,X,1,rom_dur out of range
+1004,99,50,=,1,9,9,1,rom_dur out of range

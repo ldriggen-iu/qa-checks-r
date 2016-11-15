@@ -73,13 +73,42 @@ if(exists("ltfu")){
 ## CHECK FOR INCORRECT VARIABLE TYPE (prior to range checks, if applicable)
 notnumeric(bp_u,bp)
 
-##??? range checks on BP by units???
+## range checks on BP by units
+## ???? need to chec
+
 
 ## CHECK FOR UNEXPECTED CODING
 bp_u_codebook <- read.csv("resource/bp_u_codebook.csv",header=TRUE,stringsAsFactors = FALSE,na.strings="")
 badcodes(bp_d_a,c("<",">","D","M","Y","U"),bp)
 badcodes(bp_u,bp_u_codebook$code,bp)
 
+# Force systolic and diastolic columns to be numbers
+bp$bp_sys<-forcenumber(bp$bp_sys)
+bp$bp_dia<-forcenumber(bp$bp_dia)
+
+# mmHg check for systolic
+lowerrangecheck(bp_sys,80,bp[bp$bp_u=='1' & is.na(bp$bp_u)==FALSE,],subsettext = ' mmHg')
+upperrangecheck(bp_sys,260,bp[bp$bp_u=='1' & is.na(bp$bp_u)==FALSE,],subsettext = ' mmHg')
+
+# mmHg check for diastolic
+lowerrangecheck(bp_dia,50,bp[bp$bp_u=='1' & is.na(bp$bp_u)==FALSE,],subsettext = ' mmHg')
+upperrangecheck(bp_dia,150,bp[bp$bp_u=='1' & is.na(bp$bp_u)==FALSE,],subsettext = ' mmHg')
+  
+# cmHg check for systolic
+lowerrangecheck(bp_sys,8,bp[bp$bp_u=='2' & is.na(bp$bp_u)==FALSE,],subsettext = ' cmHg')
+upperrangecheck(bp_sys,26,bp[bp$bp_u=='2' & is.na(bp$bp_u)==FALSE,],subsettext = ' cmHg')
+
+# cmHg check for diastolic
+lowerrangecheck(bp_dia,5,bp[bp$bp_u=='2' & is.na(bp$bp_u)==FALSE,],subsettext = ' cmHg')
+upperrangecheck(bp_dia,15,bp[bp$bp_u=='2' & is.na(bp$bp_u)==FALSE,],subsettext = ' cmHg')
+
+# kPa check for systolic
+lowerrangecheck(bp_sys,10.7,bp[bp$bp_u=='3' & is.na(bp$bp_u)==FALSE,],subsettext = ' kPa')
+upperrangecheck(bp_sys,34.7,bp[bp$bp_u=='3' & is.na(bp$bp_u)==FALSE,],subsettext = ' kPa')
+
+# kPa check for diastolic
+lowerrangecheck(bp_dia,6.7,bp[bp$bp_u=='3' & is.na(bp$bp_u)==FALSE,],subsettext = ' kPa')
+upperrangecheck(bp_dia,20,bp[bp$bp_u=='3' & is.na(bp$bp_u)==FALSE,],subsettext = ' kPa')
 
 # ## NEED TO PROGRAM:
 ## ???? other checks ????
