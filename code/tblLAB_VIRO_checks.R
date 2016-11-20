@@ -42,7 +42,7 @@ notdate(vs_d,viro,id=patient)
 #missingvalue(art_sd,deliverychild)
 
 ## CONVERT DATES USING EXPECTED FORMAT (will force NA if format is incorrect)
-if(exists("vs_d",viro)){viro$vs_d <- convertdate(vs_d,viro)}
+viro$vs_d <- convertdate(vs_d,viro)
 
 
 ## CHECK FOR DATES OCCURRING IN THE WRONG ORDER
@@ -55,6 +55,9 @@ if(exists("ltfu")){
   ltfuviro <- merge(viro,with(ltfu,data.frame(patient,death_d)),all.x=TRUE)
 	ltfuviro$death_d <- convertdate(death_d,ltfuviro)
 	outoforder(vs_d,death_d,ltfuviro,table2="tblLTFU")
+	ltfuviro <- merge(viro,with(ltfu,data.frame(patient,l_alive_d)),all.x=TRUE)
+	ltfuviro$l_alive_d <- convertdate(l_alive_d,ltfuviro)
+	outoforder(vs_d,l_alive_d,ltfuviro,table2="tblLTFU")
 }
 
 ## CHECK FOR DATES OCCURRING IN THE WRONG ORDER
@@ -78,10 +81,11 @@ notnumeric(vs_u,viro)
 ##??? range checks on vs_v - just for HVC-RNA and HBV-DNA???
 
 ## CHECK FOR UNEXPECTED CODING
+## ???? LDR - need to check with Bev and Stephany on final set of codes to be included in vs_id_codebook.
 vs_id_codebook <- read.csv("resource/vs_id_codebook.csv",header=TRUE,stringsAsFactors = FALSE,na.strings="")
 badcodes(vs_d_a,c("<",">","D","M","Y","U"),viro)
 badcodes(vs_id,vs_id_codebook$code,viro)
-badcodes(vs_st,c("WB","P","S","U24","U"),viro)
+badcodes(vs_st,c("WB","P","S","U24","U","CSF","9"),viro)
 
 # ## NEED TO PROGRAM:
 ## ???? other checks ????

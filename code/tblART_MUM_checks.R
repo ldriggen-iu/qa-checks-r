@@ -1,33 +1,28 @@
-#############################################################
-#
-#   Program: tblART_checks.R
-#   Project: IeDEA
+#   Program: tblART_MUM_checks.R
+#   Project: IeDEA/BD2K
 # 
-#   PI: Firas Wehbe, PhD
-#   Biostatistician/Programmer: Meridith Blevins, MS
+#   PIs: Constantin Yiannoutsos, PhD; Stephany Duda, PhD; Beverly Music, MS
+#   Programmer: Larry Riggen, MS
 #   Purpose: Read in IeDEAS standard and write  
 #            data queries
 #
-#   INPUT: "tblART.csv"
+#   INPUT: "tblART_MUM.csv"
 #   OUTPUT: 
 #
 #   Notes: As long as the working directory in "setwd" is
-#          correctly pointing to the location of tblART.csv,
+#          correctly pointing to the location of tblART_MUM.csv,
 #          then this code should run smoothly, generating
 #          a listing of data queries.
 #
-#   Created: 9 October 2013
-#   Revisions: Larry Riggen 22 June 2016
-#              Added variables ART_FORM, ART_COMB, and ARTSTART_RS for
-#              BD2K
+#   Created:   November 2016 (added to new tables by BD2K team)
 #     
 #############################################################
 
 ## NAME OF TABLE FOR WRITING QUERIES
-tablename <- "tblART"
+tablename <- "tblART_MUM"
 ## READ TABLE
 ## NAMES EXPECTED FROM HICDEP+/IeDEAS DES
-expectednames <- c("patient","art_id","art_sd","art_ed","art_rs","art_rs2","art_rs3","art_rs4","art_form","art_comb","artstart_rs")
+expectednames <- c("child_id","art_id","art_sd","art_ed","art_rs","art_rs2","art_rs3","art_rs4","art_form","art_comb","artstart_rs")
 acceptablenames <- c(expectednames,"art_sd_a","art_ed_a")
 
 ################### QUERY CHECKING BEGINS HERE ###################

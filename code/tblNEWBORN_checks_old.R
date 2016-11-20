@@ -24,7 +24,7 @@
 ## NAME OF TABLE FOR WRITING QUERIES
 tablename <- "tblNEWBORN"
 ## NAMES EXPECTED FROM HICDEP+/IeDEAS DES
-expectednames <- c("child_id","entry_pmtct_y","breastfd_y","breastfd_dur","abnorm_y")
+expectednames <- c("child_id","entry_pmtct_y","prenat_mtct_y","infant_mtct_y","infant_mtct_dur","postpar_mtct_y","breastfd_y","breastfd_dur","abnorm_y")
 acceptablenames <- c(expectednames)
 
 ################### QUERY CHECKING BEGINS HERE ###################
@@ -43,9 +43,21 @@ missvar(expectednames,newborn)
 ## CHECK FOR UNEXPECTED CODING
 
 badcodes(entry_pmtct_y,c(0,1,9),newborn,id=child_id)
+badcodes(prenat_mtct_y,c(0,10,11,12,13,14,99),newborn,id=child_id)
+badcodes(infant_mtct_y,c(0,10,11,12,13,14,99),newborn,id=child_id)
+badcodes(infant_mtct_dur,c(0,1,88,99),newborn,id=child_id)
+badcodes(postpar_mtct_y,c(0,1,9),newborn,id=child_id)
 badcodes(breastfd_y,c(0,1,9),newborn,id=child_id)
 badcodes(abnorm_y,c(0,1,9),newborn,id=child_id)
-
+#???? need to check conditionally the following:
+#     - if infant_mtct_y is 0 or 99 and infant_mtct_dur not = 88
+subsetofinterest<-(newborn$infant_mtct_y == '0' | newborn$infant_mtct_y == '99') & !is.na(newborn$infant_mtct_y)
+badcodes(infant_mtct_dur,c(88),newborn[subsetofinterest,],id=child_id,
+         auxcriteria = paste(": infant_mtct_dur value not consistent with infant_mtct_y=",newborn[subsetofinterest,]$infant_mtct_y),error="logic",query="Inconsistent values")
+#     - if infant_mtct_y is 10, 11, 12, 13, 14 and infant_mtct_dur is not 0,1,99
+subsetofinterest<-!(newborn$infant_mtct_y %in% c('0','99')) & !is.na(newborn$infant_mtct_y)
+badcodes(infant_mtct_dur,c(0,1,99),newborn[subsetofinterest,],id=child_id,
+         auxcriteria = paste(": infant_mtct_dur value not consistent with infant_mtct_y=",newborn[subsetofinterest,]$infant_mtct_y),error="logic",query="Inconsistent values")
 #     - if breastfd_y is 1 then check that breastfd_dur is numeric
 subsetofinterest<-newborn$breastfd_y == '1' & !is.na(newborn$breastfd_y)
 if (any(subsetofinterest)) {

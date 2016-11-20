@@ -20,16 +20,13 @@
 #   Revisions: 
 #     
 #############################################################
-#???? XXX_childnotincarehivstatus variable needs a definition
 ## NAME OF TABLE FOR WRITING QUERIES
 tablename <- "tblPREG_OUT"
 ## NAMES EXPECTED FROM HICDEP+/IeDEAS DES
 ## ???? assuming all fields are required
-#expectednames <- c("mother_id","preg_seq","child_id","outcom","outcom_d","b_gagew",
-#                   "XXX_childnotincarehivstatus")
+#expectednames <- c("mother_id","preg_seq","child_id","outcom","outcom_d","b_gagew")
 #acceptablenames <- c(expectednames,"outcom_d_a")
-expectednames <- c("mother_id","preg_seq","child_id","outcom","outcom_d","outcom_d_a","b_gagew",
-                   "XXX_childnotincarehivstatus")
+expectednames <- c("mother_id","preg_seq","child_id","outcom","outcom_d","outcom_d_a","b_gagew")
 acceptablenames <- c(expectednames)
 
 ################### QUERY CHECKING BEGINS HERE ###################
@@ -47,9 +44,13 @@ notdate(outcom_d,pregout,id=mother_id)
 #missingvalue(art_id,deliverychild)
 #missingvalue(art_sd,deliverychild)
 
+
 ## CONVERT DATES USING EXPECTED FORMAT (will force NA if format is incorrect)
 pregout$outcom_d <- convertdate(outcom_d,pregout)
 
+# CHECK FOR DATES OCCURRING TOO FAR IN THE FUTURE
+# ???? LDR futuredate doesn't seem to be working here - need to figure out why
+futuredate(outcome_d,pregout)
 
 ## CHECK FOR DATES OCCURRING IN THE WRONG ORDER
 if(exists("basic")){
@@ -66,10 +67,6 @@ if(exists("ltfu")){
 	ltfupregout$death_d <- convertdate(death_d,ltfupregout)
 	outoforder(outcom_d,death_d,ltfupregout,table2="tblLTFU",id=mother_id)
 }
-
-
-## CHECK FOR DATES OCCURRING TOO FAR IN THE FUTURE
-futuredate(outcome_d,pregout)
 
 
 
@@ -101,12 +98,6 @@ if(exists("preg")){
   badrecord(mother_id_preg_seq,pregout,pregtmp,id=mother_id)
 }
 
-## CHECK FOR MOTHER_ID/PREG_SEQ IN tblPREG
-if(exists("preg")){
-  pregtmp <- preg
-  pregtmp$mother_id_preg_seq <- paste("mother_id:",pregtmp$mother_id,"/ preg_seq: ",pregtmp$preg_seq)
-  pregout$mother_id_preg_seq <- paste("mother_id:",pregout$mother_id,"/ preg_seq: ",pregout$preg_seq)
-  badrecord(mother_id_preg_seq,pregout,pregtmp,id=mother_id)
-}
+
 
 ################### QUERY CHECKING ENDS HERE ###################

@@ -82,10 +82,39 @@ queryduplicates(patient,basic)
 
 ## CHECK FOR UNEXPECTED CODING
 badcodes(gender,c(1,2,9),basic)
+# Mode of Infection
+#   1 = homo/bisexual 
+#   2 = injecting drug user 
+#   3 = (1+2) 
+#   4 = haemophiliac
+#   5 = transfusion, non-haemophilia related 
+#   6 = heterosexual contact 
+#   7 = (6+2) 
+#   8 = Perinatal 
+#   9 = Sexual contact (homo/hetero not specified)
+#   10 = Sexual abuse 
+#   90 = other
+#   99 = unknown   
 badcodes(mode,c(1:8,90,99),basic)
+# ART naive upon enrollment
+#   0 = No
+#   1 = Yes
+#   9 = Unknown
 badcodes(naive_y,c(0,1,9),basic)
+# Prior to enrollment, has the patient been exposed to antiretroviral therapy for prophylaxis such as PMTCT, PREP, or PEP?
+#   0 = No
+#   1 = Yes
+#   9 = Unknown
 badcodes(proph_y,c(0,1,9),basic)
+#Has the patient ever received antiretroviral treatment? (excludes antiretroviral drugs given only for PMTCT or other prophylaxis)
+#   0 = No
+#   1 = Yes
+#   9 = Unknown
 badcodes(recart_y,c(0,1,9),basic)
+# Has patient ever been given an AIDS diagnosis? (clinical)
+#   0 = No
+#   1 = Yes
+#   9 = Unknown
 badcodes(aids_y,c(0,1,9),basic)
 badcodes(birth_d_a,c("<",">","D","M","Y","U"),basic)
 badcodes(enrol_d_a,c("<",">","D","M","Y","U"),basic)
@@ -95,7 +124,7 @@ badcodes(aids_d_a,c("<",">","D","M","Y","U"),basic)
 ## QUERY PATIENTS WITH NO RECORD IN tblPROGRAM
 if(exists("program") & exists("program",basic)){badrecord(program,basic,program)}
 
-## ???? Stepany comments for tblBAS follow: 
+## ???? Stepany comments for tblBAS follow (these remain to be implemented): 
 ##
 ## 1. (RECART variables) In historic data, we may not be able to tell when drugs were given for PMTCT vs. treatment.
 ## For each of these, we will need to make sure to have data quality rules that check against the ART reason for start/reason for stop variables.

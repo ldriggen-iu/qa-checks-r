@@ -112,10 +112,7 @@ badcodes(ultr_3,c(0,1,2,9),preg,id=mother_id)
 
 ## CHECK FOR ULTRASOUNDS UNPOPULATED IN EARLIER TRIMESTERS,
 ## BUT POPULATED in LATER TRIMESTERS
-##???? The checks below aren't perfect, but they are close... it needs to be modified so that
-##???? only totally missing prior ultr_* values are reported - not to include populated (but invalid) values, too.
-##???? for example and ultr_1 value of x will be reported both as a badcode on its own as well as
-##???? an invalid preceding code to a populated ultr_2/ultr_3 variable
+## ???? LDR - not sure this makes sense
 
 subsetofinterest<-((preg$ultr_3 %in% c('0','1','2','9')) & !is.na(preg$ultr_3) & ((is.na(preg$ultr_2) | preg$ultr_2 == " " )))
 badcodes(ultr_2,c('0','1','2','9'),preg[subsetofinterest,],id=mother_id,

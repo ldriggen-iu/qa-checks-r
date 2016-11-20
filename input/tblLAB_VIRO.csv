@@ -1,5 +1,5 @@
 patient,vs_id,vs_d,vs_d_a,vs_r,vs_v,vs_u,vs_st,forced_errors
-100,BVA,2010-01-01,D,1,80,1,WB,
+100,BVA,1999-01-01,D,1,80,1,WB,
 101,BVAC,2010-01-02,D,0,80,2,WB,
 102,BVAG,2010-01-03,D,9,80,3,WB,
 103,CHLA,2010-01-04,D,1,2,4,WB,
@@ -38,3 +38,4 @@ patient,vs_id,vs_d,vs_d_a,vs_r,vs_v,vs_u,vs_st,forced_errors
 136,UREP,2010-02-06,D,1,35,37,U,
 146,x,X,X,X,C,x,Z,all
 147,UREP,2015-06-06,D,12,8,2,9,date beyond close date
+1000,UREP,2005-06-07,D,12,8,2,9,date beyond close date

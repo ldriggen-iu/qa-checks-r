@@ -39,8 +39,9 @@ missvar(expectednames,visit)
 notdate(vis_d,visit)
 
 ## CHECK FOR MISSING DATA
+## ???? LDR not sure the missing value check is works for charater
 missingvalue(center,visit)
-missingvalue(vis_d,visit)
+
 # it's okay for others to be missing 
 
 ## CONVERT DATES USING EXPECTED FORMAT (will force NA if format is incorrect)
@@ -83,15 +84,16 @@ lowerrangecheck(heigh,0,visit) # consider specifying lower limit for adult popul
 
 ## CHECK FOR UNEXPECTED CODING
 badcodes(who_stage,c(1:4,9),visit)
-badcodes(cdc_stage,c("A","A1","A2","A3","B","B1","B2","B3","C","C1","C2","C3","9"),visit)
+badcodes(cdc_stage,c("N","A","A1","A2","A3","B","B1","B2","B3","C","C1","C2","C3","9"),visit)
 badcodes(vis_d_a,c("<",">","D","M","Y","U"),visit)
 badcodes(smoking_y,c(0,1,9),visit)
 badcodes(preg_y,c(0,1,9),visit)
 badcodes(breastf_y,c(0,1,9),visit)
 badcodes(feedoth_y,c(0,1,9),visit)
 badcodes(brought_patient,c(1,2,3,4,5,6,7,8,9),visit)
+#badcodes(live_with,c(?,?),visit) ???? LDR no codes specified yet.
 badcodes(hiv_status,c(1,2,3),visit)
-badcodes(status_unknown,c(0,1,2,9),visit)
+badcodes(status_known,c(0,1,2,9),visit)
 badcodes(school,c(0,1,9),visit)
 school_lvl_codebook <- read.csv("resource/school_lvl_codebook.csv",header=TRUE,stringsAsFactors = FALSE,na.strings="")
 badcodes(school_lvl,school_lvl_codebook$code,visit,id=patient)

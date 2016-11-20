@@ -47,9 +47,9 @@ databaseclose <- ifelse(is.na(databaseclose),Sys.Date(),databaseclose)
 
 ## IDENTIFY WHICH TABLES TO EXPECT FROM DES
 expectedtables <- c("center","program","basic","ltfu","cd4","rna","bp","viro","res","reslvl2","reslvl3","art","med",
-                    "dis","distb","visit","deliverychild","deliverymum","lab","canc","cep","newborn","newbornabnorm","pregout","preg")
+                    "dis","distb","visit","deliverychild","deliverymum","lab","canc","cep","newborn","newbornabnorm","pregout","preg","artmum")
 expecteddestables <- c("tblCENTER","tblPROGRAM","tblBAS","tblLTFU","tblLAB_CD4","tblLAB_RNA","tblLAB_BP","tblLAB_VIRO","tblLAB_RES","tblLAB_RES_LVL_2","tblLAB_RES_LVL_3","tblART","tblMED","tblDIS","tblDIS_TB","tblVIS",
-                       "tblDELIVERY_CHILD","tblDELIVERY_MUM","tblLAB","tblCANC","tblCEP","tblNEWBORN","tblNEWBORN_ABNORM","tblPREG_OUT","tblPREG")
+                       "tblDELIVERY_CHILD","tblDELIVERY_MUM","tblLAB","tblCANC","tblCEP","tblNEWBORN","tblNEWBORN_ABNORM","tblPREG_OUT","tblPREG","tblART_MUM")
 ## CHOOSE FIRST SELECTS THE TEXT STRING OCCURING BEFORE THE SPECIFIED SEPARATER
 choosefirst <- function(var,sep=".") unlist(lapply(strsplit(var,sep,fixed=TRUE),function(x) x[1]))
 ## DETERMINE WHICH TABLES EXIST IN '/input'
@@ -115,6 +115,7 @@ if(exists("newbornabnorm")) source("code/tblNEWBORN_ABNORM_checks.R")
 if(exists("newborn")) source("code/tblNEWBORN_checks.R")
 if(exists("pregout")) source("code/tblPREG_OUT_checks.R")
 if(exists("preg")) source("code/tblPREG_checks.R")
+if(exists("artmum")) source("code/tblART_MUM_checks.R")
 ################### QUERY CHECK PROGRAMS END HERE ###################
 
 ## COMBINE ALL QUERY FILES

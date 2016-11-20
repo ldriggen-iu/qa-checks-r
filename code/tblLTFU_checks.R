@@ -1,6 +1,6 @@
 #############################################################
 #
-#   Program: tblBAS_checks.R
+#   Program: tblLTFU_checks.R
 #   Project: IeDEA
 # 
 #   PI: Firas Wehbe, PhD
@@ -12,7 +12,7 @@
 #   OUTPUT: 
 #
 #   Notes: As long as the working directory in "setwd" is
-#          correctly pointing to the location of tblBAS.csv,
+#          correctly pointing to the location of tblLTFU.csv,
 #          then this code should run smoothly, generating
 #          a listing of data queries.
 #
@@ -36,12 +36,13 @@ acceptablenames <- c(expectednames,"death_d_a","l_alive_d_a","transfer_d_a","mot
 extravar(acceptablenames,ltfu)
 missvar(expectednames,ltfu)
 
-## PRIOR TO CONVERTING DATES, CHECK THAT THE TYPE IS APPROPRIATE 
-notdate(death_d,ltfu)
+## PRIOR TO CONVERTING DATES, CHECK THAT THE TYPE IS APPROPRIATE (when the date should be populated)
+
+notdate(death_d,ltfu[ltfu$death_y == 1,])
 notdate(l_alive_d,ltfu)
-notdate(transfer_d,ltfu)
-notdate(motherdeath_d,ltfu)
-notdate(fatherdeath_d,ltfu)
+notdate(transfer_d,ltfu[ltfu$transfer_d != " ",])
+notdate(motherdeath_d,ltfu[ltfu$motherdeath_y == 1,])
+notdate(fatherdeath_d,ltfu[ltfu$fatherdeath_y == 1,])
 
 ## CHECK FOR MISSING DATA
 # missingvalue(death_d,ltfu)
@@ -49,11 +50,11 @@ missingvalue(l_alive_d,ltfu)
 # missingvalue(transfer_d,ltfu)
 
 ## CONVERT DATES USING EXPECTED FORMAT (will force NA if format is incorrect)
-if(exists("death_d",ltfu)){ltfu$death_d <- convertdate(death_d,ltfu)}
-if(exists("l_alive_d",ltfu)){ltfu$l_alive_d <- convertdate(l_alive_d,ltfu)}
-if(exists("transfer_d",ltfu)){ltfu$transfer_d <- convertdate(transfer_d,ltfu)}
-if(exists("motherdeath_d",ltfu)){ltfu$motherdeath_d <- convertdate(motherdeath_d,ltfu)}
-if(exists("fatherdeath_d",ltfu)){ltfu$fatherdeath_d <- convertdate(fatherdeath_d,ltfu)}
+ltfu$death_d <- convertdate(death_d,ltfu)
+ltfu$l_alive_d <- convertdate(l_alive_d,ltfu)
+ltfu$transfer_d <- convertdate(transfer_d,ltfu)
+ltfu$motherdeath_d <- convertdate(motherdeath_d,ltfu)
+ltfu$fatherdeath_d <- convertdate(fatherdeath_d,ltfu)
 
 ## CHECK FOR DATES OCCURRING IN THE WRONG ORDER
 if(exists("basic")){
@@ -84,8 +85,11 @@ futuredate(fatherdeath_d,ltfu)
 queryduplicates(patient,ltfu)
 
 ## CHECK FOR UNEXPECTED CODING
+## ???? LDR - are checks for cases where the accuracy (_a) variables are populated, but no date is provided needed??
 badcodes(drop_y,c(0,1,9),ltfu)
 badcodes(death_y,c(0,1,9),ltfu)
+badcodes(motherdeath_y,c(0,1,9),ltfu)
+badcodes(fatherdeath_y,c(0,1,9),ltfu)
 badcodes(death_d_a,c("<",">","D","M","Y","U"),ltfu)
 badcodes(l_alive_d_a,c("<",">","D","M","Y","U"),ltfu)
 badcodes(transfer_d_a,c("<",">","D","M","Y","U"),ltfu)

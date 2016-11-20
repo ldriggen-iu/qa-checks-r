@@ -7,4 +7,4 @@ mother_id,preg_seq,child_id,outcom,outcom_d,outcom_d_a,b_gagew,forced_errors
 1005,1,1005-01,22,2014-01-04,U,45,
 1006,7,1006-01,4,2014-01-05,>,45,
 1007,99,1007-01,x,x,x,99,all
-1008,7,1008-01,4,2020-01-07,>,45,outcome date in future
+1008,7,1008-01,4,2018-01-07,>,45,outcome date in future
