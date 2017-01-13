@@ -116,10 +116,11 @@ badcodes(recart_y,c(0,1,9),basic)
 #   1 = Yes
 #   9 = Unknown
 badcodes(aids_y,c(0,1,9),basic)
-badcodes(birth_d_a,c("<",">","D","M","Y","U"),basic)
-badcodes(enrol_d_a,c("<",">","D","M","Y","U"),basic)
-badcodes(recart_d_a,c("<",">","D","M","Y","U"),basic)
-badcodes(aids_d_a,c("<",">","D","M","Y","U"),basic)
+
+if(exists("birth_d_a",basic))  {badcodes(birth_d_a,c("<",">","D","M","Y","U"),basic)}
+if(exists("enrol_d_a",basic))  {badcodes(enrol_d_a,c("<",">","D","M","Y","U"),basic)}
+if(exists("recart_d_a",basic)) {badcodes(recart_d_a,c("<",">","D","M","Y","U"),basic)}
+if(exists("aids_d_a",basic))   {badcodes(aids_d_a,c("<",">","D","M","Y","U"),basic)}
 
 ## QUERY PATIENTS WITH NO RECORD IN tblPROGRAM
 if(exists("program") & exists("program",basic)){badrecord(program,basic,program)}

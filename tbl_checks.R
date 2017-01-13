@@ -44,7 +44,7 @@ allcheck <- NULL
 ## CONVERT DATABASE CLOSE TO DATE FORMAT, IF MISSING/INCORRECT, THEN USE SYSTEM DATE (TODAY)
 databaseclose <- as.Date(databaseclose,"%Y-%m-%d")
 databaseclose <- ifelse(is.na(databaseclose),Sys.Date(),databaseclose)
-
+# ???? table tblCEP was dropped with the IeDEA_DES_Proposed_Additions_2016_Nov_14_V14.docx revision.
 ## IDENTIFY WHICH TABLES TO EXPECT FROM DES
 expectedtables <- c("center","program","basic","ltfu","cd4","rna","bp","viro","res","reslvl2","reslvl3","art","med",
                     "dis","distb","visit","deliverychild","deliverymum","lab","canc","cep","newborn","newbornabnorm","pregout","preg","artmum")
@@ -102,7 +102,7 @@ if(exists("visit")) source("code/tblVIS_checks.R")
 if(exists("deliverychild")) source("code/tblDELIVERY_CHILD_checks.R")
 if(exists("deliverymum")) source("code/tblDELIVERY_MUM_checks.R")
 if(exists("lab")) source("code/tblLAB_checks.R")
-if(exists("canc")) source("code/tblCANC_checks.R")
+# tblCANC.csv needs updated if(exists("canc")) source("code/tblCANC_checks.R")
 if(exists("cep")) source("code/tblCEP_checks.R")
 if(exists("distb")) source("code/tblDIS_TB_checks.R")
 if(exists("bp")) source("code/tblLAB_BP_checks.R")

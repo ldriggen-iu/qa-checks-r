@@ -83,13 +83,11 @@ notnumeric(art_rs1,art)
 art_id_codebook <- read.csv("resource/art_id_codebook.csv",header=TRUE,stringsAsFactors = FALSE,na.strings="")
 art_rs_codebook <- read.csv("resource/art_rs_codebook.csv",header=TRUE,stringsAsFactors = FALSE,na.strings="")
 badcodes(art_id,art_id_codebook$code,art,id=patient)
-## ???? need to figure out how to check that populated rs->rs_2->rs_3->rs_4 and only check those that are populated.
-## ???? the code below forces art_rs to always be populated (even if 99 - unknown) and art_rs2, art_rs3, art_rs4 to
-## ???? be a valid code if they contain an entry
-badcodes(art_rs,art_rs_codebook$code,art,id=patient)
-badcodes(art_rs2,art_rs_codebook$code,art[art$art_rs2 !=' ',],id=patient)
-badcodes(art_rs3,art_rs_codebook$code,art[art$art_rs3 !=' ',],id=patient)
-badcodes(art_rs4,art_rs_codebook$code,art[art$art_rs4 !=' ',],id=patient)
+# ???? Is it OK for art_rs to be blank and art_rs2 to be populated - similarly for the rs2, rs3, rs4
+badcodes(art_rs,art_rs_codebook$code,art[art$art_rs != ' ',],id=patient)
+badcodes(art_rs2,art_rs_codebook$code,art[art$art_rs2 != ' ',],id=patient)
+badcodes(art_rs3,art_rs_codebook$code,art[art$art_rs3 != ' ',],id=patient)
+badcodes(art_rs4,art_rs_codebook$code,art[art$art_rs4 != ' ',],id=patient)
 # ART Formulations:
 #   1 = Tablet/capsule
 #   2 = Syrup/suspension
@@ -107,10 +105,12 @@ badcodes(art_form,c("1","2","3","4","5","6","7","9"),art)
 badcodes(art_comb,c("0","1","9"),art)
 badcodes(art_sd_a,c("<",">","D","M","Y","U"),art)
 badcodes(art_ed_a,c("<",">","D","M","Y","U"),art)
-## ???? Stephany had comments concerning changing the reason for start specification
-## ???? In 2016-11-16 BD2K meeting it was decided to reduce the reasons for start to just 6 codes
+## Stephany had comments concerning changing the reason for start specification
+## In 2016-11-16 BD2K meeting it was decided to reduce the reasons for start to just 6 codes
 art_startrs_codebook <- read.csv("resource/art_startrs_codebook.csv",header=TRUE,stringsAsFactors = FALSE,na.strings="")
 badcodes(artstart_rs,art_startrs_codebook$code,art)
+
+## ???? Does there need to be a check that all patients in tblART are in tblBAS ????
 # ## NEED TO PROGRAM:
 # Overlapping periods of same drug
 # Double reporting - records reported for both combination drugs and their components

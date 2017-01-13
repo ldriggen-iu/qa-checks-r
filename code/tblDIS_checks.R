@@ -86,7 +86,7 @@ badcodes(dis_ed_a,c("<",">","D","M","Y","U"),dis)
 ## QUERY PATIENTS WITH NO RECORD IN tblBAS
 badrecord(patient,dis,basic)
 
-## QUERY ANY EVENT THAT IS RECORDED TWICE, same DIS_ID, and DIS_D withing 6 months 
+## QUERY ANY EVENT THAT IS RECORDED TWICE, same DIS_ID, and DIS_D within 6 months 
 if(exists("dis_d",dis) & exists("dis_id",dis)){
     qdis <- dis[with(dis,order(patient,dis_id,dis_d)),]
     qdis <- qdis[!is.na(qdis$dis_d) & !is.na(qdis$dis_id),]

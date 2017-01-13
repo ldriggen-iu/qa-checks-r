@@ -17,14 +17,18 @@
 #          a listing of data queries.
 #
 #   Created: 26 February 2016
-#   Revisions: 
+#   Revisions: ???? table was drastically revised IeDEA_DES_Proposed_Additions_2016_Nov_14_V14.docx
+#              Need to check with Bev and Stephany on how to implement "Location coding System: ICD10, ICD9, other systems,
+#              e.g. NA-ACCORD-short list (suggest using NA-ACCORD-short list: NA-ACCORD_Clinical_DxICD9_Mapping Update Sept 2014.xls)"
+#              and "Histology coding system: ICD-O-3, other systems, e.g. NA-ACCORD-short list, None (suggest using NA-ACCORD-short list:
+#              NA-ACCORD_Cancer_Registry_Dx_Mapping Update Sept 2014.xls)" code verification
 #     
 #############################################################
 ## NAME OF TABLE FOR WRITING QUERIES
 tablename <- "tblCANC"
 ## NAMES EXPECTED FROM HICDEP+/IeDEAS DES
-##???? Assuming all columns require for now
-#expectednames <- c("patient","canc_d","canc_type","canc_type_oth","canc_cert","canc_extent","canc_tx")
+##???? Assuming all columns required for now
+#expectednames <- c("patient","canc_d","loc_code","loc_code_sys","hist_code","hist_code_sys")
 #acceptablenames <- c(expectednames,"canc_d_a")
 expectednames <- c("patient","canc_d","canc_d_a","canc_type","canc_type_oth","canc_cert","canc_extent","canc_tx")
 acceptablenames <- c(expectednames)
@@ -43,11 +47,7 @@ notdate(canc_d,canc,id=patient)
 ## CHECK FOR MISSING DATA
 missingvalue(canc_d,canc)
 #missingvalue(canc_d_a,canc)
-missingvalue(canc_type,canc)
-#missingvalue(canc_type_oth,canc)
-missingvalue(canc_cert,canc)
-missingvalue(canc_extent,canc)
-missingvalue(canc_tx,canc)
+
 
 ## CONVERT DATES USING EXPECTED FORMAT (will force NA if format is incorrect)
 #if(exists("canc_d",canc)){canc$canc_d <- convertdate(canc_d,canc)}
@@ -74,16 +74,11 @@ futuredate(canc_d,canc)
 ##???? Currently checking for duplicates for canc_type/canc_d by patient
 ##???? Are futher checks needed?
 ## CHECK FOR DUPLICATE PATIENT IDs 
-for(i in unique(canc$canc_type)[!is.na(unique(canc$canc_type))]){
+for(i in unique(canc$canc_loc)[!is.na(unique(canc$canc_loc))]){
   canc_sub <- canc[canc$canc_type %in% i,]
-  queryduplicates(patient,canc_sub,date=canc_d,subsettext=paste("&canc_type=",i,sep=""))
+  queryduplicates(patient,canc_loc,date=canc_d,subsettext=paste("&canc_loc=",i,sep=""))
 }
 
-
-## CHECK FOR INCORRECT VARIABLE TYPE (prior to range checks, if applicable)
-notnumeric(canc_cert,canc)
-notnumeric(canc_extent,canc)
-notnumeric(canc_text,canc)
 
 ## CHECK FOR UNEXPECTED CODING
 canc_type_codebook <- read.csv("resource/canc_type_codebook.csv",header=TRUE,stringsAsFactors = FALSE,na.strings="")

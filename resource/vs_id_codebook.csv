@@ -1,38 +1,60 @@
-code,label
-BVA,Bacterial vaginosis unspecified method
-BVAC,Bacterial vaginosis – clinical
-BVAG,Bacterial vaginosis - gram stain
-CHLA,Chlamydia
-CMVA,CMV anitbodies
-CRYP,Cryptococcal antigen test
-GONO,Gonorrhoea
-HBV,Marker for hepatitis B infection (=HBVAC) - test unknown
-HBVAC,HBV antibody (core)
-HBVACIGM,HBV antibody (core IgM)
-HBVACIGG,HBG antibody (core IgG)
-HBVAE,HBV antibody (envelope)
-HBVAS,HBV antibody (surface)
-HBVD,HBV-DNA
-HBVGE,HBV antigen (envelope)
-HBVGS,HBV antigen (surface)
-HCV,Marker for hepatitis C infection - test unknown
-HCVA,HCV antibody
-HCVG,HCV antigen
-HCVBD,HCV b-DNA
-HCVR,HCV-RNA
-HDVA,Hepatitis delta antibody
-HIV-1,HIV-1 test
-HIV-1S,HIV-1 serology test
-HIV-1PCR,HIV-1 DNA PCR test
-HIV-2,HIV-2 test
-HIV-2S,HIV-2 serology test
-HIV-2PCR,HIV-2 DNA PCR test
-HIVAE,HIV antibodies ELISA
-HIVAWB,HIV antibodies Western blot
-MYCO,Mycoplasma
-P24AG,P24 Ag
-RUB,Rubella
-STR,"Streptococcus, group B"
-SYPH,Syphilis
-TOXA,Toxo antibodies
-UREP,Ureaplasma
+code,label,,,,,,Code,Viral test
+BVA,Bacterial vaginosis unspecified method,,,,,,BVA,Bacterial vaginosis unspecified method1
+BVAC,Bacterial vaginosis – clinical,,,,,,BVAC,Bacterial vaginosis – clinical1
+BVAG,Bacterial vaginosis - gram stain,,,,,,BVAG,Bacterial vaginosis - gram stain1
+CHLA,Chlamydia,,,,,,CHLA,Chlamydia1
+CMVA,CMV anitbodies,,,,,,CMVA,CMV antibodies
+CRYP,Cryptococcal antigen test,,,,,,CRYP,Cryptococcal test – other/type unknown 
+,,,,,,,CRAG ,Cryptococcal antigen test (CrAg)
+GONO,Gonorrhoea,,,,,,GONO,Gonorrhoea1
+HBV,Marker for hepatitis B infection (=HBVAC) - test unknown,,,,,,HBV,Marker for hepatitis B infection (=HBVAC) - test unknown
+HBVAC,HBV antibody (core),,,,,,HBVAC,HBV antibody (core)
+HBVACIGM,HBV antibody (core IgM),,,,,,HBVACIGM,HBV antibody (core IgM)
+HBVACIGG,HBG antibody (core IgG),,,,,,HBVACIGG,HBG antibody (core IgG)
+HBVAE,HBV antibody (envelope),,,,,,HBVAE,HBV antibody (envelope)
+HBVAS,HBV antibody (surface),,,,,,HBVAS,HBV antibody (surface)
+HBVD,HBV-DNA,,,,,,HBVD,HBV-DNA
+HBVGE,HBV antigen (envelope),,,,,,HBVGE,HBV antigen (envelope)
+HBVGS,HBV antigen (surface),,,,,,HBVGS,HBV antigen (surface)
+HCV,Marker for hepatitis C infection - test unknown,,,,,,HCV,Marker for hepatitis C infection - test unknown
+HCVA,HCV antibody,,,,,,HCVA,HCV antibody
+HCVG,HCV antigen,,,,,,HCVG,HCV antigen
+HCVBD,HCV b-DNA,,,,,,HCVBD,HCV b-DNA
+HCVR,HCV-RNA,,,,,,HCVR,HCV-RNA
+HDVA,Hepatitis delta antibody,,,,,,HDVA,Hepatitis delta antibody
+HIV-1,HIV-1 test,,,,,,,
+HIV-1S,HIV-1 serology test,,,,,,HIV-1R,HIV-1 rapid test
+HIV-1PCR,HIV-1 DNA PCR test,,,,,,HIV-1S,"HIV-1 serology test (ELISA, Western Blot)"
+HIV-2,HIV-2 test,,,,,,HIV-1DNA,HIV-1 DNA PCR test (qualitative)
+HIV-2S,HIV-2 serology test,,,,,,HIV-1RNA,HIV-1 RNA (quantitative )
+HIV-2PCR,HIV-2 DNA PCR test,,,,,,,
+HIVAE,HIV antibodies ELISA,,,,,,HIV-2R,HIV-2 rapid test
+HIVAWB,HIV antibodies Western blot,,,,,,HIV-2S,"HIV-2 serology test (ELISA, Western Blot)"
+MYCO,Mycoplasma,,,,,,HIV-2DNA,HIV-2 DNA PCR test (qualitative)
+P24AG,P24 Ag,,,,,,HIV-2RNA,HIV-2 RNA (quantitative)
+RUB,Rubella,,,,,,,
+STR,"Streptococcus, group B",,,,,,,
+SYPH,Syphilis,,,,,,MYCO,Mycoplasma1
+TOXA,Toxo antibodies,,,,,,P24AG,P24 antigen
+UREP,Ureaplasma,,,,,,RUB,Rubella
+,,,,,,,STR,"Streptococcus, group B"
+,,,,,,,SYPH DV,Syphilis  Direct Visualization (Darkfield microscopy)
+,,,,,,,SYPHSC,"Syphilis Screening (RPR, VDRL)"
+,,,,,,,SYPHCON,"Syphilis Confirmatory (FTA-Abs, MHA-TB, TPPA, EIA)"
+,,,,,,,TOXA,Toxoplasma antibodies
+,,,,,,,UREP,Ureaplasma
+,,,,,,," @ALL – check with your regions/clinicians/data team to see if they have any concerns about an other/type unknown test. (would include culture, india ink, etc.)",
+,,,,,,, Exclude from this table since we have a separate table tblLAB_RNA to hold the RNA results.,
+,,,,,,,,
+,,,,,,,All of these test types are listed at http://www.webmd.com/sexual-conditions/syphilis-tests,
+,,,,,,,Are all of these actually used/relevant? Which actual tests should we include (SYPH is not a specific test),
+,,,,,,,-          VDRL,
+,,,,,,,-          RPR,
+,,,,,,,-          EIA,
+,,,,,,,-          FTA-ABS,
+,,,,,,,-          TPPA,
+,,,,,,,-          Darkfield microscopy,
+,,,,,,,-          MHA-TP,
+,,,,,,,BSM: Edits per Kara’s suggestions.,
+,,,,,,, Do we want to add a test type for this?,
+,,,,,,,BSM: One suggestion was Treponemal vs non-Treponemal type.  Edits per Kara’s suggestions.,
