@@ -205,35 +205,90 @@ queryduplicates <- function(uniqueid,table=parent.frame(),date=date,subsettext="
   id <- deparse(substitute(id))
   subvar <- unlist(strsplit(subsettext,"="))[1]
   if(exists(uniqueid,table)){
-  	if(!missing(date)){
-          date <- deparse(substitute(date))
-          pid <- paste(get(uniqueid,table),"&",get(date,table))
-        }
-  	if(missing(date)){pid <- get(uniqueid,table)}
+    if(!missing(date)){
+      date <- deparse(substitute(date))
+      pid <- paste(get(uniqueid,table),"&",get(date,table))
+    }
+    if(missing(date)){pid <- get(uniqueid,table)}
     if(any(duplicated(pid))){
       duperr <- duplicated(pid)
       if(missing(date)){
-      	query <- data.frame(get(id,table)[duperr],
-      										tablename,
-      										id,
-      										"Logic",
-      										"Duplicate Record",
-      										paste(id," =",get(id,table)[duperr]),
-      										stringsAsFactors=FALSE)
+        query <- data.frame(get(id,table)[duperr],
+                            tablename,
+                            id,
+                            "Logic",
+                            "Duplicate Record",
+                            paste(id," =",get(id,table)[duperr]),
+                            stringsAsFactors=FALSE)
       }
-      	 if(!missing(date)){
-      	 	query <- data.frame(get(id,table)[duperr],
-      	 											tablename,
-      	 											ifelse(!is.na(subvar),paste(id,"&",date,subvar,sep=""),
-      	 														 paste(id,"&",date,sep="")),
-      	 											"Logic",
-      	 											"Duplicate Record",
-      	 											paste(id,"=",get(id,table)[duperr],"&",
-      	 														date,"=",get(date,table)[duperr],subsettext,sep=""),
-      	 											stringsAsFactors=FALSE)
-      	 }      	 
+      if(!missing(date)){
+        query <- data.frame(get(id,table)[duperr],
+                            tablename,
+                            ifelse(!is.na(subvar),paste(id,"&",date,subvar,sep=""),
+                                   paste(id,"&",date,sep="")),
+                            "Logic",
+                            "Duplicate Record",
+                            paste(id,"=",get(id,table)[duperr],"&",
+                                  date,"=",get(date,table)[duperr],subsettext,sep=""),
+                            stringsAsFactors=FALSE)
+      }      	 
       names(query) <- names(emptyquery)
       assign(paste("query",index,sep=""),query,envir=globalenv()); index <<- index + 1
+    }
+  }
+}
+## WRITE FUNCTION FOR OUT OF ORDER DATES, DATE2 IS SUPPOSED TO OCCUR ON OR AFTER DATE1
+outoforder <- function(date1,date2,table=parent.frame(),table2=table2,id=patient){
+  date1 <- deparse(substitute(date1))
+  date2 <- deparse(substitute(date2))
+  if(!missing(table2)){tablename <- paste(tablename,"&",table2)}
+  if(exists(date1,table) & exists(date2,table)){
+    logicerr <- !is.na(get(date1,table)) & !is.na(get(date2,table)) & get(date1,table) > get(date2,table)
+    if(exists(paste(date1,"_a",sep=""),table)){
+      flag1 <- get(paste(date1,"_a",sep=""),table)
+      logicerr[!is.na(flag1) & flag1 %in% c("U",">")] <- FALSE
+    }
+    if(exists(paste(date2,"_a",sep=""),table)){
+      flag2 <- get(paste(date2,"_a",sep=""),table)
+      logicerr[!is.na(flag2) & flag2 %in% c("U","<")] <- FALSE
+    }
+    if(any(logicerr)){
+      query <- data.frame(get(deparse(substitute(id)),table)[logicerr],
+                          tablename,paste(date1,"&",date2,sep=""),
+                          "Logic",
+                          "Out of Order",
+                          paste(date1,"=",get(date1,table)[logicerr],"&",date2,"=",get(date2,table)[logicerr],sep=""),
+                          stringsAsFactors=FALSE)
+      names(query) <- names(emptyquery)
+      assign(paste("query",index,sep=""),query,envir=globalenv()); index <<- index + 1
+    }
+  }
+}
+## CONVERT DATE VARIABLES AND PERFORM LOGIC CHECK AGAINST DATE OF BIRTH
+convertdate <- function(date,table=parent.frame()){
+  if(exists(deparse(substitute(date)),table)){
+    var <- as.Date(get(deparse(substitute(date)),table),"%Y-%m-%d")
+  }
+  if(!exists(deparse(substitute(date)),table)){
+    var <- NULL
+  }
+  return(var)
+}
+## WRITE FUNCTION TO CHECK FOR OUT OF RANGE DATA
+upperrangecheck <- function(var,value,table=parent.frame(),subsettext="",id=patient){
+  var <- deparse(substitute(var))
+  subvar <- unlist(strsplit(subsettext,"="))[1]
+  if(exists(var,table)){
+    coderr <- !is.na(get(var,table)) & get(var,table) > value
+    if(any(coderr)){
+      query<-data.frame(get(deparse(substitute(id)),table)[coderr],
+                        tablename,ifelse(!is.na(subvar),paste(var,subvar,sep=""),var),"Logic",
+                        "Out of Range",
+                        paste(var,"=",get(var,table)[coderr],subsettext,sep=""),
+                        stringsAsFactors=FALSE)
+      names(query) <- names(emptyquery)
+      assign(paste("query",index,sep=""),query,envir=globalenv())
+      index <<- index + 1
     }
   }
 }

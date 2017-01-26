@@ -103,7 +103,7 @@ badcodes(gender_id,c("1","2","3","4","5","9"),visit)
 ## QUERY PATIENTS WITH NO RECORD IN tblBAS (bad ID)
 badrecord(patient,visit,basic)
 ## QUERY PATIENTS WITH MISSING RECORD IN tblVIS (has ID, but no VISIT data)
-missrecord(patient,basic,visit)
+missrecord(patient,visit,basic)
 
 ## QUERY PATIENTS WITH NO RECORD IN tblCENTER
 if(exists("center")){badrecord(center,visit,center,id=patient)}
