@@ -26,9 +26,20 @@
 ## NAME OF TABLE FOR WRITING QUERIES
 tablename <- "tblBAS"
 ## NAMES EXPECTED FROM HICDEP+/IeDEAS DES
-expectednames <- c("patient","birth_d","enrol_d","gender",
-		   "mode","naive_y","proph_y","recart_y","recart_d","aids_y","aids_d")
-acceptablenames <- c(expectednames,"program","birth_d_a","enrol_d_a","recart_d_a","aids_d_a")
+if (file.exists("./input/Specification_of_required_and_optional_columns.tsv")) {
+  
+  column_specs<-read.table("./input/Specification_of_required_and_optional_columns.tsv",header = TRUE, sep="\t", stringsAsFactors=FALSE)
+  # get the specs for tblART
+  expectednames<-unlist(strsplit(gsub('\"','',column_specs[column_specs$tbl==tablename,]$required_columns),','))
+  acceptablenames<-c(expectednames,unlist(strsplit(gsub('\"','',column_specs[column_specs$tbl==tablename,]$optional_columns),',')))
+  
+}
+if (!(file.exists("./input/Specification_of_required_and_optional_columns.tsv"))) { 
+  expectednames <- c("patient","birth_d","enrol_d","gender",
+                     "mode","naive_y","proph_y","recart_y","recart_d","aids_y","aids_d")
+  acceptablenames <- c(expectednames,"program","birth_d_a","enrol_d_a","recart_d_a","aids_d_a")
+}
+
 
 ################### QUERY CHECKING BEGINS HERE ###################
 
@@ -37,27 +48,30 @@ extravar(acceptablenames,basic)
 missvar(expectednames,basic)
 
 ## PRIOR TO CONVERTING DATES, CHECK THAT THE TYPE IS APPROPRIATE 
-notdate(birth_d,basic)
-notdate(enrol_d,basic)
-notdate(recart_d,basic)
-notdate(aids_d,basic)
+if(exists("birth_d",basic)) {notdate(birth_d,basic)}
+if(exists("enrol_d",basic)) {notdate(enrol_d,basic)}
+if(exists("recart_d",basic)) {notdate(recart_d,basic)}
+if(exists("aids_d",basic)) {notdate(aids_d,basic)}
 
 ## CHECK FOR MISSING DATA
-missingvalue(birth_d,basic)
-missingvalue(enrol_d,basic)
-missingvalue(patient,basic)
-missingvalue(country,basic)
-missingvalue(gender,basic)
-missingvalue(mode,basic)
-missingvalue(naive_y,basic)
-missingvalue(proph_y,basic)
-missingvalue(recart_y,basic)
-missingvalue(aids_y,basic)
+if(exists("patient",basic)) {missingvalue(patient,basic)}
+if(exists("program",basic)) {missingvalue(program,basic)}
+if(exists("birth_d",basic)) {missingvalue(birth_d,basic)}
+if(exists("enrol_d",basic)) {missingvalue(enrol_d,basic)}
+if(exists("gender",basic)) {missingvalue(gender,basic)}
+if(exists("mode",basic)) {missingvalue(mode,basic)}
+if(exists("naive_y",basic)) {missingvalue(naive_y,basic)}
+if(exists("proph_y",basic)) {missingvalue(proph_y,basic)}
+if(exists("recart_y",basic)) {missingvalue(recart_y,basic)}
+if(exists("aids_y",basic)) {missingvalue(aids_y,basic)}
+if(exists("aids_d",basic)) {missingvalue(aids_d,basic)}
 
-# ???? not sure this check is correct with the change from HAART to RECART ???
-# check missing haart_d only among those confirmed not naive 
-#notnaive <- basic[basic$naive_y==0,]
-#missingvalue(haart_d,notnaive)
+
+# check missing recart_d only among those confirmed to have recart
+if(exists("recart_y",basic) && exists("recart_d",basic)) {
+  recart_yes <- basic[basic$recart_y==1,]
+  missingvalue(recart_d,recart_yes)
+}
 
 ## CONVERT DATES USING EXPECTED FORMAT (will force NA if format is incorrect)
 if(exists("birth_d",basic)){basic$birth_d <- convertdate(birth_d,basic)}
@@ -66,22 +80,22 @@ if(exists("recart_d",basic)){basic$recart_d <- convertdate(recart_d,basic)}
 if(exists("aids_d",basic)){basic$aids_d <- convertdate(aids_d,basic)}
 
 ## CHECK FOR DATES OCCURRING IN THE WRONG ORDER
-outoforder(birth_d,enrol_d,basic)
-outoforder(birth_d,recart_d,basic)
-outoforder(birth_d,aids_d,basic)
+if(exists("birth_d",basic) && exists("enrol_d",basic)) {outoforder(birth_d,enrol_d,basic)}
+if(exists("birth_d",basic) && exists("recart_d",basic)) {outoforder(birth_d,recart_d,basic)}
+if(exists("birth_d",basic) && exists("aids_d",basic)) {outoforder(birth_d,aids_d,basic)}
 
 
 ## CHECK FOR DATES OCCURRING TOO FAR IN THE FUTURE
-futuredate(birth_d,basic)
-futuredate(enrol_d,basic)
-futuredate(recart_d,basic)
-futuredate(aids_d,basic)
+if(exists("birth_d",basic)){futuredate(birth_d,basic)}
+if(exists("enrol_d",basic)){futuredate(enrol_d,basic)}
+if(exists("recart_d",basic)){futuredate(recart_d,basic)}
+if(exists("aids_d",basic)){futuredate(aids_d,basic)}
 
 ## CHECK FOR DUPLICATE PATIENT IDs
 queryduplicates(patient,basic)
 
 ## CHECK FOR UNEXPECTED CODING
-badcodes(gender,c(1,2,9),basic)
+if(exists("gender",basic)){badcodes(gender,c(1,2,9),basic)}
 # Mode of Infection
 #   1 = homo/bisexual 
 #   2 = injecting drug user 
@@ -95,27 +109,27 @@ badcodes(gender,c(1,2,9),basic)
 #   10 = Sexual abuse 
 #   90 = other
 #   99 = unknown   
-badcodes(mode,c(1:8,90,99),basic)
+if(exists("mode",basic)){badcodes(mode,c(1:8,90,99),basic)}
 # ART naive upon enrollment
 #   0 = No
 #   1 = Yes
 #   9 = Unknown
-badcodes(naive_y,c(0,1,9),basic)
+if(exists("naive_y",basic)) {badcodes(naive_y,c(0,1,9),basic)}
 # Prior to enrollment, has the patient been exposed to antiretroviral therapy for prophylaxis such as PMTCT, PREP, or PEP?
 #   0 = No
 #   1 = Yes
 #   9 = Unknown
-badcodes(proph_y,c(0,1,9),basic)
+if(exists("proph_y",basic)) {badcodes(proph_y,c(0,1,9),basic)}
 #Has the patient ever received antiretroviral treatment? (excludes antiretroviral drugs given only for PMTCT or other prophylaxis)
 #   0 = No
 #   1 = Yes
 #   9 = Unknown
-badcodes(recart_y,c(0,1,9),basic)
+if(exists("recart_y",basic)) {badcodes(recart_y,c(0,1,9),basic)}
 # Has patient ever been given an AIDS diagnosis? (clinical)
 #   0 = No
 #   1 = Yes
 #   9 = Unknown
-badcodes(aids_y,c(0,1,9),basic)
+if(exists("aids_y",basic)) {badcodes(aids_y,c(0,1,9),basic)}
 
 if(exists("birth_d_a",basic))  {badcodes(birth_d_a,c("<",">","D","M","Y","U"),basic)}
 if(exists("enrol_d_a",basic))  {badcodes(enrol_d_a,c("<",">","D","M","Y","U"),basic)}
