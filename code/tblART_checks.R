@@ -55,13 +55,15 @@ missvar(expectednames,art)
 if(exists("art_sd",art)){notdate(art_sd,art)}
 if(exists("art_ed",art))notdate(art_ed,art)
 
+## CONVERT DATES USING EXPECTED FORMAT (will force NA if format is incorrect)
+if(exists("art_sd",art)){art$art_sd <- convertdate(art_sd,art)}
+if(exists("art_ed",art)){art$art_ed <- convertdate(art_ed,art)}
+
 ## CHECK FOR MISSING DATA
 if(exists("art_id",art)){missingvalue(art_id,art)}
 if(exists("art_sd",art)){missingvalue(art_sd,art)}
 
-## CONVERT DATES USING EXPECTED FORMAT (will force NA if format is incorrect)
-if(exists("art_sd",art)){art$art_sd <- convertdate(art_sd,art)}
-if(exists("art_ed",art)){art$art_ed <- convertdate(art_ed,art)}
+
 
 ## CHECK FOR DATES OCCURRING IN THE WRONG ORDER
 if(exists("basic") && exists("birth_d",basic)){
@@ -103,10 +105,10 @@ art_rs_codebook <- read.csv("resource/art_rs_codebook.csv",header=TRUE,stringsAs
 if(exists("art_id",art)){badcodes(art_id,art_id_codebook$code,art,id=patient)}
 # ???? Is it OK for art_rs to be blank and art_rs2 to be populated - similarly for the rs2, rs3, rs4
 if(exists("art_rs",art)){badcodes(art_rs,art_rs_codebook$code,art[art$art_rs != ' ',],id=patient)}
-if(exists("art_rs",art)){badcodes(art_rs1,art_rs_codebook$code,art[art$art_rs1 != ' ',],id=patient)}
-if(exists("art_rs",art)){badcodes(art_rs2,art_rs_codebook$code,art[art$art_rs2 != ' ',],id=patient)}
-if(exists("art_rs",art)){badcodes(art_rs3,art_rs_codebook$code,art[art$art_rs3 != ' ',],id=patient)}
-if(exists("art_rs",art)){badcodes(art_rs4,art_rs_codebook$code,art[art$art_rs4 != ' ',],id=patient)}
+if(exists("art_rs1",art)){badcodes(art_rs1,art_rs_codebook$code,art[art$art_rs1 != ' ',],id=patient)}
+if(exists("art_rs2",art)){badcodes(art_rs2,art_rs_codebook$code,art[art$art_rs2 != ' ',],id=patient)}
+if(exists("art_rs3",art)){badcodes(art_rs3,art_rs_codebook$code,art[art$art_rs3 != ' ',],id=patient)}
+if(exists("art_rs4",art)){badcodes(art_rs4,art_rs_codebook$code,art[art$art_rs4 != ' ',],id=patient)}
 # ART Formulations:
 #   1 = Tablet/capsule
 #   2 = Syrup/suspension
