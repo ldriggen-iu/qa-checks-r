@@ -34,9 +34,10 @@ if (file.exists("./input/Specification_of_required_and_optional_columns.tsv")) {
   
 }
 if (!(file.exists("./input/Specification_of_required_and_optional_columns.tsv"))) { 
-  expectednames <- c("patient","art_id","art_sd","art_ed","art_rs","art_rs2","art_rs3","art_rs4","art_form","art_comb","artstart_rs")
+  expectednames <- c("child_id","art_id","art_sd","art_ed","art_rs","art_rs2","art_rs3","art_rs4","art_form","art_comb","artstart_rs")
   acceptablenames <- c(expectednames,"art_sd_a","art_ed_a")  
 }
+
 expectednames <- c("child_id","art_id","art_sd","art_ed","art_rs","art_rs2","art_rs3","art_rs4","art_form","art_comb","artstart_rs")
 acceptablenames <- c(expectednames,"art_sd_a","art_ed_a")
 
@@ -87,22 +88,22 @@ for(i in unique(artmum$art_id)[!is.na(unique(artmum$art_id))]){
 }
 
 ## CHECK FOR INCORRECT VARIABLE TYPE (prior to range checks, if applicable)
-if(exists("art_rs",artmum)){notnumeric(art_rs,artmum)}
-if(exists("art_rs1",artmum)){notnumeric(art_rs1,artmum)}
-if(exists("art_rs2",artmum)){notnumeric(art_rs2,artmum)}
-if(exists("art_rs3",artmum)){notnumeric(art_rs3,artmum)}
-if(exists("art_rs4",artmum)){notnumeric(art_rs4,artmum)}
+if(exists("art_rs",artmum)){notnumeric(art_rs,artmum,id=child_id)}
+if(exists("art_rs1",artmum)){notnumeric(art_rs1,artmum,id=child_id)}
+if(exists("art_rs2",artmum)){notnumeric(art_rs2,artmum,id=child_id)}
+if(exists("art_rs3",artmum)){notnumeric(art_rs3,artmum,id=child_id)}
+if(exists("art_rs4",artmum)){notnumeric(art_rs4,artmum,id=child_id)}
 
 ## CHECK FOR UNEXPECTED CODING
 art_id_codebook <- read.csv("resource/art_id_codebook.csv",header=TRUE,stringsAsFactors = FALSE,na.strings="")
 art_rs_codebook <- read.csv("resource/art_rs_codebook.csv",header=TRUE,stringsAsFactors = FALSE,na.strings="")
-if(exists("art_id",artmum)){badcodes(art_id,art_id_codebook$code,artmum,id=patient)}
+if(exists("art_id",artmum)){badcodes(art_id,art_id_codebook$code,artmum,id=child_id)}
 # ???? Is it OK for art_rs to be blank and art_rs2 to be populated - similarly for the rs2, rs3, rs4
-if(exists("art_rs",artmum)){badcodes(art_rs,art_rs_codebook$code,artmum[artmum$art_rs != ' ',],id=patient)}
-if(exists("art_rs",artmum)){badcodes(art_rs1,art_rs_codebook$code,artmum[artmum$art_rs1 != ' ',],id=patient)}
-if(exists("art_rs",artmum)){badcodes(art_rs2,art_rs_codebook$code,artmum[artmum$art_rs2 != ' ',],id=patient)}
-if(exists("art_rs",artmum)){badcodes(art_rs3,art_rs_codebook$code,artmum[artmum$art_rs3 != ' ',],id=patient)}
-if(exists("art_rs",artmum)){badcodes(art_rs4,art_rs_codebook$code,artmum[artmum$art_rs4 != ' ',],id=patient)}
+if(exists("art_rs",artmum)){badcodes(art_rs,art_rs_codebook$code,artmum[artmum$art_rs != ' ',],id=child_id)}
+if(exists("art_rs",artmum)){badcodes(art_rs1,art_rs_codebook$code,artmum[artmum$art_rs1 != ' ',],id=child_id)}
+if(exists("art_rs",artmum)){badcodes(art_rs2,art_rs_codebook$code,artmum[artmum$art_rs2 != ' ',],id=child_id)}
+if(exists("art_rs",artmum)){badcodes(art_rs3,art_rs_codebook$code,artmum[artmum$art_rs3 != ' ',],id=child_id)}
+if(exists("art_rs",artmum)){badcodes(art_rs4,art_rs_codebook$code,artmum[artmum$art_rs4 != ' ',],id=child_id)}
 # ART Formulations:
 #   1 = Tablet/capsule
 #   2 = Syrup/suspension

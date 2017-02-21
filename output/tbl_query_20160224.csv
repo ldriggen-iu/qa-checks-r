@@ -1,5 +1,0 @@
-"Error","Query","Table","Variable","PID","Info"
-"Table Structure","Unexpected Variable","tblDELIVERY_CHILD","extra","",""
-"Table Structure","Missing Variable","tblLAB","breech_y","",""
-"Value Error","Unexpected Code","tblLAB","lab_v","100","lab_v=7"
-"Value Error","Unexpected Code","tblLAB","lab_u","100","lab_u=98"

@@ -34,7 +34,7 @@ extravar(acceptablenames,viro)
 missvar(expectednames,viro)
 
 ## PRIOR TO CONVERTING DATES, CHECK THAT THE TYPE IS APPROPRIATE 
-notdate(vs_d,viro,id=patient)
+if (exists("vs_d",viro)) {notdate(vs_d,viro,id=patient)}
 
 ##??? require all variables to be present (even _A's)
 ## CHECK FOR MISSING DATA
@@ -42,29 +42,31 @@ notdate(vs_d,viro,id=patient)
 #missingvalue(art_sd,deliverychild)
 
 ## CONVERT DATES USING EXPECTED FORMAT (will force NA if format is incorrect)
-viro$vs_d <- convertdate(vs_d,viro)
+if (exists("vs_d",viro)) {viro$vs_d <- convertdate(vs_d,viro)}
 
 
 ## CHECK FOR DATES OCCURRING IN THE WRONG ORDER
-if(exists("basic")){
+if(exists("basic") && exists("birth_d",basic) && exists("vs_d",viro)){
   basviro <- merge(viro,with(basic,data.frame(patient,birth_d)),all.x=TRUE)
 	basviro$birth_d <- convertdate(birth_d,basviro)
 	outoforder(birth_d,vs_d,basviro,table2="tblBAS")
 }
-if(exists("ltfu")){
+if(exists("ltfu") && exists("death_d",ltfu) && exists("vs_d",viro)) {
   ltfuviro <- merge(viro,with(ltfu,data.frame(patient,death_d)),all.x=TRUE)
 	ltfuviro$death_d <- convertdate(death_d,ltfuviro)
 	outoforder(vs_d,death_d,ltfuviro,table2="tblLTFU")
-	ltfuviro <- merge(viro,with(ltfu,data.frame(patient,l_alive_d)),all.x=TRUE)
-	ltfuviro$l_alive_d <- convertdate(l_alive_d,ltfuviro)
-	outoforder(vs_d,l_alive_d,ltfuviro,table2="tblLTFU")
+}
+if(exists("ltfu") && exists("death_d",ltfu) && exists("l_alive_d",viro)) {
+  ltfuviro <- merge(viro,with(ltfu,data.frame(patient,l_alive_d)),all.x=TRUE)
+  ltfuviro$l_alive_d <- convertdate(l_alive_d,ltfuviro)
+  outoforder(vs_d,l_alive_d,ltfuviro,table2="tblLTFU")
 }
 
 ## CHECK FOR DATES OCCURRING IN THE WRONG ORDER
 #outoforder(art_sd,art_ed,art)
 
 ## CHECK FOR DATES OCCURRING TOO FAR IN THE FUTURE
-futuredate(vs_d,viro,id=patient)
+if (exists("vs_d",viro)) {futuredate(vs_d,viro,id=patient)}
 
 #??? need to add duplicate checks
 ## CHECK FOR DUPLICATE PATIENT IDs 
@@ -74,8 +76,8 @@ futuredate(vs_d,viro,id=patient)
 #}
 
 ## CHECK FOR INCORRECT VARIABLE TYPE (prior to range checks, if applicable)
-notnumeric(vs_r,viro)
-notnumeric(vs_u,viro)
+if (exists(viro$vs_r)) {notnumeric(vs_r,viro)}
+if (exists(viro$vs_u)) {notnumeric(vs_u,viro)}
 
 ##??? units on vs_u???
 ##??? range checks on vs_v - just for HVC-RNA and HBV-DNA???
@@ -83,10 +85,12 @@ notnumeric(vs_u,viro)
 ## CHECK FOR UNEXPECTED CODING
 ## ???? LDR - need to check with Bev and Stephany on final set of codes to be included in vs_id_codebook.
 vs_id_codebook <- read.csv("resource/vs_id_codebook.csv",header=TRUE,stringsAsFactors = FALSE,na.strings="")
-badcodes(vs_d_a,c("<",">","D","M","Y","U"),viro)
-badcodes(vs_id,vs_id_codebook$code,viro)
-badcodes(vs_st,c("WB","P","S","U24","U","CSF","9"),viro)
+if (exists("vs_d_a",viro)) {badcodes(vs_d_a,c("<",">","D","M","Y","U"),viro)}
+if (exists("vs_id",viro)) {badcodes(vs_id,vs_id_codebook$code,viro)}
+if (exists("vs_st",viro)) {badcodes(vs_st,c("WB","P","S","U24","U","CSF","9"),viro)}
 
+# Verify patient exists in tblBAS
+if (exists("basic")) {missrecord(patient,canc,basic)}
 # ## NEED TO PROGRAM:
 ## ???? other checks ????
 

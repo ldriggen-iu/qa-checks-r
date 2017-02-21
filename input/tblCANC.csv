@@ -1,17 +1,20 @@
-patient,canc_d,canc_d_a,canc_type,canc_type_oth,canc_cert,canc_extent,canc_tx,ldr_forced_errors
-101,2000-01-01,D,KS, ,1,1,1,none
-102,2001-01-01,D,NHL, ,2,2,2,none
-103,2002-01-01,D,ICC, ,9,9,3,none
-104,2003-01-01,D,LUNG, ,1,1,4,none
-105,2004-01-01,D,BREA, ,2,2,5,none
-106,2005-02-01,D,ANAL, ,9,9,9,none
-107,2006-01-01,D,COLO, ,1,1,1,none
-108,2007-01-01,D,PROS, ,2,2,2,none
-109,2008-10-01,D,SKIN, ,9,9,3,none
-110,2009-01-01,D,OTH,Other cancer,1,1,1,none
-109,2008-10-01,D,SKIN, ,9,9,3,none
-109,2008-10-01,D,SKIN, ,9,9,3,duplicate
-9001,2020-01-01,D,PROS,,9,9,9,date in future
-9002,2010-01-40,X,XXX,XXXX,777,777,777,all
-9003,2010-01-40,X,1,1,x,y ,z,all
-9004,1999-01-01,D,KS,,1,1,1,date before birth date
+patient,canc_d,canc_d_a,loc_code,loc_code_sys,hist_code,hist_code_sys,ldr_forced_errors
+101,2000-01-01,D,20,NA-ACCORD-short list,1,1,none
+102,2001-01-01,D,39,NA-ACCORD-short list,2,2,none
+103,2002-01-01,D,9,NA-ACCORD-short list,9,9,none
+104,2003-01-01,D,33,NA-ACCORD-short list,1,1,none
+105,2004-01-01,D,8,NA-ACCORD-short list,2,2,none
+106,2005-02-01,D,1,NA-ACCORD-short list,9,9,none
+107,2006-01-01,D,12,NA-ACCORD-short list,1,1,none
+108,2007-01-01,D,62,NA-ACCORD-short list,2,2,none
+109,2008-10-01,D,64,NA-ACCORD-short list,9,9,none
+109,2008-10-01,D,64,NA-ACCORD-short list,9,9,none
+110,2009-01-01,D,xx,NA-ACCORD-short list,1,1,none
+109,2008-10-01,D,51,NA-ACCORD-short list,9,9,none
+109,2008-10-01,D,20,NA-ACCORD-short list,9,9,duplicate
+9001,2020-01-01,D,39,NA-ACCORD-short list,9,9,date in future
+9002,2010-01-40,X,9,NA-ACCORD-short list,777,777,all
+9003,2010-01-40,X,33,NA-ACCORD-short list,x,y ,all
+9004,1999-01-01,D,8,NA-ACCORD-short list,1,1,date before birth date
+9005,,D,1,NA-ACCORD-short list,1,1,missing date
+1000,2004-01-01,D, , ,2,2,after death date

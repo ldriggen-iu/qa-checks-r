@@ -42,7 +42,7 @@ notdate(bp_d,bp,id=patient)
 #missingvalue(art_sd,deliverychild)
 
 ## CONVERT DATES USING EXPECTED FORMAT (will force NA if format is incorrect)
-if(exists("bp_d",lab)){bp$bp_d <- convertdate(bp_d,bp)}
+if(exists("bp_d",bp)){bp$bp_d <- convertdate(bp_d,bp)}
 
 
 ## CHECK FOR DATES OCCURRING IN THE WRONG ORDER

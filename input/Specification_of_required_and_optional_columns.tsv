@@ -2,3 +2,4 @@ tbl	required_columns	optional_columns
 tblART	"""patient"",""art_id"",""art_sd"",""art_ed"",""art_rs"",""art_rs2"",""art_rs3"",""art_rs4"",""art_form"",""art_comb"",""artstart_rs"""	"""art_sd_a,""art_ed_a"""
 tblBAS	"""patient"",""birth_d"",""enrol_d"",""gender"",""mode"",""naive_y"",""proph_y"",""recart_y"",""recart_d"",""aids_y"",""aids_d"""	"""program"",""birth_d_a"",""enrol_d_a"",""recart_d_a"",""aids_d_a"""
 tblART_MUM	"""child_id"",""art_id"",""art_sd"",""art_ed"",""art_rs"",""art_rs2"",""art_rs3"",""art_rs4"",""art_form"",""art_comb"",""artstart_rs"""	"""art_sd_a,""art_ed_a"""
+tblCANC	"""patient"",""canc_d"",""loc_code"",""loc_code_sys"",""hist_code"",""hist_code_sys"""	"""canc_d_a"""

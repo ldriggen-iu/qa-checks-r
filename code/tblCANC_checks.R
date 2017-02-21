@@ -27,11 +27,20 @@
 ## NAME OF TABLE FOR WRITING QUERIES
 tablename <- "tblCANC"
 ## NAMES EXPECTED FROM HICDEP+/IeDEAS DES
-##???? Assuming all columns required for now
-#expectednames <- c("patient","canc_d","loc_code","loc_code_sys","hist_code","hist_code_sys")
-#acceptablenames <- c(expectednames,"canc_d_a")
-expectednames <- c("patient","canc_d","canc_d_a","canc_type","canc_type_oth","canc_cert","canc_extent","canc_tx")
-acceptablenames <- c(expectednames)
+## Modified for Harmonist - Look for a file containing the expected names.
+## If the file of expected names doesn't exist, use the defaults for the table
+if (file.exists("./input/Specification_of_required_and_optional_columns.tsv")) {
+  
+  column_specs<-read.table("./input/Specification_of_required_and_optional_columns.tsv",header = TRUE, sep="\t", stringsAsFactors=FALSE)
+  # get the specs for tblART
+  expectednames<-unlist(strsplit(gsub('\"','',column_specs[column_specs$tbl==tablename,]$required_columns),','))
+  acceptablenames<-c(expectednames,unlist(strsplit(gsub('\"','',column_specs[column_specs$tbl==tablename,]$optional_columns),',')))
+  
+}
+if (!(file.exists("./input/Specification_of_required_and_optional_columns.tsv"))) { 
+  expectednames <- c("patient","canc_d","loc_code","loc_code_sys","hist_code","hist_code_sys")
+  acceptablenames <- c(expectednames,"canc_d_a")
+}
 
 ################### QUERY CHECKING BEGINS HERE ###################
 
@@ -40,53 +49,55 @@ extravar(acceptablenames,canc)
 missvar(expectednames,canc)
 
 ## PRIOR TO CONVERTING DATES, CHECK THAT THE TYPE IS APPROPRIATE 
-notdate(canc_d,canc,id=patient)
-
-## ??? should canc_d_a be a required field and checked here???
-## ??? logic for canc_type_oth populated when canc_type=OTH
-## CHECK FOR MISSING DATA
-missingvalue(canc_d,canc)
-#missingvalue(canc_d_a,canc)
-
+if(exists("canc_d",canc)) {(notdate(canc_d,canc,id=patient))}
 
 ## CONVERT DATES USING EXPECTED FORMAT (will force NA if format is incorrect)
-#if(exists("canc_d",canc)){canc$canc_d <- convertdate(canc_d,canc)}
-#???? assuming the date is required
-canc$canc_d <- convertdate(canc_d,canc)
+if(exists("canc_d",canc)){canc$canc_d <- convertdate(canc_d,canc)}
 
+## CHECK FOR MISSING DATES
+if(exists("canc_d",canc)) {missingvalue(canc_d,canc)}
 
 ## CHECK FOR DATES OCCURRING IN THE WRONG ORDER
-if(exists("basic")){
+if(exists("basic") && exists("birth_d",basic) && exists("canc_d",canc)){
 	bascanc <- merge(canc,with(basic,data.frame(patient,birth_d)),all.x=TRUE)
 	bascanc$birth_d <- convertdate(birth_d,bascanc)
 	outoforder(birth_d,canc_d,bascanc,table2="tblBAS")
 }
-if(exists("ltfu")){
+if(exists("ltfu") && exists("death_d",ltfu) && exists("canc_d",canc)){
   ltfucanc <- merge(canc,with(ltfu,data.frame(patient,death_d)),all.x=TRUE)
 	ltfucanc$death_d <- convertdate(death_d,ltfucanc)
 	outoforder(canc_d,death_d,ltfucanc,table2="tblLTFU")
 }
-
-
+if(exists("ltfu") && exists("l_alive_d",ltfu) && exists("canc_d",canc)){
+  ltfucanc <- merge(canc,with(ltfu,data.frame(patient,l_alive_d)),all.x=TRUE)
+  ltfucanc$l_alive_d <- convertdate(l_alive_d,ltfucanc)
+  outoforder(canc_d,l_alive_d,ltfucanc,table2="tblLTFU")
+}
 ## CHECK FOR DATES OCCURRING TOO FAR IN THE FUTURE
-futuredate(canc_d,canc)
+if(exists("canc_d",canc)){futuredate(canc_d,canc)}
 
-##???? Currently checking for duplicates for canc_type/canc_d by patient
-##???? Are futher checks needed?
-## CHECK FOR DUPLICATE PATIENT IDs 
-for(i in unique(canc$canc_loc)[!is.na(unique(canc$canc_loc))]){
-  canc_sub <- canc[canc$canc_type %in% i,]
-  queryduplicates(patient,canc_loc,date=canc_d,subsettext=paste("&canc_loc=",i,sep=""))
+## CHECK FOR Invalid location codes (only for NA-ACCORD-short list at this time)
+if(exists("loc_code_sys",canc) && exists ("loc_code",canc) && canc$loc_code_sys=="NA-ACCORD-short list") {
+  badcodes(loc_code,c(20,39,9,33,8,1,12,62,64,65,51),canc)
 }
 
 
-## CHECK FOR UNEXPECTED CODING
-canc_type_codebook <- read.csv("resource/canc_type_codebook.csv",header=TRUE,stringsAsFactors = FALSE,na.strings="")
-badcodes(canc_d_a,c("<",">","D","M","Y","U"),canc)
-badcodes(canc_type,canc_type_codebook$code,canc)
-badcodes(canc_cert,c(1,2,9),canc)
-badcodes(canc_extent,c(1,2,9),canc)
-badcodes(canc_tx,c(1,2,3,4,5,9),canc)
+## CHECK FOR DUPLICATE PATIENT IDs 
+for(i in unique(canc$loc_code)[!is.na(unique(canc$loc_code))]){
+  canc_sub <- canc[canc$loc_code %in% i,]
+  queryduplicates(patient,canc_sub,date=canc_d,subsettext=paste("&loc_code=",i,sep=""))
+}
 
+## ???? need some help from Bev and Stephany on how to code histology. 
+## CHECK FOR UNEXPECTED CODING
+#canc_type_codebook <- read.csv("resource/canc_type_codebook.csv",header=TRUE,stringsAsFactors = FALSE,na.strings="")
+#badcodes(canc_d_a,c("<",">","D","M","Y","U"),canc)
+#badcodes(canc_type,canc_type_codebook$code,canc)
+#badcodes(canc_cert,c(1,2,9),canc)
+#badcodes(canc_extent,c(1,2,9),canc)
+#badcodes(canc_tx,c(1,2,3,4,5,9),canc)
+
+# Verify patient exists in tblBAS
+if (exists("basic")) {missrecord(patient,canc,basic)}
 
 ################### QUERY CHECKING ENDS HERE ###################

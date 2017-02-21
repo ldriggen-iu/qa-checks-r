@@ -69,8 +69,9 @@ getbaseline <- function(baselinedate,visitdate,ids,value=value,before=30,after=3
     }
     if(!missing(dateformat)){
         vdate <- as.Date(vdate,dateformat)
-	bdate <- as.Date(bdate,dateformat)
+	      bdate <- as.Date(bdate,dateformat)
     }
+
   ## check variable lengths
    if(!missing(value) & length(values)!=length(ids))  stop("values is not the appropriate length")
    if(length(vdate)!=length(ids))  stop("vdate is not the appropriate length")
